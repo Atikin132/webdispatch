@@ -10,6 +10,10 @@
 
 <div class="welcome-page">
     <h2>Welcome, ${sessionScope.user.login}!</h2>
+    <p>
+        Role:
+        ${sessionScope.user.role}
+    </p>
     <a href="${pageContext.request.contextPath}/loginedit.jhtml">
         Change password
     </a>
