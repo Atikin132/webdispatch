@@ -3,24 +3,33 @@
 <head>
     <title>Welcome</title>
 
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/resources/css/normalize.css">
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/resources/css/styles.css">
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/resources/css/welcome.css">
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/resources/css/header.css">
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/resources/css/footer.css">
 </head>
 <body>
+<jsp:include page="layouts/header.jsp"/>
 
-<div class="welcome-page">
-    <h2>Welcome, ${sessionScope.user.login}!</h2>
-    <p>
-        Role:
-        ${sessionScope.user.role}
-    </p>
-    <a href="${pageContext.request.contextPath}/loginedit.jhtml">
-        Change password
-    </a>
-    <form method="post" action="${pageContext.request.contextPath}/logout.jhtml">
-        <button>Logout</button>
-    </form>
-</div>
+<main>
+    <div class="welcome-page">
+        <h2>Welcome, ${sessionScope.user.login}!</h2>
+        <p>
+            Role:
+            ${sessionScope.user.role}
+        </p>
+        <a href="${pageContext.request.contextPath}/loginedit.jhtml">
+            Change password
+        </a>
+    </div>
+</main>
+<%@ include file="layouts/footer.jsp" %>
 
 </body>
 </html>

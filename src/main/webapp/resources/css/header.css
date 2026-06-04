@@ -1,0 +1,13 @@
+.header {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid gray;
+}
+
+.greeting-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
