@@ -33,6 +33,10 @@ public class DispatcherServlet extends HttpServlet {
             pageName = "unknown";
         }
 
+        if (pageName.equals("users")) {
+            req.setAttribute(SessionAttributes.USERS, securityService.getAllUsers());
+        }
+
         forward(pageName, req, resp);
     }
 

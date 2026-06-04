@@ -4,6 +4,7 @@ import model.Role;
 import model.User;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,5 +91,9 @@ public class SecurityService {
         }
         user.setPassword(newPassword);
         return true;
+    }
+
+    public Collection<User> getAllUsers() {
+        return users.values();
     }
 }
