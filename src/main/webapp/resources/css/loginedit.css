@@ -1,0 +1,16 @@
+.change-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.password-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: fit-content;
+}
+
+.change-password-btn {
+    width: fit-content;
+}

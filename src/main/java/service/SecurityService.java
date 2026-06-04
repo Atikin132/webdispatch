@@ -24,4 +24,13 @@ public class SecurityService {
     public User getUser(String login) {
         return users.get(login);
     }
+
+    public boolean changePassword(String login, String oldPassword, String newPassword) {
+        User user = users.get(login);
+        if (!user.getPassword().equals(oldPassword)) {
+            return false;
+        }
+        user.setPassword(newPassword);
+        return true;
+    }
 }

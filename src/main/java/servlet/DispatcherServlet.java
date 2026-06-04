@@ -19,6 +19,7 @@ public class DispatcherServlet extends HttpServlet {
     private static final String LOGIN_PATH = "/login.jhtml";
     private static final String LOGOUT_PATH = "/logout.jhtml";
     private static final String WELCOME_PATH = "/welcome.jhtml";
+    private static final String LOGIN_EDIT_PATH = "/loginedit.jhtml";
 
     private static final String USER_ATTR = "user";
     private static final Set<String> ALLOWED_PAGES = Set.of("login", "welcome", "loginedit");
@@ -44,6 +45,7 @@ public class DispatcherServlet extends HttpServlet {
         switch (path) {
             case LOGIN_PATH -> handleLogin(req, resp);
             case LOGOUT_PATH -> handleLogout(req, resp);
+            case LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -51,11 +53,18 @@ public class DispatcherServlet extends HttpServlet {
     private void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        login = (login != null) ? login.trim() : null;
+        password = (password != null) ? password.trim() : null;
+
+        if (login == null || login.isBlank() || password == null || password.isBlank()) {
+            req.setAttribute("errorMessage", "Login and password cannot be empty");
+            forward("login", req, resp);
+            return;
+        }
 
         if (securityService.login(login, password)) {
             User user = securityService.getUser(login);
             req.getSession().setAttribute(USER_ATTR, user);
-            System.out.println(req.getSession().getAttribute(USER_ATTR));
             resp.sendRedirect(req.getContextPath() + WELCOME_PATH);
         } else {
             req.setAttribute("errorMessage", "Wrong login or password");
@@ -71,6 +80,23 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         resp.sendRedirect(req.getContextPath() + LOGIN_PATH);
+    }
+
+    private void handlePasswordChange(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        User currentUser = (User) session.getAttribute(USER_ATTR);
+        String oldPassword = req.getParameter("oldPassword");
+        String newPassword = req.getParameter("newPassword");
+        boolean changePassword = securityService.changePassword(currentUser.getLogin(), oldPassword, newPassword);
+
+        if (changePassword) {
+            currentUser.setPassword(newPassword);
+            req.setAttribute("successMessage", "Password changed successfully");
+        } else {
+            req.setAttribute("errorMessage", "Old password is incorrect");
+        }
+
+        forward("loginedit", req, resp);
     }
 
     private void forward(String page, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
