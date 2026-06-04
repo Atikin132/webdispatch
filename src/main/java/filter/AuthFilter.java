@@ -1,5 +1,7 @@
 package filter;
 
+import constants.SessionAttributes;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +25,7 @@ public class AuthFilter implements Filter {
         }
 
         HttpSession session = req.getSession(false);
-        boolean loggedIn = (session != null && session.getAttribute("user") != null);
+        boolean loggedIn = (session != null && session.getAttribute(SessionAttributes.USER) != null);
         boolean publicPath = PUBLIC_PATHS.contains(path);
 
         if (!loggedIn && !publicPath) {

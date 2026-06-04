@@ -1,5 +1,6 @@
 package servlet;
 
+import constants.SessionAttributes;
 import model.User;
 import service.SecurityService;
 
@@ -21,7 +22,6 @@ public class DispatcherServlet extends HttpServlet {
     private static final String WELCOME_PATH = "/welcome.jhtml";
     private static final String LOGIN_EDIT_PATH = "/loginedit.jhtml";
 
-    private static final String USER_ATTR = "user";
     private static final Set<String> ALLOWED_PAGES = Set.of("login", "welcome", "loginedit");
 
     private final SecurityService securityService = new SecurityService();
@@ -64,7 +64,7 @@ public class DispatcherServlet extends HttpServlet {
 
         if (securityService.login(login, password)) {
             User user = securityService.getUser(login);
-            req.getSession().setAttribute(USER_ATTR, user);
+            req.getSession().setAttribute(SessionAttributes.USER, user);
             resp.sendRedirect(req.getContextPath() + WELCOME_PATH);
         } else {
             req.setAttribute("errorMessage", "Wrong login or password");
@@ -84,7 +84,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private void handlePasswordChange(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
-        User currentUser = (User) session.getAttribute(USER_ATTR);
+        User currentUser = (User) session.getAttribute(SessionAttributes.USER);
         String oldPassword = req.getParameter("oldPassword");
         String newPassword = req.getParameter("newPassword");
         boolean changePassword = securityService.changePassword(currentUser.getLogin(), oldPassword, newPassword);
