@@ -96,4 +96,16 @@ public class SecurityService {
     public Collection<User> getAllUsers() {
         return users.values();
     }
+
+    public void addUser(User user) {
+        users.put(user.getLogin(), user);
+    }
+
+    public boolean existsByLogin(String login) {
+        return users.containsKey(login);
+    }
+
+    public boolean isBirthdayBeforeNow(LocalDate birthday) {
+        return birthday.isBefore(LocalDate.now());
+    }
 }

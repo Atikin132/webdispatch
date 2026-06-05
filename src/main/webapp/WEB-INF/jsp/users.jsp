@@ -67,7 +67,7 @@
             </table>
         </div>
     </div>
-    <a class="add-user-btn button" href="${pageContext.request.contextPath}/useradd.jhtml">Add
+    <a class="button green" href="${pageContext.request.contextPath}/useradd.jhtml">Add
         user</a>
 </main>
 <%@ include file="layouts/footer.jsp" %>

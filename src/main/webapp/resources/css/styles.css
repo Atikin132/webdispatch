@@ -28,9 +28,22 @@ header, footer {
     border: none;
     cursor: pointer;
     align-self: center;
+    color: #ffffff;
 }
 
 .button:hover {
     opacity: 70%;
     transform: translateY(-2px);
+}
+
+.button.red {
+    background: #E26A6A;
+}
+
+.button.green {
+    background: #A2D093;
+}
+
+.button.blue {
+    background: #789DE5;
 }
