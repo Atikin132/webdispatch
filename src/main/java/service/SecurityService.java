@@ -108,4 +108,9 @@ public class SecurityService {
     public boolean isBirthdayBeforeNow(LocalDate birthday) {
         return birthday.isBefore(LocalDate.now());
     }
+
+    public void updateUser(String oldLogin, User updatedUser) {
+        users.remove(oldLogin);
+        users.put(updatedUser.getLogin(), updatedUser);
+    }
 }

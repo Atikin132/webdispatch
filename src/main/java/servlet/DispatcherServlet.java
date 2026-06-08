@@ -34,9 +34,26 @@ public class DispatcherServlet extends HttpServlet {
         if (!ALLOWED_PAGES.contains(pageName)) {
             pageName = "unknown";
         }
-
-        if (pageName.equals("users")) {
-            req.setAttribute(SessionAttributes.USERS, securityService.getAllUsers());
+        switch (pageName) {
+            case "users":
+                req.setAttribute(SessionAttributes.USERS, securityService.getAllUsers());
+                break;
+            case "useradd":
+                req.setAttribute("mode", "add");
+                User newUser = new User();
+                newUser.setRole(Role.USER);
+                req.setAttribute("user", newUser);
+                req.setAttribute("maxDate", LocalDate.now().minusDays(1));
+                pageName = "user-form";
+                break;
+            case "useredit":
+                String login = req.getParameter("login");
+                req.setAttribute("mode", "edit");
+                req.setAttribute("user", securityService.getUser(login));
+                req.setAttribute("oldLogin", login);
+                req.setAttribute("maxDate", LocalDate.now().minusDays(1));
+                pageName = "user-form";
+                break;
         }
 
         forward(pageName, req, resp);
@@ -51,7 +68,8 @@ public class DispatcherServlet extends HttpServlet {
             case Paths.LOGIN_PATH -> handleLogin(req, resp);
             case Paths.LOGOUT_PATH -> handleLogout(req, resp);
             case Paths.LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
-            case Paths.USER_ADD_PATH -> handleUserAdd(req, resp);
+            case Paths.USER_ADD_PATH -> handleUserForm(req, resp, false);
+            case Paths.USER_EDIT_PATH -> handleUserForm(req, resp, true);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -121,42 +139,62 @@ public class DispatcherServlet extends HttpServlet {
         forward(forwardPage, req, resp);
     }
 
-    private void handleUserAdd(HttpServletRequest req,
-                               HttpServletResponse resp) throws IOException, ServletException {
-        String login = req.getParameter(SessionAttributes.LOGIN);
-        String password = req.getParameter(SessionAttributes.PASSWORD);
-        String email = req.getParameter(SessionAttributes.EMAIL);
-        String surname = req.getParameter(SessionAttributes.SURNAME);
-        String name = req.getParameter(SessionAttributes.NAME);
-        String patronymic = req.getParameter(SessionAttributes.PATRONYMIC);
-        LocalDate birthday = LocalDate.parse(req.getParameter(SessionAttributes.BIRTHDAY));
-        Role role = Role.valueOf(req.getParameter(SessionAttributes.ROLE));
-        String errorMessage = validateUserForm(login,
-                password,
-                email,
-                surname,
-                name,
-                patronymic,
-                birthday.toString());
+    private void handleUserForm(HttpServletRequest req,
+                                HttpServletResponse resp,
+                                boolean isEdit) throws IOException, ServletException {
+        String oldLogin = req.getParameter("oldLogin");
+        User user = buildUserFromRequest(req);
+        String error = validateUserForm(user.getLogin(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getSurname(),
+                user.getName(),
+                user.getPatronymic(),
+                user.getBirthday().toString());
 
-        if (errorMessage != null) {
-            saveInputsAddForm(login, password, email, surname, name, patronymic, birthday, req);
-            sendError(errorMessage, "useradd", req, resp);
+        if (error != null) {
+            prepareUserForm(user, req);
+            if (isEdit) {
+                req.setAttribute("oldLogin", oldLogin);
+                req.setAttribute("mode", "edit");
+            } else {
+                req.setAttribute("mode", "add");
+            }
+            sendError(error, "user-form", req, resp);
             return;
         }
-        if (securityService.existsByLogin(login)) {
-            saveInputsAddForm(login, password, email, surname, name, patronymic, birthday, req);
-            sendError("User with this login already exists", "useradd", req, resp);
+        if (!securityService.isBirthdayBeforeNow(user.getBirthday())) {
+            prepareUserForm(user, req);
+            if (isEdit) {
+                req.setAttribute("oldLogin", oldLogin);
+                req.setAttribute("mode", "edit");
+            } else {
+                req.setAttribute("mode", "add");
+            }
+            sendError("The date must not be today or in the future", "user-form", req, resp);
             return;
         }
-        if (!securityService.isBirthdayBeforeNow(birthday)) {
-            saveInputsAddForm(login, password, email, surname, name, patronymic, birthday, req);
-            sendError("The date must not be today or in the future", "useradd", req, resp);
-            return;
+        if (isEdit) {
+            if (securityService.existsByLogin(user.getLogin()) &&
+                    !oldLogin.equals(user.getLogin())) {
+                prepareUserForm(user, req);
+                req.setAttribute("oldLogin", oldLogin);
+                sendError("User with this login already exists", "user-form", req, resp);
+                req.setAttribute("mode", "edit");
+                return;
+            }
+            securityService.updateUser(oldLogin, user);
+        } else {
+            if (securityService.existsByLogin(user.getLogin())) {
+                prepareUserForm(user, req);
+                sendError("User with this login already exists", "user-form", req, resp);
+                req.setAttribute("mode", "add");
+                return;
+            }
+
+            securityService.addUser(user);
         }
 
-        User user = new User(login, password, email, surname, name, patronymic, birthday, role);
-        securityService.addUser(user);
         resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
     }
 
@@ -191,20 +229,20 @@ public class DispatcherServlet extends HttpServlet {
         return null;
     }
 
-    private void saveInputsAddForm(String login,
-                                   String password,
-                                   String email,
-                                   String surname,
-                                   String name,
-                                   String patronymic,
-                                   LocalDate birthday,
-                                   HttpServletRequest req) {
-        req.setAttribute(SessionAttributes.LOGIN, login);
-        req.setAttribute(SessionAttributes.PASSWORD, password);
-        req.setAttribute(SessionAttributes.EMAIL, email);
-        req.setAttribute(SessionAttributes.SURNAME, surname);
-        req.setAttribute(SessionAttributes.NAME, name);
-        req.setAttribute(SessionAttributes.PATRONYMIC, patronymic);
-        req.setAttribute(SessionAttributes.BIRTHDAY, birthday);
+    private void prepareUserForm(User user, HttpServletRequest req) {
+        req.setAttribute("user", user);
+        req.setAttribute("maxDate", LocalDate.now().minusDays(1));
     }
+
+    private User buildUserFromRequest(HttpServletRequest req) {
+        return new User(req.getParameter("login"),
+                req.getParameter("password"),
+                req.getParameter("email"),
+                req.getParameter("surname"),
+                req.getParameter("name"),
+                req.getParameter("patronymic"),
+                LocalDate.parse(req.getParameter("birthday")),
+                Role.valueOf(req.getParameter("role")));
+    }
+
 }

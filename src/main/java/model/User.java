@@ -12,6 +12,9 @@ public class User {
     private LocalDate birthday;
     private Role role;
 
+    public User() {
+    }
+
     public User(String login,
                 String password,
                 String email,
