@@ -11,3 +11,12 @@
     align-items: center;
     gap: 10px;
 }
+
+.logo {
+    width: 35px;
+    height: 35px;
+    background-repeat: no-repeat;
+    background-position: center;
+    object-fit: contain;
+    background-image: url("../svg/logo.svg");
+}
