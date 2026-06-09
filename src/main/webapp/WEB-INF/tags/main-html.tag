@@ -1,5 +1,6 @@
 <%@ tag pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ attribute name="title" required="true" %>
 <%@ attribute name="pageName" required="false" %>
 
@@ -22,8 +23,10 @@
 
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/resources/css/footer.css">
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/resources/css/${pageName}.css">
+    <c:if test="${not empty pageName}">
+        <link rel="stylesheet"
+              href="${pageContext.request.contextPath}/resources/css/${pageName}.css">
+    </c:if>
 </head>
 
 <body>
