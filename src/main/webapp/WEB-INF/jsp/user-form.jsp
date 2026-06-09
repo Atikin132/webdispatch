@@ -1,28 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Welcome</title>
-
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/normalize.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/styles.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/menu.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/header.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/footer.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/user-form.css">
-</head>
-<body>
-<jsp:include page="layouts/header.jsp"/>
-<jsp:include page="layouts/menu.jsp"/>
-<main>
+<t:main-html title="${requestScope.mode == 'add' ? 'Add User' : 'Edit User'}" pageName="user-form">
     <div class="user-form-container">
         <h2>${requestScope.mode == 'add' ? 'Add User' : 'Edit User'}</h2>
         <form class="user-form" method="post"
@@ -69,8 +49,8 @@
                 <div class="form-group">
                     <label class="form-label" for="role">Role:</label>
                     <select id="role" class="form-input" name="role">
-                        <option value="USER" ${requestScope.user.role == 'USER' ? 'selected'
-                                : ''}>USER
+                        <option value="USER" ${requestScope.user.role == 'USER' ? 'selected': ''}>
+                            USER
                         </option>
                         <option value="ADMIN" ${requestScope.user.role == 'ADMIN' ? 'selected' : ''}>
                             ADMIN
@@ -91,9 +71,4 @@
             Back
         </a>
     </div>
-
-</main>
-<%@ include file="layouts/footer.jsp" %>
-
-</body>
-</html>
+</t:main-html>
