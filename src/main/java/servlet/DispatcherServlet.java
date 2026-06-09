@@ -123,6 +123,7 @@ public class DispatcherServlet extends HttpServlet {
         } else {
             req.setAttribute(SessionAttributes.ERROR_MESSAGE, "Old password is incorrect");
         }
+        req.setAttribute(SessionAttributes.CURRENT_PAGE, "loginedit");
 
         forward("loginedit", req, resp);
     }

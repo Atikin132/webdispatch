@@ -5,3 +5,8 @@
     justify-content: center;
     border-top: 1px solid gray;
 }
+
+.github-link {
+    color: #789DE5;
+    text-decoration: none;
+}
