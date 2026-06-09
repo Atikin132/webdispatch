@@ -72,5 +72,6 @@
 
 .delete-btn {
     background-image: url("../svg/delete.svg");
+    border: none;
 }
 

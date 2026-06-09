@@ -14,7 +14,7 @@ public class SecurityService {
     public SecurityService() {
         users.put("u1",
                 new User("u1",
-                        "u1",
+                        "111111",
                         "u1@example.com",
                         "Petrov",
                         "Peter",
@@ -23,7 +23,7 @@ public class SecurityService {
                         Role.USER));
         users.put("u2",
                 new User("u2",
-                        "u2",
+                        "222222",
                         "u2@example.com",
                         "Ivanov",
                         "Ivan",
@@ -32,7 +32,7 @@ public class SecurityService {
                         Role.USER));
         users.put("u3",
                 new User("u3",
-                        "u3",
+                        "333333",
                         "u3@example.com",
                         "Vasiliev",
                         "Vasili",
@@ -112,5 +112,9 @@ public class SecurityService {
     public void updateUser(String oldLogin, User updatedUser) {
         users.remove(oldLogin);
         users.put(updatedUser.getLogin(), updatedUser);
+    }
+
+    public void deleteUser(String login) {
+        users.remove(login);
     }
 }

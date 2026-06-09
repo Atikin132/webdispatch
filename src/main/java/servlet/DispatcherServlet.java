@@ -70,6 +70,7 @@ public class DispatcherServlet extends HttpServlet {
             case Paths.LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
             case Paths.USER_ADD_PATH -> handleUserForm(req, resp, false);
             case Paths.USER_EDIT_PATH -> handleUserForm(req, resp, true);
+            case Paths.USER_DELETE_PATH -> handleUserDelete(req, resp);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -196,6 +197,13 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
+    }
+
+    private void handleUserDelete(HttpServletRequest req,
+                                  HttpServletResponse resp) throws IOException {
+        String login = req.getParameter("login");
+        securityService.deleteUser(login);
+        resp.sendRedirect(req.getContextPath() + "/users.jhtml");
     }
 
     private String validateUserForm(String login,

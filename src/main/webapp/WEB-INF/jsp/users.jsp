@@ -56,10 +56,13 @@
                             </div>
                         </td>
                         <td>
-                            <div class="btn-container">
-                                <a class="delete-btn "
-                                   href="userdelete.jhtml?login=${user.login}"></a>
-                            </div>
+                            <c:if test="${user.login ne sessionScope.user.login}">
+                                <form class="btn-container" method="post"
+                                      action="${pageContext.request.contextPath}/userdelete.jhtml">
+                                    <input type="hidden" name="login" value="${user.login}">
+                                    <button class="delete-btn" type="submit"></button>
+                                </form>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
