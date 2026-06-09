@@ -1,30 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c"
-           uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login Edit</title>
-
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/normalize.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/styles.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/menu.css">
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/resources/css/loginedit.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/header.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/footer.css">
-
-</head>
-<body>
-<jsp:include page="layouts/header.jsp"/>
-<jsp:include page="layouts/menu.jsp"/>
-<main>
+<t:main-html title="Change Password" pageName="loginedit">
     <div class="change-password-form-container">
         <h2>Change Password</h2>
         <form class="change-password-form" method="post"
@@ -33,7 +11,8 @@
                 <label for="oldPassword">
                     Old password
                 </label>
-                <input class="password-input" id="oldPassword" type="password" name="oldPassword" required
+                <input class="password-input" id="oldPassword" type="password" name="oldPassword"
+                       required
                        autocomplete="off">
             </div>
             <div class="password-field">
@@ -55,9 +34,4 @@
             </button>
         </form>
     </div>
-
-</main>
-<%@ include file="layouts/footer.jsp" %>
-
-</body>
-</html>
+</t:main-html>
