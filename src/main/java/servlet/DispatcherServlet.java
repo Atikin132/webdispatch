@@ -158,7 +158,7 @@ public class DispatcherServlet extends HttpServlet {
         if (error != null) {
             prepareUserForm(user, req);
             if (isEdit) {
-                req.setAttribute(SessionAttributes.OLD_PASSWORD, oldLogin);
+                req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
             } else {
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
@@ -169,7 +169,7 @@ public class DispatcherServlet extends HttpServlet {
         if (!securityService.isBirthdayBeforeNow(user.getBirthday())) {
             prepareUserForm(user, req);
             if (isEdit) {
-                req.setAttribute(SessionAttributes.OLD_PASSWORD, oldLogin);
+                req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
             } else {
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
@@ -181,7 +181,7 @@ public class DispatcherServlet extends HttpServlet {
             if (securityService.existsByLogin(user.getLogin()) &&
                     !oldLogin.equals(user.getLogin())) {
                 prepareUserForm(user, req);
-                req.setAttribute(SessionAttributes.OLD_PASSWORD, oldLogin);
+                req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
                 sendError("User with this login already exists", "user-form", req, resp);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
                 return;
