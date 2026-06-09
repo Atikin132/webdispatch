@@ -5,7 +5,7 @@
     <div class="greeting-logout">
         <p class="user-greeting">Hello, ${sessionScope.user.login}!</p>
         <form method="post" action="${pageContext.request.contextPath}/logout.jhtml">
-            <button>Logout</button>
+            <button class="button blue">Logout</button>
         </form>
     </div>
 </header>
