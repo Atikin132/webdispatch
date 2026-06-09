@@ -1,29 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Welcome</title>
-
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/normalize.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/styles.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/menu.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/header.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/footer.css">
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/resources/css/users.css">
-</head>
-<body>
-<jsp:include page="layouts/header.jsp"/>
-<jsp:include page="layouts/menu.jsp"/>
-<main class="users-list">
-    <div>
+<t:main-html title="Users" pageName="users">
+    <div class="users-list">
         <h2 class="page-title">Users list</h2>
         <div class="table-container">
             <table class="users-table">
@@ -71,11 +51,6 @@
                 </tbody>
             </table>
         </div>
+        <a class="button green" href="${pageContext.request.contextPath}/useradd.jhtml">Add user</a>
     </div>
-    <a class="button green" href="${pageContext.request.contextPath}/useradd.jhtml">Add
-        user</a>
-</main>
-<%@ include file="layouts/footer.jsp" %>
-
-</body>
-</html>
+</t:main-html>

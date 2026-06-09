@@ -23,7 +23,7 @@
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/resources/css/footer.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/resources/css/pages/${pageName}.css">
+          href="${pageContext.request.contextPath}/resources/css/${pageName}.css">
 </head>
 
 <body>
