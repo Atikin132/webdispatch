@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/resources/css/styles.css">
     <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/resources/css/menu.css">
+    <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/resources/css/header.css">
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/resources/css/footer.css">
@@ -19,7 +21,7 @@
 </head>
 <body>
 <jsp:include page="layouts/header.jsp"/>
-
+<jsp:include page="layouts/menu.jsp"/>
 <main>
     <div class="user-form-container">
         <h2>${requestScope.mode == 'add' ? 'Add User' : 'Edit User'}</h2>

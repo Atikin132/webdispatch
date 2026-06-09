@@ -11,6 +11,8 @@
           href="${pageContext.request.contextPath}/resources/css/normalize.css">
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/resources/css/styles.css">
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/resources/css/menu.css">
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/resources/css/loginedit.css">
     <link rel="stylesheet" type="text/css"
@@ -21,6 +23,7 @@
 </head>
 <body>
 <jsp:include page="layouts/header.jsp"/>
+<jsp:include page="layouts/menu.jsp"/>
 <main>
     <h2>Change Password</h2>
 

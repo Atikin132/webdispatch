@@ -39,23 +39,24 @@ public class DispatcherServlet extends HttpServlet {
                 req.setAttribute(SessionAttributes.USERS, securityService.getAllUsers());
                 break;
             case "useradd":
-                req.setAttribute("mode", "add");
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
                 User newUser = new User();
                 newUser.setRole(Role.USER);
-                req.setAttribute("user", newUser);
-                req.setAttribute("maxDate", LocalDate.now().minusDays(1));
+                req.setAttribute(SessionAttributes.USER, newUser);
+                req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
                 pageName = "user-form";
                 break;
             case "useredit":
-                String login = req.getParameter("login");
-                req.setAttribute("mode", "edit");
-                req.setAttribute("user", securityService.getUser(login));
-                req.setAttribute("oldLogin", login);
-                req.setAttribute("maxDate", LocalDate.now().minusDays(1));
+                String login = req.getParameter(SessionAttributes.LOGIN);
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
+                req.setAttribute(SessionAttributes.USER, securityService.getUser(login));
+                req.setAttribute(SessionAttributes.OLD_LOGIN, login);
+                req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
                 pageName = "user-form";
                 break;
         }
 
+        req.setAttribute(SessionAttributes.CURRENT_PAGE, pageName);
         forward(pageName, req, resp);
     }
 
@@ -143,7 +144,7 @@ public class DispatcherServlet extends HttpServlet {
     private void handleUserForm(HttpServletRequest req,
                                 HttpServletResponse resp,
                                 boolean isEdit) throws IOException, ServletException {
-        String oldLogin = req.getParameter("oldLogin");
+        String oldLogin = req.getParameter(SessionAttributes.OLD_LOGIN);
         User user = buildUserFromRequest(req);
         String error = validateUserForm(user.getLogin(),
                 user.getPassword(),
@@ -156,10 +157,10 @@ public class DispatcherServlet extends HttpServlet {
         if (error != null) {
             prepareUserForm(user, req);
             if (isEdit) {
-                req.setAttribute("oldLogin", oldLogin);
-                req.setAttribute("mode", "edit");
+                req.setAttribute(SessionAttributes.OLD_PASSWORD, oldLogin);
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
             } else {
-                req.setAttribute("mode", "add");
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
             }
             sendError(error, "user-form", req, resp);
             return;
@@ -167,10 +168,10 @@ public class DispatcherServlet extends HttpServlet {
         if (!securityService.isBirthdayBeforeNow(user.getBirthday())) {
             prepareUserForm(user, req);
             if (isEdit) {
-                req.setAttribute("oldLogin", oldLogin);
-                req.setAttribute("mode", "edit");
+                req.setAttribute(SessionAttributes.OLD_PASSWORD, oldLogin);
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
             } else {
-                req.setAttribute("mode", "add");
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
             }
             sendError("The date must not be today or in the future", "user-form", req, resp);
             return;
@@ -179,9 +180,9 @@ public class DispatcherServlet extends HttpServlet {
             if (securityService.existsByLogin(user.getLogin()) &&
                     !oldLogin.equals(user.getLogin())) {
                 prepareUserForm(user, req);
-                req.setAttribute("oldLogin", oldLogin);
+                req.setAttribute(SessionAttributes.OLD_PASSWORD, oldLogin);
                 sendError("User with this login already exists", "user-form", req, resp);
-                req.setAttribute("mode", "edit");
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
                 return;
             }
             securityService.updateUser(oldLogin, user);
@@ -189,7 +190,7 @@ public class DispatcherServlet extends HttpServlet {
             if (securityService.existsByLogin(user.getLogin())) {
                 prepareUserForm(user, req);
                 sendError("User with this login already exists", "user-form", req, resp);
-                req.setAttribute("mode", "add");
+                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
                 return;
             }
 
@@ -201,9 +202,9 @@ public class DispatcherServlet extends HttpServlet {
 
     private void handleUserDelete(HttpServletRequest req,
                                   HttpServletResponse resp) throws IOException {
-        String login = req.getParameter("login");
+        String login = req.getParameter(SessionAttributes.LOGIN);
         securityService.deleteUser(login);
-        resp.sendRedirect(req.getContextPath() + "/users.jhtml");
+        resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
     }
 
     private String validateUserForm(String login,
@@ -238,19 +239,19 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void prepareUserForm(User user, HttpServletRequest req) {
-        req.setAttribute("user", user);
-        req.setAttribute("maxDate", LocalDate.now().minusDays(1));
+        req.setAttribute(SessionAttributes.USER, user);
+        req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
     }
 
     private User buildUserFromRequest(HttpServletRequest req) {
-        return new User(req.getParameter("login"),
-                req.getParameter("password"),
-                req.getParameter("email"),
-                req.getParameter("surname"),
-                req.getParameter("name"),
-                req.getParameter("patronymic"),
-                LocalDate.parse(req.getParameter("birthday")),
-                Role.valueOf(req.getParameter("role")));
+        return new User(req.getParameter(SessionAttributes.LOGIN),
+                req.getParameter(SessionAttributes.PASSWORD),
+                req.getParameter(SessionAttributes.EMAIL),
+                req.getParameter(SessionAttributes.SURNAME),
+                req.getParameter(SessionAttributes.NAME),
+                req.getParameter(SessionAttributes.PATRONYMIC),
+                LocalDate.parse(req.getParameter(SessionAttributes.BIRTHDAY)),
+                Role.valueOf(req.getParameter(SessionAttributes.ROLE)));
     }
 
 }
