@@ -146,14 +146,39 @@ public class DispatcherServlet extends HttpServlet {
                                 HttpServletResponse resp,
                                 boolean isEdit) throws IOException, ServletException {
         String oldLogin = req.getParameter(SessionAttributes.OLD_LOGIN);
-        User user = buildUserFromRequest(req);
-        String error = validateUserForm(user.getLogin(),
-                user.getPassword(),
-                user.getEmail(),
-                user.getSurname(),
-                user.getName(),
-                user.getPatronymic(),
-                user.getBirthday().toString());
+
+        String login = req.getParameter(SessionAttributes.LOGIN);
+        String password = req.getParameter(SessionAttributes.PASSWORD);
+        String email = req.getParameter(SessionAttributes.EMAIL);
+        String surname = req.getParameter(SessionAttributes.SURNAME);
+        String name = req.getParameter(SessionAttributes.NAME);
+        String patronymic = req.getParameter(SessionAttributes.PATRONYMIC);
+        String birthdayStr = req.getParameter(SessionAttributes.BIRTHDAY);
+        String roleStr = req.getParameter(SessionAttributes.ROLE);
+        String error =
+                validateUserForm(login, password, email, surname, name, patronymic, birthdayStr);
+
+        LocalDate birthday;
+        try {
+            birthday = LocalDate.parse(birthdayStr);
+        } catch (Exception e) {
+            prepareUserForm(new User(login, password, email, surname, name, patronymic, null, null),
+                    req);
+            sendError("Invalid birthday format", "user-form", req, resp);
+            return;
+        }
+
+        Role role;
+        try {
+            role = Role.valueOf(roleStr);
+        } catch (Exception e) {
+            prepareUserForm(new User(login, password, email, surname, name, patronymic, null, null),
+                    req);
+            sendError("Invalid role", "user-form", req, resp);
+            return;
+        }
+
+        User user = new User(login, password, email, surname, name, patronymic, birthday, role);
 
         if (error != null) {
             prepareUserForm(user, req);
@@ -243,16 +268,4 @@ public class DispatcherServlet extends HttpServlet {
         req.setAttribute(SessionAttributes.USER, user);
         req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
     }
-
-    private User buildUserFromRequest(HttpServletRequest req) {
-        return new User(req.getParameter(SessionAttributes.LOGIN),
-                req.getParameter(SessionAttributes.PASSWORD),
-                req.getParameter(SessionAttributes.EMAIL),
-                req.getParameter(SessionAttributes.SURNAME),
-                req.getParameter(SessionAttributes.NAME),
-                req.getParameter(SessionAttributes.PATRONYMIC),
-                LocalDate.parse(req.getParameter(SessionAttributes.BIRTHDAY)),
-                Role.valueOf(req.getParameter(SessionAttributes.ROLE)));
-    }
-
 }
