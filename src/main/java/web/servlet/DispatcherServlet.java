@@ -3,15 +3,12 @@ package web.servlet;
 import constants.Pages;
 import constants.Paths;
 import constants.SessionAttributes;
-import dao.InMemoryUserDao;
-import dao.UserDao;
 import model.Role;
 import model.User;
 import service.SecurityService;
 import service.UserService;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +37,8 @@ public class DispatcherServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.userService = (UserService) config.getServletContext().getAttribute("userService");
-        this.securityService = (SecurityService) config.getServletContext().getAttribute("securityService");
+        this.securityService =
+                (SecurityService) config.getServletContext().getAttribute("securityService");
     }
 
     @Override
@@ -173,30 +171,29 @@ public class DispatcherServlet extends HttpServlet {
         String patronymic = req.getParameter(SessionAttributes.PATRONYMIC);
         String birthdayStr = req.getParameter(SessionAttributes.BIRTHDAY);
         String roleStr = req.getParameter(SessionAttributes.ROLE);
-        String error =
-                validateUserForm(login, password, email, surname, name, patronymic, birthdayStr);
 
-        LocalDate birthday;
+        User user = new User(login, password, email, surname, name, patronymic, null, null);
+
         try {
-            birthday = LocalDate.parse(birthdayStr);
+            user.setBirthday(LocalDate.parse(birthdayStr));
         } catch (Exception e) {
-            prepareUserForm(new User(login, password, email, surname, name, patronymic, null, null),
-                    req);
+            prepareUserForm(user, req);
             sendError("Invalid birthday format", Pages.USER_FORM, req, resp);
             return;
         }
 
-        Role role;
         try {
-            role = Role.valueOf(roleStr);
+            user.setRole(Role.valueOf(roleStr));
         } catch (Exception e) {
-            prepareUserForm(new User(login, password, email, surname, name, patronymic, null, null),
-                    req);
+            prepareUserForm(user, req);
             sendError("Invalid role", Pages.USER_FORM, req, resp);
             return;
         }
 
-        User user = new User(login, password, email, surname, name, patronymic, birthday, role);
+        String error =
+                isEdit ? userService.validateForForm(user, oldLogin) : userService.validateForForm(
+                        user,
+                        null);
 
         if (error != null) {
             prepareUserForm(user, req);
@@ -209,34 +206,9 @@ public class DispatcherServlet extends HttpServlet {
             sendError(error, Pages.USER_FORM, req, resp);
             return;
         }
-        if (!userService.isBirthdayBeforeNow(user.getBirthday())) {
-            prepareUserForm(user, req);
-            if (isEdit) {
-                req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
-            } else {
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
-            }
-            sendError("The date must not be today or in the future", Pages.USER_FORM, req, resp);
-            return;
-        }
         if (isEdit) {
-            if (userService.existsByLogin(user.getLogin()) && !oldLogin.equals(user.getLogin())) {
-                prepareUserForm(user, req);
-                req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
-                sendError("User with this login already exists", Pages.USER_FORM, req, resp);
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
-                return;
-            }
             userService.updateUser(oldLogin, user);
         } else {
-            if (userService.existsByLogin(user.getLogin())) {
-                prepareUserForm(user, req);
-                sendError("User with this login already exists", Pages.USER_FORM, req, resp);
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
-                return;
-            }
-
             userService.createUser(user);
         }
 
@@ -248,37 +220,6 @@ public class DispatcherServlet extends HttpServlet {
         String login = req.getParameter(SessionAttributes.LOGIN);
         userService.deleteUser(login);
         resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
-    }
-
-    private String validateUserForm(String login,
-                                    String password,
-                                    String email,
-                                    String surname,
-                                    String name,
-                                    String patronymic,
-                                    String birthday) {
-        if (login == null || login.trim().isEmpty()) {
-            return "Login is required";
-        }
-        if (password == null || password.length() < 6) {
-            return "Password must contain at least 6 characters";
-        }
-        if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            return "Invalid email";
-        }
-        if (surname == null || surname.trim().isEmpty()) {
-            return "Surname is required";
-        }
-        if (name == null || name.trim().isEmpty()) {
-            return "Name is required";
-        }
-        if (patronymic == null || patronymic.trim().isEmpty()) {
-            return "Patronymic is required";
-        }
-        if (birthday == null || birthday.isBlank()) {
-            return "Birthday is required";
-        }
-        return null;
     }
 
     private void prepareUserForm(User user, HttpServletRequest req) {
