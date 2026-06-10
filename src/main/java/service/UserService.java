@@ -8,10 +8,18 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 public class UserService {
+    private static UserService INSTANCE;
     private final UserDao userDao;
 
-    public UserService(UserDao userDao) {
+    private  UserService(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    public static UserService getInstance(UserDao userDao) {
+        if (INSTANCE == null) {
+            INSTANCE = new UserService(userDao);
+        }
+        return INSTANCE;
     }
 
     public Collection<User> getAllUsers() {
