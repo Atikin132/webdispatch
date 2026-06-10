@@ -11,15 +11,21 @@ public class UserService {
     private static UserService INSTANCE;
     private final UserDao userDao;
 
-    private  UserService(UserDao userDao) {
+    private UserService(UserDao userDao) {
         this.userDao = userDao;
     }
 
-    public static UserService getInstance(UserDao userDao) {
+    public static UserService getInstance() {
+        if (INSTANCE == null) {
+            throw new IllegalStateException("UserService is not initialized");
+        }
+        return INSTANCE;
+    }
+
+    public static void init(UserDao userDao) {
         if (INSTANCE == null) {
             INSTANCE = new UserService(userDao);
         }
-        return INSTANCE;
     }
 
     public Collection<User> getAllUsers() {
