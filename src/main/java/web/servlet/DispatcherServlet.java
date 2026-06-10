@@ -10,6 +10,8 @@ import model.User;
 import service.SecurityService;
 import service.UserService;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +33,15 @@ public class DispatcherServlet extends HttpServlet {
             Pages.USER_ADD,
             Pages.USER_EDIT);
 
-    private final UserDao userDao = new InMemoryUserDao();
+    private SecurityService securityService;
+    private UserService userService;
 
-    private final SecurityService securityService = new SecurityService(userDao);
-
-    private final UserService userService = new UserService(userDao);
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        this.userService = (UserService) config.getServletContext().getAttribute("userService");
+        this.securityService = (SecurityService) config.getServletContext().getAttribute("securityService");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req,
