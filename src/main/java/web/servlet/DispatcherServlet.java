@@ -1,8 +1,6 @@
 package web.servlet;
 
-import constants.Pages;
-import constants.Paths;
-import constants.SessionAttributes;
+import constants.*;
 import model.User;
 import service.SecurityService;
 import service.UserService;
@@ -51,25 +49,25 @@ public class DispatcherServlet extends HttpServlet {
         }
         switch (pageName) {
             case Pages.USERS:
-                req.setAttribute(SessionAttributes.USERS, userService.getAllUsers());
+                req.setAttribute(RequestAttributes.USERS, userService.getAllUsers());
                 break;
             case Pages.USER_ADD:
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
-                req.setAttribute(SessionAttributes.USER, userService.createEmptyUser());
-                req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
+                req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
+                req.setAttribute(RequestAttributes.USER, userService.createEmptyUser());
+                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusDays(1));
                 pageName = Pages.USER_FORM;
                 break;
             case Pages.USER_EDIT:
-                String login = req.getParameter(SessionAttributes.LOGIN);
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
-                req.setAttribute(SessionAttributes.USER, userService.getUser(login));
-                req.setAttribute(SessionAttributes.OLD_LOGIN, login);
-                req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
+                String login = req.getParameter(RequestParams.LOGIN);
+                req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
+                req.setAttribute(RequestAttributes.USER, userService.getUser(login));
+                req.setAttribute(RequestAttributes.OLD_LOGIN, login);
+                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusDays(1));
                 pageName = Pages.USER_FORM;
                 break;
         }
 
-        req.setAttribute(SessionAttributes.CURRENT_PAGE, pageName);
+        req.setAttribute(RequestAttributes.CURRENT_PAGE, pageName);
         forward(pageName, req, resp);
     }
 
@@ -91,8 +89,8 @@ public class DispatcherServlet extends HttpServlet {
 
     private void handleLogin(HttpServletRequest req,
                              HttpServletResponse resp) throws ServletException, IOException {
-        String login = req.getParameter(SessionAttributes.LOGIN);
-        String password = req.getParameter(SessionAttributes.PASSWORD);
+        String login = req.getParameter(RequestParams.LOGIN);
+        String password = req.getParameter(RequestParams.PASSWORD);
 
         String loginAttempt = securityService.login(login, password);
         if (loginAttempt == null) {
@@ -118,17 +116,17 @@ public class DispatcherServlet extends HttpServlet {
             IOException {
         HttpSession session = req.getSession(false);
         User currentUser = (User) session.getAttribute(SessionAttributes.USER);
-        String oldPassword = req.getParameter(SessionAttributes.OLD_PASSWORD);
-        String newPassword = req.getParameter(SessionAttributes.NEW_PASSWORD);
+        String oldPassword = req.getParameter(RequestParams.OLD_PASSWORD);
+        String newPassword = req.getParameter(RequestParams.NEW_PASSWORD);
         boolean changePassword =
                 securityService.changePassword(currentUser.getLogin(), oldPassword, newPassword);
 
         if (changePassword) {
-            req.setAttribute(SessionAttributes.SUCCESS_MESSAGE, "Password changed successfully");
+            req.setAttribute(RequestAttributes.SUCCESS_MESSAGE, "Password changed successfully");
         } else {
-            req.setAttribute(SessionAttributes.ERROR_MESSAGE, "Old password is incorrect");
+            req.setAttribute(RequestAttributes.ERROR_MESSAGE, "Old password is incorrect");
         }
-        req.setAttribute(SessionAttributes.CURRENT_PAGE, Pages.LOGIN_EDIT);
+        req.setAttribute(RequestAttributes.CURRENT_PAGE, Pages.LOGIN_EDIT);
 
         forward(Pages.LOGIN_EDIT, req, resp);
     }
@@ -143,23 +141,23 @@ public class DispatcherServlet extends HttpServlet {
                            String forwardPage,
                            HttpServletRequest req,
                            HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute(SessionAttributes.ERROR_MESSAGE, errorText);
+        req.setAttribute(RequestAttributes.ERROR_MESSAGE, errorText);
         forward(forwardPage, req, resp);
     }
 
     private void handleUserForm(HttpServletRequest req,
                                 HttpServletResponse resp,
                                 boolean isEdit) throws IOException, ServletException {
-        String oldLogin = req.getParameter(SessionAttributes.OLD_LOGIN);
+        String oldLogin = req.getParameter(RequestParams.OLD_LOGIN);
 
-        String login = req.getParameter(SessionAttributes.LOGIN);
-        String password = req.getParameter(SessionAttributes.PASSWORD);
-        String email = req.getParameter(SessionAttributes.EMAIL);
-        String surname = req.getParameter(SessionAttributes.SURNAME);
-        String name = req.getParameter(SessionAttributes.NAME);
-        String patronymic = req.getParameter(SessionAttributes.PATRONYMIC);
-        String birthdayStr = req.getParameter(SessionAttributes.BIRTHDAY);
-        String roleStr = req.getParameter(SessionAttributes.ROLE);
+        String login = req.getParameter(RequestParams.LOGIN);
+        String password = req.getParameter(RequestParams.PASSWORD);
+        String email = req.getParameter(RequestParams.EMAIL);
+        String surname = req.getParameter(RequestParams.SURNAME);
+        String name = req.getParameter(RequestParams.NAME);
+        String patronymic = req.getParameter(RequestParams.PATRONYMIC);
+        String birthdayStr = req.getParameter(RequestParams.BIRTHDAY);
+        String roleStr = req.getParameter(RequestParams.ROLE);
 
         User user = new User(login, password, email, surname, name, patronymic, null, null);
 
@@ -171,10 +169,10 @@ public class DispatcherServlet extends HttpServlet {
         if (error != null) {
             prepareUserForm(user, req);
             if (isEdit) {
-                req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
+                req.setAttribute(RequestAttributes.OLD_LOGIN, oldLogin);
+                req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
             } else {
-                req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
+                req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
             }
             sendError(error, Pages.USER_FORM, req, resp);
             return;
@@ -191,13 +189,13 @@ public class DispatcherServlet extends HttpServlet {
 
     private void handleUserDelete(HttpServletRequest req,
                                   HttpServletResponse resp) throws IOException {
-        String login = req.getParameter(SessionAttributes.LOGIN);
+        String login = req.getParameter(RequestParams.LOGIN);
         userService.deleteUser(login);
         resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
     }
 
     private void prepareUserForm(User user, HttpServletRequest req) {
-        req.setAttribute(SessionAttributes.USER, user);
-        req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
+        req.setAttribute(RequestAttributes.USER, user);
+        req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusDays(1));
     }
 }
