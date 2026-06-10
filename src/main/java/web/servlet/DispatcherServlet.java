@@ -5,7 +5,6 @@ import model.User;
 import service.SecurityService;
 import service.UserService;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +30,9 @@ public class DispatcherServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        this.userService = (UserService) config.getServletContext().getAttribute("userService");
-        this.securityService =
-                (SecurityService) config.getServletContext().getAttribute("securityService");
+    public void init() {
+        this.userService = UserService.getInstance();
+        this.securityService = SecurityService.getInstance();
     }
 
     @Override
