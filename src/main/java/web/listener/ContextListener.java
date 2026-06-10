@@ -14,7 +14,7 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        UserDao userDao = new InMemoryUserDao();
+        UserDao userDao = InMemoryUserDao.getInstance();
 
         UserService userService = new UserService(userDao);
         SecurityService securityService = new SecurityService(userService);

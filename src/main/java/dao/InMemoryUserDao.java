@@ -9,9 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryUserDao implements UserDao {
+    private static InMemoryUserDao INSTANCE;
+
     private final Map<String, User> users = new HashMap<>();
 
-    public InMemoryUserDao() {
+    private InMemoryUserDao() {
         users.put("u1",
                 new User("u1",
                         "111111",
@@ -60,6 +62,12 @@ public class InMemoryUserDao implements UserDao {
                         Role.ADMIN));
     }
 
+    public static InMemoryUserDao getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new InMemoryUserDao();
+        }
+        return INSTANCE;
+    }
 
     @Override
     public void create(User user) {
