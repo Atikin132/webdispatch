@@ -2,9 +2,12 @@ package servlet;
 
 import constants.Paths;
 import constants.SessionAttributes;
+import dao.InMemoryUserDao;
+import dao.UserDao;
 import model.Role;
 import model.User;
 import service.SecurityService;
+import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +26,11 @@ public class DispatcherServlet extends HttpServlet {
     private static final Set<String> ALLOWED_PAGES =
             Set.of("login", "welcome", "loginedit", "users", "useradd", "useredit");
 
-    private final SecurityService securityService = new SecurityService();
+    private final UserDao userDao = new InMemoryUserDao();
+
+    private final SecurityService securityService = new SecurityService(userDao);
+
+    private final UserService userService = new UserService(userDao);
 
     @Override
     protected void doGet(HttpServletRequest req,
@@ -36,7 +43,7 @@ public class DispatcherServlet extends HttpServlet {
         }
         switch (pageName) {
             case "users":
-                req.setAttribute(SessionAttributes.USERS, securityService.getAllUsers());
+                req.setAttribute(SessionAttributes.USERS, userService.getAllUsers());
                 break;
             case "useradd":
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
@@ -49,7 +56,7 @@ public class DispatcherServlet extends HttpServlet {
             case "useredit":
                 String login = req.getParameter(SessionAttributes.LOGIN);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
-                req.setAttribute(SessionAttributes.USER, securityService.getUser(login));
+                req.setAttribute(SessionAttributes.USER, userService.getUser(login));
                 req.setAttribute(SessionAttributes.OLD_LOGIN, login);
                 req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
                 pageName = "user-form";
@@ -89,7 +96,7 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         if (securityService.login(login, password)) {
-            User user = securityService.getUser(login);
+            User user = userService.getUser(login);
             req.getSession().setAttribute(SessionAttributes.USER, user);
             resp.sendRedirect(req.getContextPath() + Paths.WELCOME_PATH);
         } else {
@@ -191,7 +198,7 @@ public class DispatcherServlet extends HttpServlet {
             sendError(error, "user-form", req, resp);
             return;
         }
-        if (!securityService.isBirthdayBeforeNow(user.getBirthday())) {
+        if (!userService.isBirthdayBeforeNow(user.getBirthday())) {
             prepareUserForm(user, req);
             if (isEdit) {
                 req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
@@ -203,24 +210,23 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
         if (isEdit) {
-            if (securityService.existsByLogin(user.getLogin()) &&
-                    !oldLogin.equals(user.getLogin())) {
+            if (userService.existsByLogin(user.getLogin()) && !oldLogin.equals(user.getLogin())) {
                 prepareUserForm(user, req);
                 req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
                 sendError("User with this login already exists", "user-form", req, resp);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
                 return;
             }
-            securityService.updateUser(oldLogin, user);
+            userService.updateUser(oldLogin, user);
         } else {
-            if (securityService.existsByLogin(user.getLogin())) {
+            if (userService.existsByLogin(user.getLogin())) {
                 prepareUserForm(user, req);
                 sendError("User with this login already exists", "user-form", req, resp);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
                 return;
             }
 
-            securityService.addUser(user);
+            userService.createUser(user);
         }
 
         resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
@@ -229,7 +235,7 @@ public class DispatcherServlet extends HttpServlet {
     private void handleUserDelete(HttpServletRequest req,
                                   HttpServletResponse resp) throws IOException {
         String login = req.getParameter(SessionAttributes.LOGIN);
-        securityService.deleteUser(login);
+        userService.deleteUser(login);
         resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
     }
 
