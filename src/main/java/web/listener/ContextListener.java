@@ -17,7 +17,7 @@ public class ContextListener implements ServletContextListener {
         UserDao userDao = new InMemoryUserDao();
 
         UserService userService = new UserService(userDao);
-        SecurityService securityService = new SecurityService(userDao);
+        SecurityService securityService = new SecurityService(userService);
 
         sce.getServletContext().setAttribute("userService", userService);
         sce.getServletContext().setAttribute("securityService", securityService);

@@ -7,19 +7,20 @@ import model.User;
 import java.time.LocalDate;
 
 public class SecurityService {
-    private final UserDao userDao;
+    private final UserService userService;
 
-    public SecurityService(UserDao userDao) {
-        this.userDao = userDao;
+    public SecurityService(UserService userService) {
+        this.userService = userService;
     }
 
+
     public boolean login(String login, String password) {
-        User user = userDao.read(login);
+        User user = userService.getUser(login);
         return user != null && user.getPassword().equals(password);
     }
 
     public boolean changePassword(String login, String oldPassword, String newPassword) {
-        User user = userDao.read(login);
+        User user = userService.getUser(login);
         if (user == null) {
             return false;
         }
@@ -38,11 +39,18 @@ public class SecurityService {
                              String patronymic,
                              LocalDate birthday,
                              Role role) {
-        User user = userDao.read(login);
+        User user = userService.getUser(login);
         if (user != null) {
             return false;
         }
-        userDao.create(new User(login, password, email, surname, name, patronymic, birthday, role));
+        userService.createUser(new User(login,
+                password,
+                email,
+                surname,
+                name,
+                patronymic,
+                birthday,
+                role));
         return true;
     }
 }
