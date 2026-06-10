@@ -46,13 +46,16 @@ public class UserService {
         return birthday.isBefore(LocalDate.now());
     }
 
-    public User createEmptyUser(){
+    public User createEmptyUser() {
         User user = new User();
         user.setRole(Role.USER);
         return user;
     }
-    
-    public String validateAndPrepareUser(User user, String birthdayStr, String roleStr, String oldLogin) {
+
+    public String validateAndPrepareUser(User user,
+                                         String birthdayStr,
+                                         String roleStr,
+                                         String oldLogin) {
         try {
             user.setBirthday(LocalDate.parse(birthdayStr));
         } catch (Exception e) {

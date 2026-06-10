@@ -10,8 +10,6 @@ public class Pages {
     public static final String UNKNOWN = "unknown";
     public static final String USER_FORM = "user-form";
 
-
-
     private Pages() {
     }
 }

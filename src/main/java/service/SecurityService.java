@@ -1,13 +1,6 @@
 package service;
 
-import constants.Pages;
-import constants.Paths;
-import constants.SessionAttributes;
-import dao.UserDao;
-import model.Role;
 import model.User;
-
-import java.time.LocalDate;
 
 public class SecurityService {
     private final UserService userService;
@@ -16,9 +9,7 @@ public class SecurityService {
         this.userService = userService;
     }
 
-
     public String login(String login, String password) {
-
         login = (login != null) ? login.trim() : null;
         password = (password != null) ? password.trim() : null;
 
