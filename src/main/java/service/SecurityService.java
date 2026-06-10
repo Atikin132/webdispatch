@@ -10,11 +10,17 @@ public class SecurityService {
         this.userService = userService;
     }
 
-    public static SecurityService getInstance(UserService userService) {
+    public static SecurityService getInstance() {
+        if (INSTANCE == null) {
+            throw new IllegalStateException("SecurityService is not initialized");
+        }
+        return INSTANCE;
+    }
+
+    public static void init(UserService userService) {
         if (INSTANCE == null) {
             INSTANCE = new SecurityService(userService);
         }
-        return INSTANCE;
     }
 
     public String login(String login, String password) {
