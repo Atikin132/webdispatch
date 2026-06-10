@@ -86,4 +86,9 @@ public class InMemoryUserDao implements UserDao {
     public Collection<User> findAll() {
         return users.values();
     }
+
+    @Override
+    public void updatePassword(String login, String newPassword) {
+        users.get(login).setPassword(newPassword);
+    }
 }

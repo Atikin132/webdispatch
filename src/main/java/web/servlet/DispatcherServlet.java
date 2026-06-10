@@ -134,7 +134,6 @@ public class DispatcherServlet extends HttpServlet {
                 securityService.changePassword(currentUser.getLogin(), oldPassword, newPassword);
 
         if (changePassword) {
-            currentUser.setPassword(newPassword);
             req.setAttribute(SessionAttributes.SUCCESS_MESSAGE, "Password changed successfully");
         } else {
             req.setAttribute(SessionAttributes.ERROR_MESSAGE, "Old password is incorrect");

@@ -15,4 +15,6 @@ public interface UserDao {
     void delete(String login);
 
     Collection<User> findAll();
+
+    void updatePassword(String login, String newPassword);
 }

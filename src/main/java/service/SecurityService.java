@@ -21,13 +21,15 @@ public class SecurityService {
 
     public boolean changePassword(String login, String oldPassword, String newPassword) {
         User user = userService.getUser(login);
+
         if (user == null) {
             return false;
         }
         if (!user.getPassword().equals(oldPassword)) {
             return false;
         }
-        user.setPassword(newPassword);
+
+        userService.updatePassword(login, newPassword);
         return true;
     }
 

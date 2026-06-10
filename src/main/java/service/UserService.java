@@ -33,6 +33,10 @@ public class UserService {
         userDao.delete(login);
     }
 
+    public void updatePassword(String login, String newPassword) {
+        userDao.updatePassword(login, newPassword);
+    }
+
     public boolean existsByLogin(String login) {
         return userDao.read(login) != null;
     }
