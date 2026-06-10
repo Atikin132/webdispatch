@@ -3,10 +3,18 @@ package service;
 import model.User;
 
 public class SecurityService {
+    private static SecurityService INSTANCE;
     private final UserService userService;
 
-    public SecurityService(UserService userService) {
+    private SecurityService(UserService userService) {
         this.userService = userService;
+    }
+
+    public static SecurityService getInstance(UserService userService) {
+        if (INSTANCE == null) {
+            INSTANCE = new SecurityService(userService);
+        }
+        return INSTANCE;
     }
 
     public String login(String login, String password) {
