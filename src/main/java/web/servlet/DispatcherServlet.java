@@ -3,7 +3,6 @@ package web.servlet;
 import constants.Pages;
 import constants.Paths;
 import constants.SessionAttributes;
-import model.Role;
 import model.User;
 import service.SecurityService;
 import service.UserService;
@@ -56,9 +55,7 @@ public class DispatcherServlet extends HttpServlet {
                 break;
             case Pages.USER_ADD:
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
-                User newUser = new User();
-                newUser.setRole(Role.USER);
-                req.setAttribute(SessionAttributes.USER, newUser);
+                req.setAttribute(SessionAttributes.USER, userService.createEmptyUser());
                 req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
                 pageName = Pages.USER_FORM;
                 break;
@@ -96,20 +93,13 @@ public class DispatcherServlet extends HttpServlet {
                              HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter(SessionAttributes.LOGIN);
         String password = req.getParameter(SessionAttributes.PASSWORD);
-        login = (login != null) ? login.trim() : null;
-        password = (password != null) ? password.trim() : null;
 
-        if (login == null || login.isBlank() || password == null || password.isBlank()) {
-            sendError("Login and password cannot be empty", Pages.LOGIN, req, resp);
-            return;
-        }
-
-        if (securityService.login(login, password)) {
-            User user = userService.getUser(login);
-            req.getSession().setAttribute(SessionAttributes.USER, user);
+        String loginAttempt = securityService.login(login, password);
+        if (loginAttempt == null) {
+            req.getSession().setAttribute(SessionAttributes.USER, userService.getUser(login));
             resp.sendRedirect(req.getContextPath() + Paths.WELCOME_PATH);
         } else {
-            sendError("Wrong login or password", Pages.LOGIN, req, resp);
+            sendError(loginAttempt, Pages.LOGIN, req, resp);
         }
     }
 
@@ -173,26 +163,10 @@ public class DispatcherServlet extends HttpServlet {
 
         User user = new User(login, password, email, surname, name, patronymic, null, null);
 
-        try {
-            user.setBirthday(LocalDate.parse(birthdayStr));
-        } catch (Exception e) {
-            prepareUserForm(user, req);
-            sendError("Invalid birthday format", Pages.USER_FORM, req, resp);
-            return;
-        }
-
-        try {
-            user.setRole(Role.valueOf(roleStr));
-        } catch (Exception e) {
-            prepareUserForm(user, req);
-            sendError("Invalid role", Pages.USER_FORM, req, resp);
-            return;
-        }
-
-        String error =
-                isEdit ? userService.validateForForm(user, oldLogin) : userService.validateForForm(
-                        user,
-                        null);
+        String error = isEdit ? userService.validateAndPrepareUser(user,
+                birthdayStr,
+                roleStr,
+                oldLogin) : userService.validateAndPrepareUser(user, birthdayStr, roleStr, null);
 
         if (error != null) {
             prepareUserForm(user, req);
@@ -205,6 +179,7 @@ public class DispatcherServlet extends HttpServlet {
             sendError(error, Pages.USER_FORM, req, resp);
             return;
         }
+
         if (isEdit) {
             userService.updateUser(oldLogin, user);
         } else {

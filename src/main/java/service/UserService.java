@@ -1,6 +1,7 @@
 package service;
 
 import dao.UserDao;
+import model.Role;
 import model.User;
 
 import java.time.LocalDate;
@@ -43,6 +44,27 @@ public class UserService {
 
     public boolean isBirthdayBeforeNow(LocalDate birthday) {
         return birthday.isBefore(LocalDate.now());
+    }
+
+    public User createEmptyUser(){
+        User user = new User();
+        user.setRole(Role.USER);
+        return user;
+    }
+    
+    public String validateAndPrepareUser(User user, String birthdayStr, String roleStr, String oldLogin) {
+        try {
+            user.setBirthday(LocalDate.parse(birthdayStr));
+        } catch (Exception e) {
+            return "Invalid birthday format";
+        }
+
+        try {
+            user.setRole(Role.valueOf(roleStr));
+        } catch (Exception e) {
+            return "Invalid role";
+        }
+        return (oldLogin != null) ? validateForForm(user, oldLogin) : validateForForm(user, null);
     }
 
     public String validateForForm(User user, String oldLogin) {
