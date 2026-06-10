@@ -51,27 +51,4 @@ public class SecurityService {
         userService.updatePassword(login, newPassword);
         return true;
     }
-
-    private boolean register(String login,
-                             String password,
-                             String email,
-                             String surname,
-                             String name,
-                             String patronymic,
-                             LocalDate birthday,
-                             Role role) {
-        User user = userService.getUser(login);
-        if (user != null) {
-            return false;
-        }
-        userService.createUser(new User(login,
-                password,
-                email,
-                surname,
-                name,
-                patronymic,
-                birthday,
-                role));
-        return true;
-    }
 }
