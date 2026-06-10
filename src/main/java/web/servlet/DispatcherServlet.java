@@ -1,5 +1,6 @@
-package servlet;
+package web.servlet;
 
+import constants.Pages;
 import constants.Paths;
 import constants.SessionAttributes;
 import dao.InMemoryUserDao;
@@ -23,8 +24,12 @@ public class DispatcherServlet extends HttpServlet {
     private static final String JSP_PATH = "/WEB-INF/jsp/";
     private static final String JSP_EXTENSION = ".jsp";
 
-    private static final Set<String> ALLOWED_PAGES =
-            Set.of("login", "welcome", "loginedit", "users", "useradd", "useredit");
+    private static final Set<String> ALLOWED_PAGES = Set.of(Pages.LOGIN,
+            Pages.WELCOME,
+            Pages.LOGIN_EDIT,
+            Pages.USERS,
+            Pages.USER_ADD,
+            Pages.USER_EDIT);
 
     private final UserDao userDao = new InMemoryUserDao();
 
@@ -39,27 +44,27 @@ public class DispatcherServlet extends HttpServlet {
         String pageName = path.substring(1, path.lastIndexOf("."));
 
         if (!ALLOWED_PAGES.contains(pageName)) {
-            pageName = "unknown";
+            pageName = Pages.UNKNOWN;
         }
         switch (pageName) {
-            case "users":
+            case Pages.USERS:
                 req.setAttribute(SessionAttributes.USERS, userService.getAllUsers());
                 break;
-            case "useradd":
+            case Pages.USER_ADD:
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
                 User newUser = new User();
                 newUser.setRole(Role.USER);
                 req.setAttribute(SessionAttributes.USER, newUser);
                 req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
-                pageName = "user-form";
+                pageName = Pages.USER_FORM;
                 break;
-            case "useredit":
+            case Pages.USER_EDIT:
                 String login = req.getParameter(SessionAttributes.LOGIN);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
                 req.setAttribute(SessionAttributes.USER, userService.getUser(login));
                 req.setAttribute(SessionAttributes.OLD_LOGIN, login);
                 req.setAttribute(SessionAttributes.MAX_DATE, LocalDate.now().minusDays(1));
-                pageName = "user-form";
+                pageName = Pages.USER_FORM;
                 break;
         }
 
@@ -91,7 +96,7 @@ public class DispatcherServlet extends HttpServlet {
         password = (password != null) ? password.trim() : null;
 
         if (login == null || login.isBlank() || password == null || password.isBlank()) {
-            sendError("Login and password cannot be empty", "login", req, resp);
+            sendError("Login and password cannot be empty", Pages.LOGIN, req, resp);
             return;
         }
 
@@ -100,7 +105,7 @@ public class DispatcherServlet extends HttpServlet {
             req.getSession().setAttribute(SessionAttributes.USER, user);
             resp.sendRedirect(req.getContextPath() + Paths.WELCOME_PATH);
         } else {
-            sendError("Wrong login or password", "login", req, resp);
+            sendError("Wrong login or password", Pages.LOGIN, req, resp);
         }
     }
 
@@ -130,9 +135,9 @@ public class DispatcherServlet extends HttpServlet {
         } else {
             req.setAttribute(SessionAttributes.ERROR_MESSAGE, "Old password is incorrect");
         }
-        req.setAttribute(SessionAttributes.CURRENT_PAGE, "loginedit");
+        req.setAttribute(SessionAttributes.CURRENT_PAGE, Pages.LOGIN_EDIT);
 
-        forward("loginedit", req, resp);
+        forward(Pages.LOGIN_EDIT, req, resp);
     }
 
     private void forward(String page,
@@ -171,7 +176,7 @@ public class DispatcherServlet extends HttpServlet {
         } catch (Exception e) {
             prepareUserForm(new User(login, password, email, surname, name, patronymic, null, null),
                     req);
-            sendError("Invalid birthday format", "user-form", req, resp);
+            sendError("Invalid birthday format", Pages.USER_FORM, req, resp);
             return;
         }
 
@@ -181,7 +186,7 @@ public class DispatcherServlet extends HttpServlet {
         } catch (Exception e) {
             prepareUserForm(new User(login, password, email, surname, name, patronymic, null, null),
                     req);
-            sendError("Invalid role", "user-form", req, resp);
+            sendError("Invalid role", Pages.USER_FORM, req, resp);
             return;
         }
 
@@ -195,7 +200,7 @@ public class DispatcherServlet extends HttpServlet {
             } else {
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
             }
-            sendError(error, "user-form", req, resp);
+            sendError(error, Pages.USER_FORM, req, resp);
             return;
         }
         if (!userService.isBirthdayBeforeNow(user.getBirthday())) {
@@ -206,14 +211,14 @@ public class DispatcherServlet extends HttpServlet {
             } else {
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
             }
-            sendError("The date must not be today or in the future", "user-form", req, resp);
+            sendError("The date must not be today or in the future", Pages.USER_FORM, req, resp);
             return;
         }
         if (isEdit) {
             if (userService.existsByLogin(user.getLogin()) && !oldLogin.equals(user.getLogin())) {
                 prepareUserForm(user, req);
                 req.setAttribute(SessionAttributes.OLD_LOGIN, oldLogin);
-                sendError("User with this login already exists", "user-form", req, resp);
+                sendError("User with this login already exists", Pages.USER_FORM, req, resp);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "edit");
                 return;
             }
@@ -221,7 +226,7 @@ public class DispatcherServlet extends HttpServlet {
         } else {
             if (userService.existsByLogin(user.getLogin())) {
                 prepareUserForm(user, req);
-                sendError("User with this login already exists", "user-form", req, resp);
+                sendError("User with this login already exists", Pages.USER_FORM, req, resp);
                 req.setAttribute(SessionAttributes.USER_FORM_MODE, "add");
                 return;
             }

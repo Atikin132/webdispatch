@@ -10,7 +10,7 @@
     <display-name>WebDispatch</display-name>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
-        <servlet-class>servlet.DispatcherServlet</servlet-class>
+        <servlet-class>web.servlet.DispatcherServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -20,7 +20,7 @@
 
     <filter>
         <filter-name>authFilter</filter-name>
-        <filter-class>filter.AuthFilter</filter-class>
+        <filter-class>web.filter.AuthFilter</filter-class>
     </filter>
 
     <filter-mapping>

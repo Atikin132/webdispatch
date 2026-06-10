@@ -1,4 +1,4 @@
-package filter;
+package web.filter;
 
 import constants.Paths;
 import constants.SessionAttributes;
