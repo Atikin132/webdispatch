@@ -1,7 +1,8 @@
 package web.listener;
 
-import dao.InMemoryUserDao;
 import dao.UserDao;
+import factory.UserDaoFactory;
+import factory.UserDaoType;
 import service.SecurityService;
 import service.UserService;
 
@@ -14,7 +15,7 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        UserDao userDao = InMemoryUserDao.getInstance();
+        UserDao userDao = UserDaoFactory.getUserDao(UserDaoType.MEMORY);
 
         UserService.init(userDao);
         SecurityService.init(UserService.getInstance());
