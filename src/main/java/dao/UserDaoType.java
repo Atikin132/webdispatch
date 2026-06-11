@@ -1,4 +1,4 @@
-package factory;
+package dao;
 
 public enum UserDaoType {
     MEMORY,

@@ -62,7 +62,7 @@ public class InMemoryUserDao implements UserDao {
                         Role.ADMIN));
     }
 
-    public static InMemoryUserDao getInstance() {
+    static InMemoryUserDao getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new InMemoryUserDao();
         }

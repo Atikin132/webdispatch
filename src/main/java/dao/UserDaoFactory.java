@@ -1,7 +1,4 @@
-package factory;
-
-import dao.InMemoryUserDao;
-import dao.UserDao;
+package dao;
 
 public class UserDaoFactory {
 

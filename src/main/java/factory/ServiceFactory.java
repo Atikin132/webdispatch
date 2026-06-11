@@ -1,5 +1,6 @@
 package factory;
 
+import dao.UserDaoFactory;
 import service.SecurityService;
 import service.UserService;
 
