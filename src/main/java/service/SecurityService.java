@@ -23,6 +23,10 @@ public class SecurityService {
         }
     }
 
+    public static boolean isInitialized() {
+        return INSTANCE != null;
+    }
+
     public String login(String login, String password) {
         login = (login != null) ? login.trim() : null;
         password = (password != null) ? password.trim() : null;

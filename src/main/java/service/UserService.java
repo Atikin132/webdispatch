@@ -28,6 +28,10 @@ public class UserService {
         }
     }
 
+    public static boolean isInitialized() {
+        return INSTANCE != null;
+    }
+
     public Collection<User> getAllUsers() {
         return userDao.findAll();
     }

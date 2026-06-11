@@ -1,6 +1,7 @@
 package web.servlet;
 
 import constants.*;
+import factory.ServiceFactory;
 import model.User;
 import service.SecurityService;
 import service.UserService;
@@ -31,8 +32,8 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
-        this.userService = UserService.getInstance();
-        this.securityService = SecurityService.getInstance();
+        this.userService = ServiceFactory.getUserService();
+        this.securityService =  ServiceFactory.getSecurityService();
     }
 
     @Override
