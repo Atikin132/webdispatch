@@ -15,20 +15,20 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public static UserService getInstance() {
+    static UserService getInstance() {
         if (INSTANCE == null) {
             throw new IllegalStateException("UserService is not initialized");
         }
         return INSTANCE;
     }
 
-    public static void init(UserDao userDao) {
+    static void init(UserDao userDao) {
         if (INSTANCE == null) {
             INSTANCE = new UserService(userDao);
         }
     }
 
-    public static boolean isInitialized() {
+    static boolean isInitialized() {
         return INSTANCE != null;
     }
 

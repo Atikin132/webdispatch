@@ -1,8 +1,6 @@
-package factory;
+package service;
 
 import dao.UserDaoFactory;
-import service.SecurityService;
-import service.UserService;
 
 public class ServiceFactory {
 

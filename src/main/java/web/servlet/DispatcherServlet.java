@@ -1,7 +1,7 @@
 package web.servlet;
 
 import constants.*;
-import factory.ServiceFactory;
+import service.ServiceFactory;
 import model.User;
 import service.SecurityService;
 import service.UserService;

@@ -10,20 +10,20 @@ public class SecurityService {
         this.userService = userService;
     }
 
-    public static SecurityService getInstance() {
+    static SecurityService getInstance() {
         if (INSTANCE == null) {
             throw new IllegalStateException("SecurityService is not initialized");
         }
         return INSTANCE;
     }
 
-    public static void init(UserService userService) {
+    static void init(UserService userService) {
         if (INSTANCE == null) {
             INSTANCE = new SecurityService(userService);
         }
     }
 
-    public static boolean isInitialized() {
+    static boolean isInitialized() {
         return INSTANCE != null;
     }
 
