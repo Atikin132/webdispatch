@@ -9,6 +9,7 @@
               action="${pageContext.request.contextPath}/${requestScope.mode == 'add' ?
         'useradd.jhtml' : 'useredit.jhtml?oldLogin='.concat(requestScope.oldLogin)}">
             <div class="inputs-container">
+                <input type="hidden" id="id" name="id" value="${requestScope.user.id}" />
                 <div class="form-group">
                     <label class="form-label" for="login">Login:</label>
                     <input id="login" class="form-input" type="text" name="login" required
@@ -20,24 +21,9 @@
                            autocomplete="off" value="${requestScope.user.password}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="email">Email:</label>
-                    <input id="email" class="form-input" type="email" name="email" required
-                           autocomplete="off" value="${requestScope.user.email}">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="surname">Surname:</label>
-                    <input id="surname" class="form-input" type="text" name="surname" required
-                           autocomplete="off" value="${requestScope.user.surname}">
-                </div>
-                <div class="form-group">
                     <label class="form-label" for="name">Name:</label>
                     <input id="name" class="form-input" type="text" name="name" required
                            autocomplete="off" value="${requestScope.user.name}">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="patronymic">Patronymic:</label>
-                    <input id="patronymic" class="form-input" type="text" name="patronymic" required
-                           autocomplete="off" value="${requestScope.user.patronymic}">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="birthday">Birthday:</label>
@@ -47,15 +33,30 @@
                            autocomplete="off" value="${requestScope.user.birthday}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="role">Role:</label>
-                    <select id="role" class="form-input" name="role">
-                        <option value="USER" ${requestScope.user.role == 'USER' ? 'selected': ''}>
-                            USER
-                        </option>
-                        <option value="ADMIN" ${requestScope.user.role == 'ADMIN' ? 'selected' : ''}>
-                            ADMIN
-                        </option>
-                    </select>
+                    <label class="form-label" for="salary">Salary:</label>
+                    <input id="salary" class="form-input" type="text" name="salary" required
+                           autocomplete="off" value="${requestScope.user.salary}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Roles:</label>
+                    <div class="roles-checkboxes form-input">
+                        <label><input type="checkbox" name="roles"
+                                      value="1" ${requestScope.user.hasRole(1) ? 'checked' : ''}>
+                            Administrator</label>
+                        <label><input type="checkbox" name="roles"
+                                      value="2" ${requestScope.user.hasRole(2) ? 'checked' : ''}>
+                            Manager</label>
+                        <label><input type="checkbox" name="roles"
+                                      value="3" ${requestScope.user.hasRole(3) ? 'checked' : ''}>
+                            Bookkeeper</label>
+                        <label><input type="checkbox" name="roles"
+                                      value="4" ${requestScope.user.hasRole(4) ? 'checked' : ''}>
+                            Developer</label>
+                        <label><input type="checkbox" name="roles"
+                                      value="5" ${requestScope.user.hasRole(5) ? 'checked' : ''}>
+                            Designer</label>
+                    </div>
+
                 </div>
             </div>
             <c:if test="${not empty requestScope.errorMessage}">

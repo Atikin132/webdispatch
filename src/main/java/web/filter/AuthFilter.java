@@ -50,7 +50,7 @@ public class AuthFilter implements Filter {
         if (loggedIn) {
             boolean adminsPath = ADMINS_PATHS.contains(path);
             if (adminsPath &&
-                    ((User) session.getAttribute(SessionAttributes.USER)).getRole() != Role.ADMIN) {
+                    !((User) session.getAttribute(SessionAttributes.USER)).hasRole("Administrator")) {
                 resp.sendRedirect(req.getContextPath() + Paths.WELCOME_PATH);
                 return;
             }

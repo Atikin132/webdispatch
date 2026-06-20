@@ -33,7 +33,7 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void init() {
         this.userService = ServiceFactory.getUserService();
-        this.securityService =  ServiceFactory.getSecurityService();
+        this.securityService = ServiceFactory.getSecurityService();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class DispatcherServlet extends HttpServlet {
             case Pages.USER_ADD:
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
                 req.setAttribute(RequestAttributes.USER, userService.createEmptyUser());
-                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusDays(1));
+                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(18));
                 pageName = Pages.USER_FORM;
                 break;
             case Pages.USER_EDIT:
@@ -60,7 +60,7 @@ public class DispatcherServlet extends HttpServlet {
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
                 req.setAttribute(RequestAttributes.USER, userService.getUser(login));
                 req.setAttribute(RequestAttributes.OLD_LOGIN, login);
-                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusDays(1));
+                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(18));
                 pageName = Pages.USER_FORM;
                 break;
         }
@@ -148,21 +148,31 @@ public class DispatcherServlet extends HttpServlet {
                                 boolean isEdit) throws IOException, ServletException {
         String oldLogin = req.getParameter(RequestParams.OLD_LOGIN);
 
+        String idStr = req.getParameter(RequestParams.ID);
         String login = req.getParameter(RequestParams.LOGIN);
         String password = req.getParameter(RequestParams.PASSWORD);
-        String email = req.getParameter(RequestParams.EMAIL);
-        String surname = req.getParameter(RequestParams.SURNAME);
         String name = req.getParameter(RequestParams.NAME);
-        String patronymic = req.getParameter(RequestParams.PATRONYMIC);
         String birthdayStr = req.getParameter(RequestParams.BIRTHDAY);
-        String roleStr = req.getParameter(RequestParams.ROLE);
+        String salaryStr = req.getParameter(RequestParams.SALARY);
+        String[] selectedRoleIds = req.getParameterValues(RequestParams.ROLES);
 
-        User user = new User(login, password, email, surname, name, patronymic, null, null);
+        User user = new User(null, login, password, name, null, null, null, null);
 
-        String error = isEdit ? userService.validateAndPrepareUser(user,
+        String error = isEdit
+                ? userService.validateAndPrepareUser(
+                user,
+                idStr,
                 birthdayStr,
-                roleStr,
-                oldLogin) : userService.validateAndPrepareUser(user, birthdayStr, roleStr, null);
+                salaryStr,
+                selectedRoleIds,
+                oldLogin)
+                : userService.validateAndPrepareUser(
+                user,
+                idStr,
+                birthdayStr,
+                salaryStr,
+                selectedRoleIds,
+                null);
 
         if (error != null) {
             prepareUserForm(user, req);
@@ -194,6 +204,6 @@ public class DispatcherServlet extends HttpServlet {
 
     private void prepareUserForm(User user, HttpServletRequest req) {
         req.setAttribute(RequestAttributes.USER, user);
-        req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusDays(1));
+        req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(18));
     }
 }

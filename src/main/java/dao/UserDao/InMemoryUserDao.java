@@ -1,8 +1,8 @@
-package dao;
+package dao.UserDao;
 
-import model.Role;
 import model.User;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,51 +15,45 @@ public class InMemoryUserDao implements UserDao {
 
     private InMemoryUserDao() {
         users.put("u1",
-                new User("u1",
+                new User(1,
+                        "u1",
                         "111111",
-                        "u1@example.com",
-                        "Petrov",
                         "Peter",
-                        "Petrovich",
                         LocalDate.of(1990, 1, 1),
-                        Role.USER));
+                        36,
+                        BigDecimal.valueOf(3000)));
         users.put("u2",
-                new User("u2",
+                new User(2,
+                        "u2",
                         "222222",
-                        "u2@example.com",
-                        "Ivanov",
                         "Ivan",
-                        "Ivanovich",
-                        LocalDate.of(2004, 6, 25),
-                        Role.USER));
+                        LocalDate.of(2004, 6, 18),
+                        22,
+                        BigDecimal.valueOf(5000)));
         users.put("u3",
-                new User("u3",
+                new User(3,
+                        "u3",
                         "333333",
-                        "u3@example.com",
-                        "Vasiliev",
                         "Vasili",
-                        "Vasilievich",
                         LocalDate.of(1984, 5, 9),
-                        Role.USER));
-
+                        42,
+                        BigDecimal.valueOf(2000)));
         users.put("admin1",
-                new User("admin1",
+                new User(4,
                         "admin1",
-                        "admin1@example.com",
-                        "Adminov",
+                        "admin1",
                         "Admin",
-                        "Adminovich",
                         LocalDate.of(2000, 1, 1),
-                        Role.ADMIN));
+                        26,
+                        BigDecimal.valueOf(8000)));
         users.put("admin2",
-                new User("admin2",
+                new User(5,
                         "admin2",
-                        "admin2@example.com",
-                        "Antonov",
+                        "admin2",
                         "Anton",
-                        "Antonovich",
-                        LocalDate.of(1999, 9, 9),
-                        Role.ADMIN));
+                        LocalDate.of(1999, 6, 9),
+                        27,
+                        BigDecimal.valueOf(8000)));
     }
 
     static InMemoryUserDao getInstance() {

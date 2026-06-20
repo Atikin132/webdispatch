@@ -9,13 +9,13 @@
             <table class="users-table">
                 <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Login</th>
-                    <th>Email</th>
-                    <th>Surname</th>
                     <th>Name</th>
-                    <th>Patronymic</th>
                     <th>Birthday</th>
-                    <th>Role</th>
+                    <th>Age</th>
+                    <th>Salary</th>
+                    <th>Roles</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -24,13 +24,15 @@
                 <tbody>
                 <c:forEach var="user" items="${requestScope.users}">
                     <tr>
+                        <td>${user.id}</td>
                         <td>${user.login}</td>
-                        <td>${user.email}</td>
-                        <td>${user.surname}</td>
                         <td>${user.name}</td>
-                        <td>${user.patronymic}</td>
                         <td>${user.birthday}</td>
-                        <td>${user.role}</td>
+                        <td>${user.age}</td>
+                        <td>${user.salary}</td>
+                        <td><c:forEach var="role" items="${user.roles}">
+                            <p>${role.toString()}</p>
+                        </c:forEach></td>
                         <td>
                             <div class="btn-container">
                                 <a class="edit-btn"

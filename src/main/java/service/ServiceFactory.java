@@ -1,6 +1,7 @@
 package service;
 
-import dao.UserDaoFactory;
+import dao.RoleDao.RoleDaoFactory;
+import dao.UserDao.UserDaoFactory;
 
 public class ServiceFactory {
 
@@ -9,7 +10,7 @@ public class ServiceFactory {
 
     public static UserService getUserService() {
         if (!UserService.isInitialized()) {
-            UserService.init(UserDaoFactory.getUserDao());
+            UserService.init(UserDaoFactory.getUserDao(), RoleDaoFactory.getUserDao());
         }
         return UserService.getInstance();
     }

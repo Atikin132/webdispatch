@@ -1,36 +1,63 @@
 package model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class User {
+    private Integer id;
     private String login;
     private String password;
-    private String email;
-    private String surname;
     private String name;
-    private String patronymic;
     private LocalDate birthday;
-    private Role role;
+    private Integer age;
+    private BigDecimal salary;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String login,
+    public User(Integer id,
+                String login,
                 String password,
-                String email,
-                String surname,
                 String name,
-                String patronymic,
                 LocalDate birthday,
-                Role role) {
+                Integer age,
+                BigDecimal salary) {
+        this.id = id;
         this.login = login;
         this.password = password;
-        this.email = email;
-        this.surname = surname;
         this.name = name;
-        this.patronymic = patronymic;
         this.birthday = birthday;
-        this.role = role;
+        this.age = age;
+        this.salary = salary;
+    }
+
+    public User(Integer id,
+                String login,
+                String password,
+                String name,
+                LocalDate birthday,
+                Integer age,
+                BigDecimal salary,
+                Set<Role> roles) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.name = name;
+        this.birthday = birthday;
+        this.age = age;
+        this.salary = salary;
+        this.roles = roles;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -49,36 +76,12 @@ public class User {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
     }
 
     public LocalDate getBirthday() {
@@ -89,19 +92,55 @@ public class User {
         this.birthday = birthday;
     }
 
-    public Role getRole() {
-        return role;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void addRole(Integer roleId) {
+        this.roles.add(new Role(roleId));
+    }
+
+    public boolean hasRole(String roleName) {
+        return roles.stream()
+                .anyMatch(role -> roleName.equals(role.getName()));
+    }
+
+    public boolean hasRole(int roleId) {
+        return roles.stream()
+                .anyMatch(role -> roleId == role.getId());
     }
 
     @Override
     public String toString() {
-        return "User{" + "login='" + login + '\'' + ", password='" + password + '\'' + ", email='" +
-                email + '\'' + ", surname='" + surname + '\'' + ", name='" + name + '\'' +
-                ", patronymic='" + patronymic + '\'' + ", birthday=" + birthday + ", role=" + role +
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", birthday=" + birthday +
+                ", age=" + age +
+                ", salary=" + salary +
+                ", roles=" + roles +
                 '}';
     }
 }

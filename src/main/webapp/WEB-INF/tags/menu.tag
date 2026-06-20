@@ -6,7 +6,7 @@
         <li class="${requestScope.currentPage == 'welcome' ? 'active' : ''}">
             <a href="${pageContext.request.contextPath}/welcome.jhtml">Home</a>
         </li>
-        <c:if test="${sessionScope.user.role == 'ADMIN'}">
+        <c:if test="${sessionScope.user.hasRole('Administrator')}">
             <li class="${requestScope.currentPage == 'users' ? 'active' : ''}">
                 <a href="${pageContext.request.contextPath}/users.jhtml">Users</a>
             </li>

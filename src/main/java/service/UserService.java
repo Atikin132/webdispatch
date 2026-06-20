@@ -1,18 +1,25 @@
 package service;
 
-import dao.UserDao;
+import dao.RoleDao.RoleDao;
+import dao.UserDao.UserDao;
 import model.Role;
 import model.User;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserService {
     private static UserService INSTANCE;
     private final UserDao userDao;
+    private final RoleDao roleDao;
 
-    private UserService(UserDao userDao) {
+    private UserService(UserDao userDao, RoleDao roleDao) {
         this.userDao = userDao;
+        this.roleDao = roleDao;
     }
 
     static UserService getInstance() {
@@ -22,9 +29,9 @@ public class UserService {
         return INSTANCE;
     }
 
-    static void init(UserDao userDao) {
+    static void init(UserDao userDao, RoleDao roleDao) {
         if (INSTANCE == null) {
-            INSTANCE = new UserService(userDao);
+            INSTANCE = new UserService(userDao, roleDao);
         }
     }
 
@@ -33,19 +40,30 @@ public class UserService {
     }
 
     public Collection<User> getAllUsers() {
-        return userDao.findAll();
+        Collection<User> users = userDao.findAll();
+        for (User user : users) {
+            user.setRoles(roleDao.findByUserId(user.getId()));
+        }
+        return users;
     }
 
     public User getUser(String login) {
-        return userDao.read(login);
+        User user = userDao.read(login);
+        if (user != null) {
+            user.setRoles(roleDao.findByUserId(user.getId()));
+        }
+        return user;
     }
 
     public void createUser(User user) {
         userDao.create(user);
+        roleDao.saveRolesForUser(user.getId(), user.getRoles());
     }
 
     public void updateUser(String oldLogin, User updatedUser) {
         userDao.update(oldLogin, updatedUser);
+        roleDao.deleteRolesForUser(updatedUser.getId());
+        roleDao.saveRolesForUser(updatedUser.getId(), updatedUser.getRoles());
     }
 
     public void deleteUser(String login) {
@@ -65,15 +83,19 @@ public class UserService {
     }
 
     public User createEmptyUser() {
-        User user = new User();
-        user.setRole(Role.USER);
-        return user;
+        return new User();
     }
 
     public String validateAndPrepareUser(User user,
+                                         String idStr,
                                          String birthdayStr,
-                                         String roleStr,
+                                         String salaryStr,
+                                         String[] selectedRoleIds,
                                          String oldLogin) {
+        if (!idStr.isEmpty()) {
+            user.setId(Integer.parseInt(idStr));
+        }
+
         try {
             user.setBirthday(LocalDate.parse(birthdayStr));
         } catch (Exception e) {
@@ -81,11 +103,33 @@ public class UserService {
         }
 
         try {
-            user.setRole(Role.valueOf(roleStr));
+            user.setSalary(new BigDecimal(salaryStr));
         } catch (Exception e) {
-            return "Invalid role";
+            return "Invalid salary";
         }
-        return (oldLogin != null) ? validateForForm(user, oldLogin) : validateForForm(user, null);
+
+        prepareRoles(user, selectedRoleIds);
+
+        user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
+
+        return validateForForm(user, oldLogin);
+    }
+
+    private void prepareRoles(User user, String[] selectedRoleIds) {
+        Set<Role> roles = new HashSet<>();
+
+        if (selectedRoleIds != null) {
+            for (String roleIdStr : selectedRoleIds) {
+
+                Role role = roleDao.findById(Integer.parseInt(roleIdStr));
+
+                if (role != null) {
+                    roles.add(role);
+                }
+            }
+        }
+
+        user.setRoles(roles);
     }
 
     public String validateForForm(User user, String oldLogin) {
@@ -114,21 +158,14 @@ public class UserService {
         if (user.getPassword() == null || user.getPassword().length() < 6) {
             return "Password must contain at least 6 characters";
         }
-        if (user.getEmail() == null ||
-                !user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            return "Invalid email";
-        }
-        if (user.getSurname() == null || user.getSurname().trim().isEmpty()) {
-            return "Surname is required";
-        }
         if (user.getName() == null || user.getName().trim().isEmpty()) {
             return "Name is required";
         }
-        if (user.getPatronymic() == null || user.getPatronymic().trim().isEmpty()) {
-            return "Patronymic is required";
-        }
         if (user.getBirthday() == null) {
             return "Birthday is required";
+        }
+        if (user.getSalary() == null || user.getSalary().compareTo(BigDecimal.ZERO) < 0) {
+            return "Salary cannot be negative or null";
         }
         return null;
     }
