@@ -8,13 +8,15 @@ public interface UserDao {
 
     void create(User user);
 
-    void update(String oldLogin, User user);
+    void update(Integer id, User user);
 
-    User read(String login);
+    User read(Integer id);
 
-    void delete(String login);
+    void delete(Integer id);
 
     Collection<User> findAll();
 
-    void updatePassword(String login, String newPassword);
+    void updatePassword(Integer id, String newPassword);
+
+    User findByLogin(String login);
 }

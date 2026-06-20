@@ -47,8 +47,16 @@ public class UserService {
         return users;
     }
 
-    public User getUser(String login) {
-        User user = userDao.read(login);
+    public User getUser(Integer id) {
+        User user = userDao.read(id);
+        if (user != null) {
+            user.setRoles(roleDao.findByUserId(user.getId()));
+        }
+        return user;
+    }
+
+    public User getUserByLogin(String login) {
+        User user = userDao.findByLogin(login);
         if (user != null) {
             user.setRoles(roleDao.findByUserId(user.getId()));
         }
@@ -60,22 +68,18 @@ public class UserService {
         roleDao.saveRolesForUser(user.getId(), user.getRoles());
     }
 
-    public void updateUser(String oldLogin, User updatedUser) {
-        userDao.update(oldLogin, updatedUser);
-        roleDao.deleteRolesForUser(updatedUser.getId());
-        roleDao.saveRolesForUser(updatedUser.getId(), updatedUser.getRoles());
+    public void updateUser(Integer id, User updatedUser) {
+        userDao.update(id, updatedUser);
+        roleDao.deleteRolesForUser(id);
+        roleDao.saveRolesForUser(id, updatedUser.getRoles());
     }
 
-    public void deleteUser(String login) {
-        userDao.delete(login);
+    public void deleteUser(Integer id) {
+        userDao.delete(id);
     }
 
-    public void updatePassword(String login, String newPassword) {
-        userDao.updatePassword(login, newPassword);
-    }
-
-    public boolean existsByLogin(String login) {
-        return userDao.read(login) != null;
+    public void updatePassword(Integer id, String newPassword) {
+        userDao.updatePassword(id, newPassword);
     }
 
     public boolean isBirthdayBeforeNow(LocalDate birthday) {
@@ -90,11 +94,12 @@ public class UserService {
                                          String idStr,
                                          String birthdayStr,
                                          String salaryStr,
-                                         String[] selectedRoleIds,
-                                         String oldLogin) {
+                                         String[] selectedRoleIds) {
         if (!idStr.isEmpty()) {
             user.setId(Integer.parseInt(idStr));
         }
+
+        prepareRoles(user, selectedRoleIds);
 
         try {
             user.setBirthday(LocalDate.parse(birthdayStr));
@@ -108,11 +113,9 @@ public class UserService {
             return "Invalid salary";
         }
 
-        prepareRoles(user, selectedRoleIds);
-
         user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
 
-        return validateForForm(user, oldLogin);
+        return validateForForm(user);
     }
 
     private void prepareRoles(User user, String[] selectedRoleIds) {
@@ -132,7 +135,7 @@ public class UserService {
         user.setRoles(roles);
     }
 
-    public String validateForForm(User user, String oldLogin) {
+    public String validateForForm(User user) {
         String basicError = validateUser(user);
         if (basicError != null) {
             return basicError;
@@ -142,12 +145,11 @@ public class UserService {
             return "The date must not be today or in the future";
         }
 
-        boolean isLoginTaken = (oldLogin != null) ? (!oldLogin.equals(user.getLogin()) &&
-                existsByLogin(user.getLogin())) : existsByLogin(user.getLogin());
-        if (isLoginTaken) {
+        User existingUser = userDao.findByLogin(user.getLogin().trim());
+
+        if (existingUser != null && !existingUser.getId().equals(user.getId())) {
             return "User with this login already exists";
         }
-
         return null;
     }
 

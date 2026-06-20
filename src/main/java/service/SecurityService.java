@@ -38,7 +38,7 @@ public class SecurityService {
             return "Password cannot be empty";
         }
 
-        User user = userService.getUser(login);
+        User user = userService.getUserByLogin(login);
 
         if (user != null && user.getPassword().equals(password)) {
             return null;
@@ -47,8 +47,8 @@ public class SecurityService {
         }
     }
 
-    public boolean changePassword(String login, String oldPassword, String newPassword) {
-        User user = userService.getUser(login);
+    public boolean changePassword(Integer userId, String oldPassword, String newPassword) {
+        User user = userService.getUser(userId);
 
         if (user == null) {
             return false;
@@ -57,7 +57,7 @@ public class SecurityService {
             return false;
         }
 
-        userService.updatePassword(login, newPassword);
+        userService.updatePassword(userId, newPassword);
         return true;
     }
 }

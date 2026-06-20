@@ -7,7 +7,7 @@
         <h2>${requestScope.mode == 'add' ? 'Add User' : 'Edit User'}</h2>
         <form class="user-form" method="post"
               action="${pageContext.request.contextPath}/${requestScope.mode == 'add' ?
-        'useradd.jhtml' : 'useredit.jhtml?oldLogin='.concat(requestScope.oldLogin)}">
+        'useradd.jhtml' : 'useredit.jhtml?id='.concat(requestScope.user.id)}">
             <div class="inputs-container">
                 <input type="hidden" id="id" name="id" value="${requestScope.user.id}" />
                 <div class="form-group">
