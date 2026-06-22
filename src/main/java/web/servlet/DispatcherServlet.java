@@ -2,6 +2,7 @@ package web.servlet;
 
 import constants.*;
 import model.User;
+import service.RoleService;
 import service.SecurityService;
 import service.ServiceFactory;
 import service.UserService;
@@ -30,11 +31,13 @@ public class DispatcherServlet extends HttpServlet {
 
     private SecurityService securityService;
     private UserService userService;
+    private RoleService roleService;
 
     @Override
     public void init() {
         this.userService = ServiceFactory.getUserService();
         this.securityService = ServiceFactory.getSecurityService();
+        this.roleService = ServiceFactory.getRoleService();
     }
 
     @Override
@@ -52,6 +55,7 @@ public class DispatcherServlet extends HttpServlet {
                 break;
             case Pages.USER_ADD:
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
+                req.setAttribute("roles", roleService.findAll());
                 req.setAttribute(RequestAttributes.USER, userService.createEmptyUser());
                 req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
                 pageName = Pages.USER_FORM;
@@ -59,6 +63,7 @@ public class DispatcherServlet extends HttpServlet {
             case Pages.USER_EDIT:
                 Integer userId = Integer.parseInt(req.getParameter(RequestParams.ID));
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
+                req.setAttribute("roles", roleService.findAll());
                 req.setAttribute(RequestAttributes.USER, userService.getUser(userId));
                 req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
                 pageName = Pages.USER_FORM;
@@ -201,6 +206,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private void prepareUserForm(User user, HttpServletRequest req) {
         req.setAttribute(RequestAttributes.USER, user);
+        req.setAttribute("roles", roleService.findAll());
         req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
     }
 }

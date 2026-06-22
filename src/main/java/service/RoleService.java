@@ -32,31 +32,31 @@ public class RoleService {
     }
 
 
-    Role findById(Integer id) {
+    public Role findById(Integer id) {
         return roleDao.findById(id);
     }
 
-    Set<Role> findAll() {
+    public Set<Role> findAll() {
         return roleDao.findAll();
     }
 
-    Set<Role> findByUserId(Integer userId) {
+    public Set<Role> findByUserId(Integer userId) {
         return roleDao.findByUserId(userId);
     }
 
-    void saveRolesForUser(Integer userId, Set<Role> roles) {
+    public void saveRolesForUser(Integer userId, Set<Role> roles) {
         roleDao.saveRolesForUser(userId, roles);
     }
 
-    void saveRolesForUser(Connection con, Integer userId, Set<Role> roles) {
+    public void saveRolesForUser(Connection con, Integer userId, Set<Role> roles) {
         roleDao.saveRolesForUser(con, userId, roles);
     }
 
-    void deleteRolesForUser(Integer userId) {
+    public void deleteRolesForUser(Integer userId) {
         roleDao.deleteRolesForUser(userId);
     }
 
-    void deleteRolesForUser(Connection con, Integer userId) {
+    public void deleteRolesForUser(Connection con, Integer userId) {
         roleDao.deleteRolesForUser(con, userId);
     }
 }

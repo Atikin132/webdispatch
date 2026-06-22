@@ -9,7 +9,7 @@
               action="${pageContext.request.contextPath}/${requestScope.mode == 'add' ?
         'useradd.jhtml' : 'useredit.jhtml?id='.concat(requestScope.user.id)}">
             <div class="inputs-container">
-                <input type="hidden" id="id" name="id" value="${requestScope.user.id}" />
+                <input type="hidden" id="id" name="id" value="${requestScope.user.id}"/>
                 <div class="form-group">
                     <label class="form-label" for="login">Login:</label>
                     <input id="login" class="form-input" type="text" name="login" required
@@ -42,26 +42,21 @@
                     <input id="salary" class="form-input" type="text" name="salary" required
                            autocomplete="off" value="${requestScope.user.salary}">
                 </div>
+
+
                 <div class="form-group">
                     <label class="form-label">Roles:</label>
                     <div class="roles-checkboxes form-input">
-                        <label><input type="checkbox" name="roles"
-                                      value="1" ${requestScope.user.hasRole(1) ? 'checked' : ''}>
-                            Administrator</label>
-                        <label><input type="checkbox" name="roles"
-                                      value="2" ${requestScope.user.hasRole(2) ? 'checked' : ''}>
-                            Manager</label>
-                        <label><input type="checkbox" name="roles"
-                                      value="3" ${requestScope.user.hasRole(3) ? 'checked' : ''}>
-                            Bookkeeper</label>
-                        <label><input type="checkbox" name="roles"
-                                      value="4" ${requestScope.user.hasRole(4) ? 'checked' : ''}>
-                            Developer</label>
-                        <label><input type="checkbox" name="roles"
-                                      value="5" ${requestScope.user.hasRole(5) ? 'checked' : ''}>
-                            Designer</label>
+                        <c:forEach var="role" items="${requestScope.roles}">
+                            <label>
+                                <input type="checkbox"
+                                       name="roles"
+                                       value="${role.id}"
+                                    ${requestScope.user.hasRole(role.id) ? 'checked' : ''}>
+                                    ${role.name}
+                            </label>
+                        </c:forEach>
                     </div>
-
                 </div>
             </div>
             <c:if test="${not empty requestScope.errorMessage}">
