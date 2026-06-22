@@ -10,7 +10,7 @@ public class RequestParams {
     public static final String BIRTHDAY = "birthday";
     public static final String OLD_PASSWORD = "oldPassword";
     public static final String NEW_PASSWORD = "newPassword";
-    public static final String OLD_LOGIN = "oldLogin";
+    public static final String AGE = "age";
 
     public RequestParams() {
     }

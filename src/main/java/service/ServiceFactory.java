@@ -10,9 +10,16 @@ public class ServiceFactory {
 
     public static UserService getUserService() {
         if (!UserService.isInitialized()) {
-            UserService.init(UserDaoFactory.getUserDao(), RoleDaoFactory.getUserDao());
+            UserService.init(UserDaoFactory.getUserDao(), getRoleService());
         }
         return UserService.getInstance();
+    }
+
+    public static RoleService getRoleService() {
+        if (!RoleService.isInitialized()) {
+            RoleService.init(RoleDaoFactory.getRoleDao());
+        }
+        return RoleService.getInstance();
     }
 
     public static SecurityService getSecurityService() {

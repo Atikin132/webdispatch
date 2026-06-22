@@ -29,8 +29,13 @@
                     <label class="form-label" for="birthday">Birthday:</label>
                     <input id="birthday" class="form-input" max="${requestScope.maxDate}"
                            type="date"
-                           name="birthday" required
+                           name="birthday"
                            autocomplete="off" value="${requestScope.user.birthday}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="age">Age:</label>
+                    <input id="age" class="form-input" type="number" name="age" required min="19"
+                           autocomplete="off" value="${requestScope.user.age}">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="salary">Salary:</label>

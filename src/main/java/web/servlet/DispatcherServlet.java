@@ -53,14 +53,14 @@ public class DispatcherServlet extends HttpServlet {
             case Pages.USER_ADD:
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
                 req.setAttribute(RequestAttributes.USER, userService.createEmptyUser());
-                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(18));
+                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
                 pageName = Pages.USER_FORM;
                 break;
             case Pages.USER_EDIT:
                 Integer userId = Integer.parseInt(req.getParameter(RequestParams.ID));
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
                 req.setAttribute(RequestAttributes.USER, userService.getUser(userId));
-                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(18));
+                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
                 pageName = Pages.USER_FORM;
                 break;
         }
@@ -152,6 +152,7 @@ public class DispatcherServlet extends HttpServlet {
         String password = req.getParameter(RequestParams.PASSWORD);
         String name = req.getParameter(RequestParams.NAME);
         String birthdayStr = req.getParameter(RequestParams.BIRTHDAY);
+        String ageStr = req.getParameter(RequestParams.AGE);
         String salaryStr = req.getParameter(RequestParams.SALARY);
         String[] selectedRoleIds = req.getParameterValues(RequestParams.ROLES);
 
@@ -167,6 +168,7 @@ public class DispatcherServlet extends HttpServlet {
         String error = userService.validateAndPrepareUser(user,
                 idStr,
                 birthdayStr,
+                ageStr,
                 salaryStr,
                 selectedRoleIds);
 
@@ -199,6 +201,6 @@ public class DispatcherServlet extends HttpServlet {
 
     private void prepareUserForm(User user, HttpServletRequest req) {
         req.setAttribute(RequestAttributes.USER, user);
-        req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(18));
+        req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
     }
 }
