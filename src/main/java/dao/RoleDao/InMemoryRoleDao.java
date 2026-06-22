@@ -2,6 +2,7 @@ package dao.RoleDao;
 
 import model.Role;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +63,17 @@ public class InMemoryRoleDao implements RoleDao {
     }
 
     @Override
+    public void saveRolesForUser(Connection con, Integer userId, Set<Role> roles) {
+
+    }
+
+    @Override
     public void deleteRolesForUser(Integer userId) {
         userRoles.remove(userId);
+    }
+
+    @Override
+    public void deleteRolesForUser(Connection con, Integer userId) {
+
     }
 }

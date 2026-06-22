@@ -3,6 +3,7 @@ package dao.UserDao;
 import model.User;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -66,6 +67,11 @@ public class InMemoryUserDao implements UserDao {
     }
 
     @Override
+    public void create(Connection con, User user) {
+
+    }
+
+    @Override
     public void create(User user) {
         user.setId(nextId++);
         users.put(user.getId(), user);
@@ -74,6 +80,11 @@ public class InMemoryUserDao implements UserDao {
     @Override
     public void update(Integer id, User user) {
         users.put(id, user);
+    }
+
+    @Override
+    public void update(Connection con, Integer id, User user) {
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package service;
 import dao.RoleDao.RoleDao;
 import model.Role;
 
+import java.sql.Connection;
 import java.util.Set;
 
 public class RoleService {
@@ -47,7 +48,15 @@ public class RoleService {
         roleDao.saveRolesForUser(userId, roles);
     }
 
+    void saveRolesForUser(Connection con, Integer userId, Set<Role> roles) {
+        roleDao.saveRolesForUser(con, userId, roles);
+    }
+
     void deleteRolesForUser(Integer userId) {
         roleDao.deleteRolesForUser(userId);
+    }
+
+    void deleteRolesForUser(Connection con, Integer userId) {
+        roleDao.deleteRolesForUser(con, userId);
     }
 }

@@ -1,10 +1,13 @@
 package service;
 
+import dao.DatabaseConnection;
 import dao.UserDao.UserDao;
 import model.Role;
 import model.User;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -61,15 +64,48 @@ public class UserService {
         return user;
     }
 
+//    public void createUser(User user) {
+//        userDao.create(user);
+//        roleService.saveRolesForUser(user.getId(), user.getRoles());
+//    }
+
     public void createUser(User user) {
-        userDao.create(user);
-        roleService.saveRolesForUser(user.getId(), user.getRoles());
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            try {
+                userDao.create(con, user);
+                roleService.saveRolesForUser(con, user.getId(), user.getRoles());
+                con.commit();
+            } catch (Exception e) {
+                con.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+//    public void updateUser(Integer id, User updatedUser) {
+//        userDao.update(id, updatedUser);
+//        roleService.deleteRolesForUser(id);
+//        roleService.saveRolesForUser(id, updatedUser.getRoles());
+//    }
+
     public void updateUser(Integer id, User updatedUser) {
-        userDao.update(id, updatedUser);
-        roleService.deleteRolesForUser(id);
-        roleService.saveRolesForUser(id, updatedUser.getRoles());
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            try {
+                userDao.update(con, id, updatedUser);
+                roleService.deleteRolesForUser(con, id);
+                roleService.saveRolesForUser(con, id, updatedUser.getRoles());
+                con.commit();
+            } catch (Exception e) {
+                con.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void deleteUser(Integer id) {

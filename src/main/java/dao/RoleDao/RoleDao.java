@@ -2,6 +2,7 @@ package dao.RoleDao;
 
 import model.Role;
 
+import java.sql.Connection;
 import java.util.Set;
 
 public interface RoleDao {
@@ -13,5 +14,9 @@ public interface RoleDao {
 
     void saveRolesForUser(Integer userId, Set<Role> roles);
 
+    void saveRolesForUser(Connection con, Integer userId, Set<Role> roles);
+
     void deleteRolesForUser(Integer userId);
+
+    void deleteRolesForUser(Connection con, Integer userId);
 }
