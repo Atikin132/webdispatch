@@ -231,6 +231,9 @@ public class UserService {
         if (user.getSalary().compareTo(new BigDecimal("99999999.99")) > 0) {
             return "Salary is too large";
         }
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            return "At least one role must be selected";
+        }
         return null;
     }
 }
