@@ -1,7 +1,7 @@
-package dao.UserDao;
+package com.example.dao.UserDao;
 
-import dao.DatabaseConnection;
-import model.User;
+import com.example.dao.DatabaseConnection;
+import com.example.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;

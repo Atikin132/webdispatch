@@ -1,6 +1,6 @@
-package dao.RoleDao;
+package com.example.dao.RoleDao;
 
-import model.Role;
+import com.example.model.Role;
 
 import java.sql.Connection;
 import java.util.Set;

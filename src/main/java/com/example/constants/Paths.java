@@ -1,4 +1,4 @@
-package constants;
+package com.example.constants;
 
 public class Paths {
     public static final String LOGIN_PATH = "/login.jhtml";

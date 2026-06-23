@@ -1,4 +1,4 @@
-package constants;
+package com.example.constants;
 
 public class SessionAttributes {
     public static final String USER = "user";

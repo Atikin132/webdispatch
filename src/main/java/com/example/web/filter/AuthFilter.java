@@ -1,17 +1,18 @@
-package web.filter;
+package com.example.web.filter;
 
-import constants.Paths;
-import constants.SessionAttributes;
-import model.Role;
-import model.User;
+import com.example.constants.Paths;
+import com.example.constants.SessionAttributes;
+import com.example.model.User;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Set;
 
+@WebFilter(urlPatterns = "/*")
 public class AuthFilter implements Filter {
 
     private static final Set<String> PUBLIC_PATHS = Set.of("/", "/index.jsp", "/login.jhtml");
@@ -50,7 +51,8 @@ public class AuthFilter implements Filter {
         if (loggedIn) {
             boolean adminsPath = ADMINS_PATHS.contains(path);
             if (adminsPath &&
-                    !((User) session.getAttribute(SessionAttributes.USER)).hasRole("Administrator")) {
+                    !((User) session.getAttribute(SessionAttributes.USER)).hasRole("Administrator"
+                    )) {
                 resp.sendRedirect(req.getContextPath() + Paths.WELCOME_PATH);
                 return;
             }

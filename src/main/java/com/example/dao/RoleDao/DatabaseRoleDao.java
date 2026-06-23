@@ -1,7 +1,7 @@
-package dao.RoleDao;
+package com.example.dao.RoleDao;
 
-import dao.DatabaseConnection;
-import model.Role;
+import com.example.dao.DatabaseConnection;
+import com.example.model.Role;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;

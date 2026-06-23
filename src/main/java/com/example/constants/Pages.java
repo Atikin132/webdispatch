@@ -1,4 +1,4 @@
-package constants;
+package com.example.constants;
 
 public class Pages {
     public static final String LOGIN = "login";

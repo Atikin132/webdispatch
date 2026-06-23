@@ -1,9 +1,9 @@
-package service;
+package com.example.service;
 
-import dao.DatabaseConnection;
-import dao.UserDao.UserDao;
-import model.Role;
-import model.User;
+import com.example.dao.DatabaseConnection;
+import com.example.dao.UserDao.UserDao;
+import com.example.model.Role;
+import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

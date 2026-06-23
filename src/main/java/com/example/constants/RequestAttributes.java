@@ -1,4 +1,4 @@
-package constants;
+package com.example.constants;
 
 public class RequestAttributes {
     public static final String USERS = "users";

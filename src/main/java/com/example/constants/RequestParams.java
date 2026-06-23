@@ -1,4 +1,4 @@
-package constants;
+package com.example.constants;
 
 public class RequestParams {
     public static final String ID = "id";

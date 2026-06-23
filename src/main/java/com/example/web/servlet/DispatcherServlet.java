@@ -1,13 +1,14 @@
-package web.servlet;
+package com.example.web.servlet;
 
-import constants.*;
-import model.User;
-import service.RoleService;
-import service.SecurityService;
-import service.ServiceFactory;
-import service.UserService;
+import com.example.constants.*;
+import com.example.model.User;
+import com.example.service.RoleService;
+import com.example.service.SecurityService;
+import com.example.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+@WebServlet(urlPatterns = "*.jhtml")
 public class DispatcherServlet extends HttpServlet {
 
     private static final String JSP_PATH = "/WEB-INF/jsp/";
@@ -29,16 +31,12 @@ public class DispatcherServlet extends HttpServlet {
             Pages.USER_ADD,
             Pages.USER_EDIT);
 
+    @Autowired
     private SecurityService securityService;
+    @Autowired
     private UserService userService;
+    @Autowired
     private RoleService roleService;
-
-    @Override
-    public void init() {
-        this.userService = ServiceFactory.getUserService();
-        this.securityService = ServiceFactory.getSecurityService();
-        this.roleService = ServiceFactory.getRoleService();
-    }
 
     @Override
     protected void doGet(HttpServletRequest req,

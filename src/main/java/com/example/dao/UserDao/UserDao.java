@@ -1,6 +1,6 @@
-package dao.UserDao;
+package com.example.dao.UserDao;
 
-import model.User;
+import com.example.model.User;
 
 import java.sql.Connection;
 import java.util.Collection;
