@@ -1,31 +1,14 @@
 package service;
 
 import model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SecurityService {
-    private static SecurityService INSTANCE;
-    private final UserService userService;
 
-    private SecurityService(UserService userService) {
-        this.userService = userService;
-    }
-
-    static SecurityService getInstance() {
-        if (INSTANCE == null) {
-            throw new IllegalStateException("SecurityService is not initialized");
-        }
-        return INSTANCE;
-    }
-
-    static void init(UserService userService) {
-        if (INSTANCE == null) {
-            INSTANCE = new SecurityService(userService);
-        }
-    }
-
-    static boolean isInitialized() {
-        return INSTANCE != null;
-    }
+    @Autowired
+    private UserService userService;
 
     public String login(String login, String password) {
         login = (login != null) ? login.trim() : null;

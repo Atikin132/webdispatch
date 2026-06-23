@@ -2,35 +2,17 @@ package service;
 
 import dao.RoleDao.RoleDao;
 import model.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.util.Set;
 
+@Service
 public class RoleService {
-    private static RoleService INSTANCE;
-    private final RoleDao roleDao;
 
-    private RoleService(RoleDao roleDao) {
-        this.roleDao = roleDao;
-    }
-
-    static RoleService getInstance() {
-        if (INSTANCE == null) {
-            throw new IllegalStateException("RoleService is not initialized");
-        }
-        return INSTANCE;
-    }
-
-    static void init(RoleDao roleDao) {
-        if (INSTANCE == null) {
-            INSTANCE = new RoleService(roleDao);
-        }
-    }
-
-    static boolean isInitialized() {
-        return INSTANCE != null;
-    }
-
+    @Autowired
+    private RoleDao roleDao;
 
     public Role findById(Integer id) {
         return roleDao.findById(id);

@@ -4,6 +4,8 @@ import dao.DatabaseConnection;
 import dao.UserDao.UserDao;
 import model.Role;
 import model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -13,32 +15,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@Service
 public class UserService {
-    private static UserService INSTANCE;
-    private final UserDao userDao;
-    private final RoleService roleService;
-
-    private UserService(UserDao userDao, RoleService roleService) {
-        this.userDao = userDao;
-        this.roleService = roleService;
-    }
-
-    static UserService getInstance() {
-        if (INSTANCE == null) {
-            throw new IllegalStateException("UserService is not initialized");
-        }
-        return INSTANCE;
-    }
-
-    static void init(UserDao userDao, RoleService roleService) {
-        if (INSTANCE == null) {
-            INSTANCE = new UserService(userDao, roleService);
-        }
-    }
-
-    static boolean isInitialized() {
-        return INSTANCE != null;
-    }
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private RoleService roleService;
 
     public Collection<User> getAllUsers() {
         Collection<User> users = userDao.findAll();
@@ -64,11 +46,6 @@ public class UserService {
         return user;
     }
 
-//    public void createUser(User user) {
-//        userDao.create(user);
-//        roleService.saveRolesForUser(user.getId(), user.getRoles());
-//    }
-
     public void createUser(User user) {
         try (Connection con = DatabaseConnection.getConnection()) {
             con.setAutoCommit(false);
@@ -84,12 +61,6 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
-
-//    public void updateUser(Integer id, User updatedUser) {
-//        userDao.update(id, updatedUser);
-//        roleService.deleteRolesForUser(id);
-//        roleService.saveRolesForUser(id, updatedUser.getRoles());
-//    }
 
     public void updateUser(Integer id, User updatedUser) {
         try (Connection con = DatabaseConnection.getConnection()) {
