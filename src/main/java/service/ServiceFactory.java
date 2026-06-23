@@ -1,8 +1,5 @@
 package service;
 
-import dao.RoleDao.RoleDaoFactory;
-import dao.UserDao.UserDaoFactory;
-
 public class ServiceFactory {
 
     private ServiceFactory() {

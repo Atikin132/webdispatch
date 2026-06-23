@@ -2,6 +2,7 @@ package dao.UserDao;
 
 import dao.DatabaseConnection;
 import model.User;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -11,28 +12,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+@Repository
 public class DatabaseUserDao implements UserDao {
-
-    private static DatabaseUserDao INSTANCE;
-
-    private DatabaseUserDao() {
-    }
-
-    static DatabaseUserDao getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new DatabaseUserDao();
-        }
-        return INSTANCE;
-    }
-
-    @Override
-    public void create(User user) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            create(con, user);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void create(Connection con, User user) {
         String sql = """
@@ -57,15 +38,6 @@ public class DatabaseUserDao implements UserDao {
             if (rs.next()) {
                 user.setId(rs.getInt(1));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void update(Integer id, User user) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            update(con, id, user);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +83,7 @@ public class DatabaseUserDao implements UserDao {
 
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
                 con.prepareStatement(
-                sql)) {
+                        sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -159,7 +131,7 @@ public class DatabaseUserDao implements UserDao {
                 """;
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
                 con.prepareStatement(
-                sql)) {
+                        sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 users.add(mapUser(rs));
@@ -179,7 +151,7 @@ public class DatabaseUserDao implements UserDao {
                 """;
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
                 con.prepareStatement(
-                sql)) {
+                        sql)) {
             ps.setString(1, newPassword);
             ps.setInt(2, id);
             ps.executeUpdate();
@@ -198,7 +170,7 @@ public class DatabaseUserDao implements UserDao {
 
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
                 con.prepareStatement(
-                sql)) {
+                        sql)) {
 
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();

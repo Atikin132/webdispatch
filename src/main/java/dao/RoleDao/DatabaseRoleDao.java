@@ -2,6 +2,7 @@ package dao.RoleDao;
 
 import dao.DatabaseConnection;
 import model.Role;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,18 +11,8 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+@Repository
 public class DatabaseRoleDao implements RoleDao {
-    private static DatabaseRoleDao INSTANCE;
-
-    private DatabaseRoleDao() {
-    }
-
-    static DatabaseRoleDao getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new DatabaseRoleDao();
-        }
-        return INSTANCE;
-    }
 
     @Override
     public Role findById(Integer id) {
@@ -33,7 +24,7 @@ public class DatabaseRoleDao implements RoleDao {
 
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
                 con.prepareStatement(
-                sql)) {
+                        sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -55,7 +46,7 @@ public class DatabaseRoleDao implements RoleDao {
 
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
                 con.prepareStatement(
-                sql)) {
+                        sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 roles.add(new Role(rs.getInt("id"), rs.getString("name")));
@@ -81,7 +72,7 @@ public class DatabaseRoleDao implements RoleDao {
 
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
                 con.prepareStatement(
-                sql)) {
+                        sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -91,40 +82,6 @@ public class DatabaseRoleDao implements RoleDao {
             throw new RuntimeException(e);
         }
         return roles;
-    }
-
-//    @Override
-//    public void saveRolesForUser(Integer userId, Set<Role> roles) {
-//        if (roles == null || roles.isEmpty()) {
-//            return;
-//        }
-//        String sql = """
-//                INSERT INTO "authorization".user_roles
-//                (user_id, role_id)
-//                VALUES (?, ?)
-//                """;
-//
-//        try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps =
-//                con.prepareStatement(
-//                sql)) {
-//            for (Role role : roles) {
-//                ps.setInt(1, userId);
-//                ps.setInt(2, role.getId());
-//                ps.addBatch();
-//            }
-//            ps.executeBatch();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-    @Override
-    public void saveRolesForUser(Integer userId, Set<Role> roles) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            saveRolesForUser(con, userId, roles);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -150,14 +107,6 @@ public class DatabaseRoleDao implements RoleDao {
         }
     }
 
-    @Override
-    public void deleteRolesForUser(Integer userId) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            deleteRolesForUser(con, userId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void deleteRolesForUser(Connection con, Integer userId) {

@@ -44,16 +44,8 @@ public class RoleService {
         return roleDao.findByUserId(userId);
     }
 
-    public void saveRolesForUser(Integer userId, Set<Role> roles) {
-        roleDao.saveRolesForUser(userId, roles);
-    }
-
     public void saveRolesForUser(Connection con, Integer userId, Set<Role> roles) {
         roleDao.saveRolesForUser(con, userId, roles);
-    }
-
-    public void deleteRolesForUser(Integer userId) {
-        roleDao.deleteRolesForUser(userId);
     }
 
     public void deleteRolesForUser(Connection con, Integer userId) {

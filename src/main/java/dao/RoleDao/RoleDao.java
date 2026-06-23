@@ -12,11 +12,7 @@ public interface RoleDao {
 
     Set<Role> findByUserId(Integer userId);
 
-    void saveRolesForUser(Integer userId, Set<Role> roles);
-
     void saveRolesForUser(Connection con, Integer userId, Set<Role> roles);
-
-    void deleteRolesForUser(Integer userId);
 
     void deleteRolesForUser(Connection con, Integer userId);
 }
