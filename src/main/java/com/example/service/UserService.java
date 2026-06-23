@@ -1,15 +1,13 @@
 package com.example.service;
 
-import com.example.dao.DatabaseConnection;
-import com.example.dao.UserDao.UserDao;
+import com.example.mapper.UserMapper;
 import com.example.model.Role;
 import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,73 +16,54 @@ import java.util.Set;
 @Service
 public class UserService {
     @Autowired
-    private UserDao userDao;
+    private UserMapper userMapper;
     @Autowired
     private RoleService roleService;
 
+    @Transactional
+    public void createUser(User user) {
+        userMapper.create(user);
+        roleService.saveRolesForUser(user.getId(), user.getRoles());
+    }
+
+    public User getUser(Integer id) {
+        User user = userMapper.read(id);
+        if (user != null) {
+            user.setRoles(roleService.findByUserId(user.getId()));
+        }
+        return user;
+    }
+
+    @Transactional
+    public void updateUser(Integer id, User updatedUser) {
+        userMapper.update(id, updatedUser);
+        roleService.saveRolesForUser(id, updatedUser.getRoles());
+    }
+
+    @Transactional
+    public void deleteUser(Integer id) {
+        roleService.deleteRolesForUser(id);
+        userMapper.delete(id);
+    }
+
     public Collection<User> getAllUsers() {
-        Collection<User> users = userDao.findAll();
+        Collection<User> users = userMapper.findAll();
         for (User user : users) {
             user.setRoles(roleService.findByUserId(user.getId()));
         }
         return users;
     }
 
-    public User getUser(Integer id) {
-        User user = userDao.read(id);
-        if (user != null) {
-            user.setRoles(roleService.findByUserId(user.getId()));
-        }
-        return user;
+    public void updatePassword(Integer id, String newPassword) {
+        userMapper.updatePassword(id, newPassword);
     }
 
     public User getUserByLogin(String login) {
-        User user = userDao.findByLogin(login);
+        User user = userMapper.findByLogin(login);
         if (user != null) {
             user.setRoles(roleService.findByUserId(user.getId()));
         }
         return user;
-    }
-
-    public void createUser(User user) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            con.setAutoCommit(false);
-            try {
-                userDao.create(con, user);
-                roleService.saveRolesForUser(con, user.getId(), user.getRoles());
-                con.commit();
-            } catch (Exception e) {
-                con.rollback();
-                throw e;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void updateUser(Integer id, User updatedUser) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            con.setAutoCommit(false);
-            try {
-                userDao.update(con, id, updatedUser);
-                roleService.deleteRolesForUser(con, id);
-                roleService.saveRolesForUser(con, id, updatedUser.getRoles());
-                con.commit();
-            } catch (Exception e) {
-                con.rollback();
-                throw e;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void deleteUser(Integer id) {
-        userDao.delete(id);
-    }
-
-    public void updatePassword(Integer id, String newPassword) {
-        userDao.updatePassword(id, newPassword);
     }
 
     public boolean isBirthdayBeforeNow(LocalDate birthday) {
@@ -157,7 +136,7 @@ public class UserService {
             return "The date must not be today or in the future";
         }
 
-        User existingUser = userDao.findByLogin(user.getLogin().trim());
+        User existingUser = userMapper.findByLogin(user.getLogin().trim());
 
         if (existingUser != null && !existingUser.getId().equals(user.getId())) {
             return "User with this login already exists";
