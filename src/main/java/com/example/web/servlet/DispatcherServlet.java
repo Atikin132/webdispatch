@@ -6,6 +6,7 @@ import com.example.service.RoleService;
 import com.example.service.SecurityService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,6 +38,13 @@ public class DispatcherServlet extends HttpServlet {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+
+
+    @Override
+    public void init() {
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                getServletContext());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req,
