@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html>
@@ -15,21 +16,22 @@
 </head>
 <body>
 
-<form class="login-form" method="post" action="${pageContext.request.contextPath}/login.jhtml">
+<form:form class="login-form" method="post" action="${pageContext.request.contextPath}/login.jhtml"
+           modelAttribute="loginFormDTO">
     <div class="auth-field">
         <label for="login">Login</label>
-        <input class="auth-input" id="login" type="text" name="login" required autocomplete="off">
+        <form:input class="auth-input" id="login" path="login" required="true" autocomplete="off"/>
     </div>
     <div class="auth-field">
         <label for="password">Password</label>
-        <input class="auth-input" id="password" type="password" name="password" required
-               autocomplete="off">
+        <form:password class="auth-input" id="password" path="password" required="true"
+                       autocomplete="off"/>
     </div>
-    <c:if test="${not empty requestScope.errorMessage}">
-        <span style="color:red">${requestScope.errorMessage}</span>
+    <c:if test="${not empty errorMessage}">
+        <span style="color:red">${errorMessage}</span>
     </c:if>
     <button class="button blue" type="submit">Login</button>
-</form>
+</form:form>
 
 </body>
 </html>

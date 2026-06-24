@@ -9,6 +9,7 @@ public class RequestAttributes {
     public static final String USER_FORM_MODE = "mode";
     public static final String USER = "user";
     public static final String ROLES = "roles";
+    public static final String LOGIN_FORM_DTO = "loginFormDTO";
 
     public RequestAttributes() {
     }
