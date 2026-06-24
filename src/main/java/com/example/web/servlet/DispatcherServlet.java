@@ -86,8 +86,8 @@ public class DispatcherServlet extends HttpServlet {
         String path = req.getServletPath();
 
         switch (path) {
-            case Paths.LOGIN_PATH -> handleLogin(req, resp);
-            case Paths.LOGOUT_PATH -> handleLogout(req, resp);
+//            case Paths.LOGIN_PATH -> handleLogin(req, resp);
+//            case Paths.LOGOUT_PATH -> handleLogout(req, resp);
             case Paths.LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
             case Paths.USER_ADD_PATH -> handleUserForm(req, resp, false);
             case Paths.USER_EDIT_PATH -> handleUserForm(req, resp, true);
@@ -96,30 +96,30 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private void handleLogin(HttpServletRequest req,
-                             HttpServletResponse resp) throws ServletException, IOException {
-        String login = req.getParameter(RequestParams.LOGIN);
-        String password = req.getParameter(RequestParams.PASSWORD);
-
-        String loginAttempt = securityService.login(login, password);
-        if (loginAttempt == null) {
-            req.getSession()
-                    .setAttribute(SessionAttributes.USER, userService.getUserByLogin(login));
-            resp.sendRedirect(req.getContextPath() + Paths.WELCOME_PATH);
-        } else {
-            sendError(loginAttempt, Pages.LOGIN, req, resp);
-        }
-    }
-
-    private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession();
-
-        if (session != null) {
-            session.invalidate();
-        }
-
-        resp.sendRedirect(req.getContextPath() + Paths.LOGIN_PATH);
-    }
+//    private void handleLogin(HttpServletRequest req,
+//                             HttpServletResponse resp) throws ServletException, IOException {
+//        String login = req.getParameter(RequestParams.LOGIN);
+//        String password = req.getParameter(RequestParams.PASSWORD);
+//
+//        String loginAttempt = securityService.login(login, password);
+//        if (loginAttempt == null) {
+//            req.getSession()
+//                    .setAttribute(SessionAttributes.USER, userService.getUserByLogin(login));
+//            resp.sendRedirect(req.getContextPath() + Paths.WELCOME_PATH);
+//        } else {
+//            sendError(loginAttempt, Pages.LOGIN, req, resp);
+//        }
+//    }
+//
+//    private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+//        HttpSession session = req.getSession();
+//
+//        if (session != null) {
+//            session.invalidate();
+//        }
+//
+//        resp.sendRedirect(req.getContextPath() + Paths.LOGIN_PATH);
+//    }
 
     private void handlePasswordChange(HttpServletRequest req,
                                       HttpServletResponse resp) throws ServletException,
