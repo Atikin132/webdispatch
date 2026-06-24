@@ -10,7 +10,7 @@ public class User {
     private String login;
     private String password;
     private String name;
-    private LocalDate birthday;
+    private LocalDate birthDate;
     private Integer age;
     private BigDecimal salary;
     private Set<Role> roles = new HashSet<>();
@@ -22,14 +22,14 @@ public class User {
                 String login,
                 String password,
                 String name,
-                LocalDate birthday,
+                LocalDate birthDate,
                 Integer age,
                 BigDecimal salary) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.name = name;
-        this.birthday = birthday;
+        this.birthDate = birthDate;
         this.age = age;
         this.salary = salary;
     }
@@ -38,7 +38,7 @@ public class User {
                 String login,
                 String password,
                 String name,
-                LocalDate birthday,
+                LocalDate birthDate,
                 Integer age,
                 BigDecimal salary,
                 Set<Role> roles) {
@@ -46,7 +46,7 @@ public class User {
         this.login = login;
         this.password = password;
         this.name = name;
-        this.birthday = birthday;
+        this.birthDate = birthDate;
         this.age = age;
         this.salary = salary;
         this.roles = roles;
@@ -84,12 +84,12 @@ public class User {
         this.name = name;
     }
 
-    public LocalDate getBirthday() {
-        return birthday;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public Integer getAge() {
@@ -121,26 +121,17 @@ public class User {
     }
 
     public boolean hasRole(String roleName) {
-        return roles.stream()
-                .anyMatch(role -> roleName.equals(role.getName()));
+        return roles.stream().anyMatch(role -> roleName.equals(role.getName()));
     }
 
     public boolean hasRole(int roleId) {
-        return roles.stream()
-                .anyMatch(role -> roleId == role.getId());
+        return roles.stream().anyMatch(role -> roleId == role.getId());
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", birthday=" + birthday +
-                ", age=" + age +
-                ", salary=" + salary +
-                ", roles=" + roles +
-                '}';
+        return "User{" + "id=" + id + ", login='" + login + '\'' + ", password='" + password +
+                '\'' + ", name='" + name + '\'' + ", birthDate=" + birthDate + ", age=" + age +
+                ", salary=" + salary + ", roles=" + roles + '}';
     }
 }

@@ -12,7 +12,7 @@ public interface UserMapper {
 
     User read(Integer id);
 
-    void update(@Param("id") Integer id, @Param("user") User user);
+    void update(User user);
 
     void delete(Integer id);
 

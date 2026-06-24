@@ -35,9 +35,9 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(Integer id, User updatedUser) {
-        userMapper.update(id, updatedUser);
-        roleService.saveRolesForUser(id, updatedUser.getRoles());
+    public void updateUser(User updatedUser) {
+        userMapper.update(updatedUser);
+        roleService.saveRolesForUser(updatedUser.getId(), updatedUser.getRoles());
     }
 
     @Transactional
@@ -66,8 +66,8 @@ public class UserService {
         return user;
     }
 
-    public boolean isBirthdayBeforeNow(LocalDate birthday) {
-        return birthday.isBefore(LocalDate.now());
+    public boolean isBirthDateBeforeNow(LocalDate birthDate) {
+        return birthDate.isBefore(LocalDate.now());
     }
 
     public User createEmptyUser() {
@@ -76,7 +76,7 @@ public class UserService {
 
     public String validateAndPrepareUser(User user,
                                          String idStr,
-                                         String birthdayStr,
+                                         String birthDateStr,
                                          String ageStr,
                                          String salaryStr,
                                          String[] selectedRoleIds) {
@@ -86,11 +86,11 @@ public class UserService {
 
         prepareRoles(user, selectedRoleIds);
 
-        if (birthdayStr != null && !birthdayStr.isBlank()) {
+        if (birthDateStr != null && !birthDateStr.isBlank()) {
             try {
-                user.setBirthday(LocalDate.parse(birthdayStr));
+                user.setBirthDate(LocalDate.parse(birthDateStr));
             } catch (Exception e) {
-                return "Invalid birthday format";
+                return "Invalid birth date format";
             }
         }
 
@@ -132,7 +132,7 @@ public class UserService {
             return basicError;
         }
 
-        if (user.getBirthday() != null && !isBirthdayBeforeNow(user.getBirthday())) {
+        if (user.getBirthDate() != null && !isBirthDateBeforeNow(user.getBirthDate())) {
             return "The date must not be today or in the future";
         }
 

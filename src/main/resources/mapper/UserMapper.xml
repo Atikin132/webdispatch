@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.UserMapper">
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users(login, password, name, birth_date, age, salary)
+        VALUES (#{login}, #{password}, #{name}, #{birthDate}, #{age},
+        #{salary})
+    </insert>
+
+    <select id="read" resultMap="UserResultMap">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <update id="update">
+        UPDATE users
+        SET login = #{login},
+        password = #{password},
+        name = #{name},
+        birth_date = #{birthDate},
+        age = #{age},
+        salary = #{salary}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT * FROM users ORDER BY id
+    </select>
+
+    <update id="updatePassword">
+        UPDATE users
+        SET password = #{newPassword}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findByLogin" resultMap="UserResultMap">
+        SELECT * FROM users WHERE login = #{login}
+    </select>
+
+    <resultMap id="UserResultMap" type="User">
+        <id property="id" column="id"/>
+        <result property="login" column="login"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="birthDate" column="birth_date"/>
+        <result property="age" column="age"/>
+        <result property="salary" column="salary"/>
+    </resultMap>
+</mapper>

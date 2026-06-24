@@ -14,7 +14,7 @@ public interface RoleMapper {
 
     Set<Role> findByUserId(Integer userId);
 
-    void insertUserRole(@Param("user_id") Integer userId, @Param("roleId") Integer roleId);
+    void insertUserRole(@Param("userId") Integer userId, @Param("roleId") Integer roleId);
 
     void deleteRolesForUser(Integer userId);
 }

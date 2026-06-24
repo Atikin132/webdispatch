@@ -12,7 +12,7 @@
                     <th>ID</th>
                     <th>Login</th>
                     <th>Name</th>
-                    <th>Birthday</th>
+                    <th>Birth Date</th>
                     <th>Age</th>
                     <th>Salary</th>
                     <th>Roles</th>
@@ -27,7 +27,7 @@
                         <td>${user.id}</td>
                         <td>${user.login}</td>
                         <td>${user.name}</td>
-                        <td>${user.birthday}</td>
+                        <td>${user.birthDate}</td>
                         <td>${user.age}</td>
                         <td>${user.salary}</td>
                         <td><c:forEach var="role" items="${user.roles}">

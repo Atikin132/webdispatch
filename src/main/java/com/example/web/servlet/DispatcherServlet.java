@@ -162,7 +162,7 @@ public class DispatcherServlet extends HttpServlet {
         String login = req.getParameter(RequestParams.LOGIN);
         String password = req.getParameter(RequestParams.PASSWORD);
         String name = req.getParameter(RequestParams.NAME);
-        String birthdayStr = req.getParameter(RequestParams.BIRTHDAY);
+        String birthDateStr = req.getParameter(RequestParams.BIRTH_DATE);
         String ageStr = req.getParameter(RequestParams.AGE);
         String salaryStr = req.getParameter(RequestParams.SALARY);
         String[] selectedRoleIds = req.getParameterValues(RequestParams.ROLES);
@@ -178,7 +178,7 @@ public class DispatcherServlet extends HttpServlet {
 
         String error = userService.validateAndPrepareUser(user,
                 idStr,
-                birthdayStr,
+                birthDateStr,
                 ageStr,
                 salaryStr,
                 selectedRoleIds);
@@ -195,7 +195,7 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         if (isEdit) {
-            userService.updateUser(user.getId(), user);
+            userService.updateUser(user);
         } else {
             userService.createUser(user);
         }

@@ -26,11 +26,11 @@
                            autocomplete="off" value="${requestScope.user.name}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="birthday">Birthday:</label>
-                    <input id="birthday" class="form-input" max="${requestScope.maxDate}"
+                    <label class="form-label" for="birthDate">Birth Date:</label>
+                    <input id="birthDate" class="form-input" max="${requestScope.maxDate}"
                            type="date"
-                           name="birthday"
-                           autocomplete="off" value="${requestScope.user.birthday}">
+                           name="birthDate"
+                           autocomplete="off" value="${requestScope.user.birthDate}">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="age">Age:</label>
