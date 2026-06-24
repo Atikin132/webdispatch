@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.mapper.UserMapper;
+import com.example.dao.UserDao;
 import com.example.model.Role;
 import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +16,18 @@ import java.util.Set;
 @Service
 public class UserService {
     @Autowired
-    private UserMapper userMapper;
+    private UserDao userDao;
     @Autowired
     private RoleService roleService;
 
     @Transactional
     public void createUser(User user) {
-        userMapper.create(user);
+        userDao.create(user);
         roleService.saveRolesForUser(user.getId(), user.getRoles());
     }
 
     public User getUser(Integer id) {
-        User user = userMapper.read(id);
+        User user = userDao.read(id);
         if (user != null) {
             user.setRoles(roleService.findByUserId(user.getId()));
         }
@@ -36,18 +36,18 @@ public class UserService {
 
     @Transactional
     public void updateUser(User updatedUser) {
-        userMapper.update(updatedUser);
+        userDao.update(updatedUser);
         roleService.saveRolesForUser(updatedUser.getId(), updatedUser.getRoles());
     }
 
     @Transactional
     public void deleteUser(Integer id) {
         roleService.deleteRolesForUser(id);
-        userMapper.delete(id);
+        userDao.delete(id);
     }
 
     public Collection<User> getAllUsers() {
-        Collection<User> users = userMapper.findAll();
+        Collection<User> users = userDao.findAll();
         for (User user : users) {
             user.setRoles(roleService.findByUserId(user.getId()));
         }
@@ -55,11 +55,11 @@ public class UserService {
     }
 
     public void updatePassword(Integer id, String newPassword) {
-        userMapper.updatePassword(id, newPassword);
+        userDao.updatePassword(id, newPassword);
     }
 
     public User getUserByLogin(String login) {
-        User user = userMapper.findByLogin(login);
+        User user = userDao.findByLogin(login);
         if (user != null) {
             user.setRoles(roleService.findByUserId(user.getId()));
         }
@@ -136,7 +136,7 @@ public class UserService {
             return "The date must not be today or in the future";
         }
 
-        User existingUser = userMapper.findByLogin(user.getLogin().trim());
+        User existingUser = userDao.findByLogin(user.getLogin().trim());
 
         if (existingUser != null && !existingUser.getId().equals(user.getId())) {
             return "User with this login already exists";

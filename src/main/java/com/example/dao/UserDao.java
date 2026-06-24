@@ -1,4 +1,4 @@
-package com.example.mapper;
+package com.example.dao;
 
 import com.example.model.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Collection;
 
 @Mapper
-public interface UserMapper {
+public interface UserDao {
     void create(User user);
 
     User read(Integer id);

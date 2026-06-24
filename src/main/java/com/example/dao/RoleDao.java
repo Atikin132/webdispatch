@@ -1,4 +1,4 @@
-package com.example.mapper;
+package com.example.dao;
 
 import com.example.model.Role;
 import org.apache.ibatis.annotations.Mapper;
@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Set;
 
 @Mapper
-public interface RoleMapper {
+public interface RoleDao {
     Role findById(Integer id);
 
     Set<Role> findAll();
