@@ -111,7 +111,8 @@ public class DispatcherServlet extends HttpServlet {
 //        }
 //    }
 //
-//    private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+//    private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws
+//    IOException {
 //        HttpSession session = req.getSession();
 //
 //        if (session != null) {
