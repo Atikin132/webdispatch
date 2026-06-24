@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 
 @Controller
@@ -43,8 +42,7 @@ public class UserController {
     }
 
     @GetMapping(Paths.USER_EDIT_PATH)
-    public String userEditPage(@RequestParam("id") Integer userId,
-                                   Model model) {
+    public String userEditPage(@RequestParam("id") Integer userId, Model model) {
         model.addAttribute(RequestAttributes.USER_FORM_MODE, "edit");
         model.addAttribute(RequestAttributes.ROLES, roleService.findAll());
         model.addAttribute(RequestAttributes.USER, userService.getUser(userId));
@@ -53,16 +51,22 @@ public class UserController {
         return Pages.USER_FORM;
     }
 
+    @GetMapping(Paths.USER_DELETE_PATH)
+    public String userDeletePage(Model model) {
+        model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USERS);
+        return Pages.USERS;
+    }
+
     @PostMapping(Paths.USER_ADD_PATH)
     public String userAdd(@RequestParam("id") String idStr,
-                            @RequestParam String login,
-                            @RequestParam String password,
-                            @RequestParam String name,
-                            @RequestParam("birthDate") String birthDateStr,
-                            @RequestParam("age") String ageStr,
-                            @RequestParam("salary") String salaryStr,
-                            @RequestParam(value = "roles", required = false) String[] selectedRoleIds,
-                            Model model) {
+                          @RequestParam String login,
+                          @RequestParam String password,
+                          @RequestParam String name,
+                          @RequestParam("birthDate") String birthDateStr,
+                          @RequestParam("age") String ageStr,
+                          @RequestParam("salary") String salaryStr,
+                          @RequestParam(value = "roles", required = false) String[] selectedRoleIds,
+                          Model model) {
         return handleUserForm(idStr,
                 login,
                 password,
@@ -77,17 +81,14 @@ public class UserController {
 
     @PostMapping(Paths.USER_EDIT_PATH)
     public String userEdit(@RequestParam("id") String idStr,
-                            @RequestParam String login,
-                            @RequestParam String password,
-                            @RequestParam String name,
-                            @RequestParam("birthDate") String birthDateStr,
-                            @RequestParam("age") String ageStr,
-                            @RequestParam("salary") String salaryStr,
-                            @RequestParam(value = "roles", required = false) String[] selectedRoleIds,
-                            Model model) {
-        System.out.println("Roles = " + Arrays.toString(selectedRoleIds));
-        System.out.println("ID = " + idStr);
-
+                           @RequestParam String login,
+                           @RequestParam String password,
+                           @RequestParam String name,
+                           @RequestParam("birthDate") String birthDateStr,
+                           @RequestParam("age") String ageStr,
+                           @RequestParam("salary") String salaryStr,
+                           @RequestParam(value = "roles", required = false) String[] selectedRoleIds,
+                           Model model) {
         return handleUserForm(idStr,
                 login,
                 password,
@@ -98,6 +99,12 @@ public class UserController {
                 selectedRoleIds,
                 model,
                 true);
+    }
+
+    @PostMapping(Paths.USER_DELETE_PATH)
+    public String userDelete(@RequestParam("id") Integer userId) {
+        userService.deleteUser(userId);
+        return "redirect:" + Paths.USERS_PATH;
     }
 
     private String handleUserForm(String idStr,
