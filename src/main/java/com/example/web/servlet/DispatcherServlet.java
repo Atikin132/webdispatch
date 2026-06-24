@@ -88,7 +88,7 @@ public class DispatcherServlet extends HttpServlet {
         switch (path) {
 //            case Paths.LOGIN_PATH -> handleLogin(req, resp);
 //            case Paths.LOGOUT_PATH -> handleLogout(req, resp);
-            case Paths.LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
+//            case Paths.LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
             case Paths.USER_ADD_PATH -> handleUserForm(req, resp, false);
             case Paths.USER_EDIT_PATH -> handleUserForm(req, resp, true);
             case Paths.USER_DELETE_PATH -> handleUserDelete(req, resp);
@@ -121,26 +121,26 @@ public class DispatcherServlet extends HttpServlet {
 //
 //        resp.sendRedirect(req.getContextPath() + Paths.LOGIN_PATH);
 //    }
-
-    private void handlePasswordChange(HttpServletRequest req,
-                                      HttpServletResponse resp) throws ServletException,
-            IOException {
-        HttpSession session = req.getSession(false);
-        User currentUser = (User) session.getAttribute(SessionAttributes.USER);
-        String oldPassword = req.getParameter(RequestParams.OLD_PASSWORD);
-        String newPassword = req.getParameter(RequestParams.NEW_PASSWORD);
-        boolean changePassword =
-                securityService.changePassword(currentUser.getId(), oldPassword, newPassword);
-
-        if (changePassword) {
-            req.setAttribute(RequestAttributes.SUCCESS_MESSAGE, "Password changed successfully");
-        } else {
-            req.setAttribute(RequestAttributes.ERROR_MESSAGE, "Old password is incorrect");
-        }
-        req.setAttribute(RequestAttributes.CURRENT_PAGE, Pages.LOGIN_EDIT);
-
-        forward(Pages.LOGIN_EDIT, req, resp);
-    }
+//
+//    private void handlePasswordChange(HttpServletRequest req,
+//                                      HttpServletResponse resp) throws ServletException,
+//            IOException {
+//        HttpSession session = req.getSession(false);
+//        User currentUser = (User) session.getAttribute(SessionAttributes.USER);
+//        String oldPassword = req.getParameter(RequestParams.OLD_PASSWORD);
+//        String newPassword = req.getParameter(RequestParams.NEW_PASSWORD);
+//        boolean changePassword =
+//                securityService.changePassword(currentUser.getId(), oldPassword, newPassword);
+//
+//        if (changePassword) {
+//            req.setAttribute(RequestAttributes.SUCCESS_MESSAGE, "Password changed successfully");
+//        } else {
+//            req.setAttribute(RequestAttributes.ERROR_MESSAGE, "Old password is incorrect");
+//        }
+//        req.setAttribute(RequestAttributes.CURRENT_PAGE, Pages.LOGIN_EDIT);
+//
+//        forward(Pages.LOGIN_EDIT, req, resp);
+//    }
 
     private void forward(String page,
                          HttpServletRequest req,
