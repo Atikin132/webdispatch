@@ -56,9 +56,9 @@ public class DispatcherServlet extends HttpServlet {
             pageName = Pages.UNKNOWN;
         }
         switch (pageName) {
-            case Pages.USERS:
-                req.setAttribute(RequestAttributes.USERS, userService.getAllUsers());
-                break;
+//            case Pages.USERS:
+//                req.setAttribute(RequestAttributes.USERS, userService.getAllUsers());
+//                break;
             case Pages.USER_ADD:
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
                 req.setAttribute("roles", roleService.findAll());
