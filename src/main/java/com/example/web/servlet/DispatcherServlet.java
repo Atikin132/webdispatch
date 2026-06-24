@@ -59,13 +59,13 @@ public class DispatcherServlet extends HttpServlet {
 //            case Pages.USERS:
 //                req.setAttribute(RequestAttributes.USERS, userService.getAllUsers());
 //                break;
-            case Pages.USER_ADD:
-                req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
-                req.setAttribute("roles", roleService.findAll());
-                req.setAttribute(RequestAttributes.USER, userService.createEmptyUser());
-                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
-                pageName = Pages.USER_FORM;
-                break;
+//            case Pages.USER_ADD:
+//                req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
+//                req.setAttribute("roles", roleService.findAll());
+//                req.setAttribute(RequestAttributes.USER, userService.createEmptyUser());
+//                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
+//                pageName = Pages.USER_FORM;
+//                break;
             case Pages.USER_EDIT:
                 Integer userId = Integer.parseInt(req.getParameter(RequestParams.ID));
                 req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
@@ -89,7 +89,7 @@ public class DispatcherServlet extends HttpServlet {
 //            case Paths.LOGIN_PATH -> handleLogin(req, resp);
 //            case Paths.LOGOUT_PATH -> handleLogout(req, resp);
 //            case Paths.LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
-            case Paths.USER_ADD_PATH -> handleUserForm(req, resp, false);
+//            case Paths.USER_ADD_PATH -> handleUserForm(req, resp, false);
             case Paths.USER_EDIT_PATH -> handleUserForm(req, resp, true);
             case Paths.USER_DELETE_PATH -> handleUserDelete(req, resp);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
