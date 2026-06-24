@@ -40,9 +40,7 @@ public class UserService {
         roleService.saveRolesForUser(updatedUser.getId(), updatedUser.getRoles());
     }
 
-    @Transactional
     public void deleteUser(Integer id) {
-        roleService.deleteRolesForUser(id);
         userDao.delete(id);
     }
 

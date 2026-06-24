@@ -26,7 +26,11 @@
     </update>
 
     <delete id="delete">
-        DELETE FROM users WHERE id = #{id}
+        DELETE FROM user_roles
+        WHERE user_id = #{id};
+
+        DELETE FROM users
+        WHERE id = #{id};
     </delete>
 
     <select id="findAll" resultMap="UserResultMap">

@@ -35,8 +35,4 @@ public class RoleService {
             }
         }
     }
-
-    public void deleteRolesForUser(Integer userId) {
-        roleDao.deleteRolesForUser(userId);
-    }
 }
