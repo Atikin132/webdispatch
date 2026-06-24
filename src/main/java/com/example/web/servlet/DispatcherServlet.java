@@ -66,14 +66,14 @@ public class DispatcherServlet extends HttpServlet {
 //                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
 //                pageName = Pages.USER_FORM;
 //                break;
-            case Pages.USER_EDIT:
-                Integer userId = Integer.parseInt(req.getParameter(RequestParams.ID));
-                req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
-                req.setAttribute("roles", roleService.findAll());
-                req.setAttribute(RequestAttributes.USER, userService.getUser(userId));
-                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
-                pageName = Pages.USER_FORM;
-                break;
+//            case Pages.USER_EDIT:
+//                Integer userId = Integer.parseInt(req.getParameter(RequestParams.ID));
+//                req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
+//                req.setAttribute("roles", roleService.findAll());
+//                req.setAttribute(RequestAttributes.USER, userService.getUser(userId));
+//                req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
+//                pageName = Pages.USER_FORM;
+//                break;
         }
 
         req.setAttribute(RequestAttributes.CURRENT_PAGE, pageName);
@@ -90,7 +90,7 @@ public class DispatcherServlet extends HttpServlet {
 //            case Paths.LOGOUT_PATH -> handleLogout(req, resp);
 //            case Paths.LOGIN_EDIT_PATH -> handlePasswordChange(req, resp);
 //            case Paths.USER_ADD_PATH -> handleUserForm(req, resp, false);
-            case Paths.USER_EDIT_PATH -> handleUserForm(req, resp, true);
+//            case Paths.USER_EDIT_PATH -> handleUserForm(req, resp, true);
             case Paths.USER_DELETE_PATH -> handleUserDelete(req, resp);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -148,61 +148,61 @@ public class DispatcherServlet extends HttpServlet {
         req.getRequestDispatcher(JSP_PATH + page + JSP_EXTENSION).forward(req, resp);
     }
 
-    private void sendError(String errorText,
-                           String forwardPage,
-                           HttpServletRequest req,
-                           HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute(RequestAttributes.ERROR_MESSAGE, errorText);
-        forward(forwardPage, req, resp);
-    }
-
-    private void handleUserForm(HttpServletRequest req,
-                                HttpServletResponse resp,
-                                boolean isEdit) throws IOException, ServletException {
-        String idStr = req.getParameter(RequestParams.ID);
-        String login = req.getParameter(RequestParams.LOGIN);
-        String password = req.getParameter(RequestParams.PASSWORD);
-        String name = req.getParameter(RequestParams.NAME);
-        String birthDateStr = req.getParameter(RequestParams.BIRTH_DATE);
-        String ageStr = req.getParameter(RequestParams.AGE);
-        String salaryStr = req.getParameter(RequestParams.SALARY);
-        String[] selectedRoleIds = req.getParameterValues(RequestParams.ROLES);
-
-        User user = new User(null,
-                login.trim(),
-                password.trim(),
-                name.trim(),
-                null,
-                null,
-                null,
-                new HashSet<>());
-
-        String error = userService.validateAndPrepareUser(user,
-                idStr,
-                birthDateStr,
-                ageStr,
-                salaryStr,
-                selectedRoleIds);
-
-        if (error != null) {
-            prepareUserForm(user, req);
-            if (isEdit) {
-                req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
-            } else {
-                req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
-            }
-            sendError(error, Pages.USER_FORM, req, resp);
-            return;
-        }
-
-        if (isEdit) {
-            userService.updateUser(user);
-        } else {
-            userService.createUser(user);
-        }
-
-        resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
-    }
+//    private void sendError(String errorText,
+//                           String forwardPage,
+//                           HttpServletRequest req,
+//                           HttpServletResponse resp) throws ServletException, IOException {
+//        req.setAttribute(RequestAttributes.ERROR_MESSAGE, errorText);
+//        forward(forwardPage, req, resp);
+//    }
+//
+//    private void handleUserForm(HttpServletRequest req,
+//                                HttpServletResponse resp,
+//                                boolean isEdit) throws IOException, ServletException {
+//        String idStr = req.getParameter(RequestParams.ID);
+//        String login = req.getParameter(RequestParams.LOGIN);
+//        String password = req.getParameter(RequestParams.PASSWORD);
+//        String name = req.getParameter(RequestParams.NAME);
+//        String birthDateStr = req.getParameter(RequestParams.BIRTH_DATE);
+//        String ageStr = req.getParameter(RequestParams.AGE);
+//        String salaryStr = req.getParameter(RequestParams.SALARY);
+//        String[] selectedRoleIds = req.getParameterValues(RequestParams.ROLES);
+//
+//        User user = new User(null,
+//                login.trim(),
+//                password.trim(),
+//                name.trim(),
+//                null,
+//                null,
+//                null,
+//                new HashSet<>());
+//
+//        String error = userService.validateAndPrepareUser(user,
+//                idStr,
+//                birthDateStr,
+//                ageStr,
+//                salaryStr,
+//                selectedRoleIds);
+//
+//        if (error != null) {
+//            prepareUserForm(user, req);
+//            if (isEdit) {
+//                req.setAttribute(RequestAttributes.USER_FORM_MODE, "edit");
+//            } else {
+//                req.setAttribute(RequestAttributes.USER_FORM_MODE, "add");
+//            }
+//            sendError(error, Pages.USER_FORM, req, resp);
+//            return;
+//        }
+//
+//        if (isEdit) {
+//            userService.updateUser(user);
+//        } else {
+//            userService.createUser(user);
+//        }
+//
+//        resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
+//    }
 
     private void handleUserDelete(HttpServletRequest req,
                                   HttpServletResponse resp) throws IOException {
@@ -211,9 +211,9 @@ public class DispatcherServlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + Paths.USERS_PATH);
     }
 
-    private void prepareUserForm(User user, HttpServletRequest req) {
-        req.setAttribute(RequestAttributes.USER, user);
-        req.setAttribute("roles", roleService.findAll());
-        req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
-    }
+//    private void prepareUserForm(User user, HttpServletRequest req) {
+//        req.setAttribute(RequestAttributes.USER, user);
+//        req.setAttribute("roles", roleService.findAll());
+//        req.setAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
+//    }
 }

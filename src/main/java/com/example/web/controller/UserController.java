@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 
 @Controller
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping(Paths.USER_ADD_PATH)
-    public String welcomePage(Model model) {
+    public String userAddPage(Model model) {
         model.addAttribute(RequestAttributes.USER_FORM_MODE, "add");
         model.addAttribute(RequestAttributes.ROLES, roleService.findAll());
         model.addAttribute(RequestAttributes.USER, userService.createEmptyUser());
@@ -41,8 +42,19 @@ public class UserController {
         return Pages.USER_FORM;
     }
 
+    @GetMapping(Paths.USER_EDIT_PATH)
+    public String userEditPage(@RequestParam("id") Integer userId,
+                                   Model model) {
+        model.addAttribute(RequestAttributes.USER_FORM_MODE, "edit");
+        model.addAttribute(RequestAttributes.ROLES, roleService.findAll());
+        model.addAttribute(RequestAttributes.USER, userService.getUser(userId));
+        model.addAttribute(RequestAttributes.MAX_DATE, LocalDate.now().minusYears(19));
+        model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USER_FORM);
+        return Pages.USER_FORM;
+    }
+
     @PostMapping(Paths.USER_ADD_PATH)
-    public String loginEdit(@RequestParam("id") String idStr,
+    public String userAdd(@RequestParam("id") String idStr,
                             @RequestParam String login,
                             @RequestParam String password,
                             @RequestParam String name,
@@ -61,6 +73,31 @@ public class UserController {
                 selectedRoleIds,
                 model,
                 false);
+    }
+
+    @PostMapping(Paths.USER_EDIT_PATH)
+    public String userEdit(@RequestParam("id") String idStr,
+                            @RequestParam String login,
+                            @RequestParam String password,
+                            @RequestParam String name,
+                            @RequestParam("birthDate") String birthDateStr,
+                            @RequestParam("age") String ageStr,
+                            @RequestParam("salary") String salaryStr,
+                            @RequestParam(value = "roles", required = false) String[] selectedRoleIds,
+                            Model model) {
+        System.out.println("Roles = " + Arrays.toString(selectedRoleIds));
+        System.out.println("ID = " + idStr);
+
+        return handleUserForm(idStr,
+                login,
+                password,
+                name,
+                birthDateStr,
+                ageStr,
+                salaryStr,
+                selectedRoleIds,
+                model,
+                true);
     }
 
     private String handleUserForm(String idStr,
