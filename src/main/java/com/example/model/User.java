@@ -1,5 +1,7 @@
 package com.example.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ public class User {
     private String login;
     private String password;
     private String name;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private Integer age;
     private BigDecimal salary;
