@@ -30,9 +30,7 @@ public class RoleService {
         roleDao.deleteRolesForUser(userId);
 
         if (roles != null && !roles.isEmpty()) {
-            for (Role role : roles) {
-                roleDao.insertUserRole(userId, role.getId());
-            }
+            roleDao.insertUserRoles(userId, roles);
         }
     }
 }

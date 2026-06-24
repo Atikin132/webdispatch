@@ -20,9 +20,12 @@
         WHERE user_roles.user_id = #{userId}
     </select>
 
-    <insert id="insertUserRole">
-        INSERT INTO user_roles(user_id, role_id)
-        VALUES (#{userId}, #{roleId})
+    <insert id="insertUserRoles">
+        INSERT INTO user_roles (user_id, role_id)
+        VALUES
+        <foreach collection="roles" item="role" separator=",">
+            (#{userId}, #{role.id})
+        </foreach>
     </insert>
 
     <delete id="deleteRolesForUser">
