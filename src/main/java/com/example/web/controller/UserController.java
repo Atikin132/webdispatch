@@ -60,21 +60,13 @@ public class UserController {
 
     @PostMapping(Paths.USER_ADD_PATH)
     public String userAdd(@ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
-                          BindingResult bindingResult,
                           Model model) {
-        if (bindingResult.hasErrors()) {
-            return Pages.USER_FORM;
-        }
         return handleUserForm(userFormDTO, model, false);
     }
 
     @PostMapping(Paths.USER_EDIT_PATH)
     public String userEdit(@ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
-                           BindingResult bindingResult,
                            Model model) {
-        if (bindingResult.hasErrors()) {
-            return Pages.USER_FORM;
-        }
         return handleUserForm(userFormDTO, model, true);
     }
 
