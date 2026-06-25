@@ -16,7 +16,6 @@ public class UserFormDTO {
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must contain at least 6 characters")
-    @Size(max = 255, message = "Password is too long")
     private String password;
 
     @NotBlank(message = "Name is required")
