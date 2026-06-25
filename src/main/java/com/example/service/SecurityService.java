@@ -13,14 +13,6 @@ public class SecurityService {
     public String login(String login, String password) {
         login = (login != null) ? login.trim() : null;
         password = (password != null) ? password.trim() : null;
-
-        if (login == null || login.isBlank()) {
-            return "Login cannot be empty";
-        }
-        if (password == null || password.isBlank()) {
-            return "Password cannot be empty";
-        }
-
         User user = userService.getUserByLogin(login);
 
         if (user != null && user.getPassword().equals(password)) {

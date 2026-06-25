@@ -10,11 +10,13 @@ import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 public class AuthController {
@@ -31,9 +33,13 @@ public class AuthController {
     }
 
     @PostMapping(Paths.LOGIN_PATH)
-    public String login(@ModelAttribute(RequestAttributes.LOGIN_FORM_DTO) LoginFormDTO loginFormDTO,
+    public String login(@Valid @ModelAttribute(RequestAttributes.LOGIN_FORM_DTO) LoginFormDTO loginFormDTO,
+                        BindingResult bindingResult,
                         HttpSession session,
                         Model model) {
+        if (bindingResult.hasErrors()) {
+            return Pages.LOGIN;
+        }
         String login = loginFormDTO.getLogin();
         String password = loginFormDTO.getPassword();
         String error = securityService.login(login, password);

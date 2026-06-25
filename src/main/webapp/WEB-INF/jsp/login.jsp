@@ -20,15 +20,20 @@
            modelAttribute="loginFormDTO">
     <div class="auth-field">
         <label for="login">Login</label>
-        <form:input class="auth-input" id="login" path="login" required="true" autocomplete="off"/>
+        <form:input path="login" id="login" cssClass="auth-input"
+                    cssErrorClass="auth-input error-input"
+                    autocomplete="off"/>
+        <form:errors path="login" cssClass="error-message"/>
     </div>
     <div class="auth-field">
         <label for="password">Password</label>
-        <form:password class="auth-input" id="password" path="password" required="true"
-                       autocomplete="off"/>
+        <form:password path="password" id="password" cssClass="auth-input"
+                    cssErrorClass="auth-input error-input"
+                    autocomplete="off"/>
+        <form:errors path="password" cssClass="error-message"/>
     </div>
     <c:if test="${not empty errorMessage}">
-        <span style="color:red">${errorMessage}</span>
+        <span class="error-message">${errorMessage}</span>
     </c:if>
     <button class="button blue" type="submit">Login</button>
 </form:form>

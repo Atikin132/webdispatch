@@ -28,3 +28,11 @@ body {
     flex-direction: column;
     gap: 5px;
 }
+
+.error-message {
+    color: #E26A6A;
+}
+
+.error-input {
+    border-color: #E26A6A;
+}
