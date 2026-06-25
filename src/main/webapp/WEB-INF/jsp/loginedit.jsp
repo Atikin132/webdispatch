@@ -13,21 +13,25 @@
                 <label for="oldPassword">
                     Old password
                 </label>
-                <form:password path="oldPassword" id="oldPassword" class="password-input"
-                               autocomplete="off"/>
+                <form:password path="oldPassword" id="oldPassword" cssClass="password-input"
+                            cssErrorClass="password-input error-input"
+                            autocomplete="off"/>
+                <form:errors path="oldPassword" cssClass="error-message"/>
             </div>
             <div class="password-field">
                 <label for="newPassword">
                     New password
                 </label>
-                <form:password path="newPassword" id="newPassword" class="password-input"
-                               autocomplete="off"/>
+                <form:password path="newPassword" id="newPassword" cssClass="password-input"
+                            cssErrorClass="password-input error-input"
+                            autocomplete="off"/>
+                <form:errors path="newPassword" cssClass="error-message"/>
             </div>
-            <c:if test="${not empty requestScope.errorMessage}">
-                <span style="color:red">${requestScope.errorMessage}</span>
+            <c:if test="${not empty errorMessage}">
+                <span class="error-message">${errorMessage}</span>
             </c:if>
-            <c:if test="${not empty requestScope.successMessage}">
-                <span style="color:green">${requestScope.successMessage}</span>
+            <c:if test="${not empty successMessage}">
+                <span class="success-message">${successMessage}</span>
             </c:if>
             <button class="change-password-btn button green" type="submit">
                 Change password

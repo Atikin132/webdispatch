@@ -29,3 +29,7 @@
     border: .5px solid gray;
     border-radius: 10px;
 }
+
+.error-input {
+    border-color: #E26A6A;
+}

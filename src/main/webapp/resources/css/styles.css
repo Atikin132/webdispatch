@@ -47,3 +47,15 @@ header, footer {
 .button.blue {
     background: #789DE5;
 }
+
+.error-message {
+    color: #E26A6A;
+}
+
+.success-message {
+    color: #A2D093;
+}
+
+.error-input {
+    border-color: #E26A6A;
+}
