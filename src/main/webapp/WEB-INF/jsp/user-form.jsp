@@ -3,11 +3,11 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<t:main-html title="${requestScope.mode == 'add' ? 'Add User' : 'Edit User'}" pageName="user-form">
+<t:main-html title="${mode == 'add' ? 'Add User' : 'Edit User'}" pageName="user-form">
     <div class="user-form-container">
-        <h2>${requestScope.mode == 'add' ? 'Add User' : 'Edit User'}</h2>
-        <form:form modelAttribute="user" class="user-form" method="post"
-                   action="${pageContext.request.contextPath}/${requestScope.mode == 'add' ?
+        <h2>${mode == 'add' ? 'Add User' : 'Edit User'}</h2>
+        <form:form modelAttribute="userFormDTO" class="user-form" method="post"
+                   action="${pageContext.request.contextPath}/${mode == 'add' ?
         'useradd.jhtml' : 'useredit.jhtml'}">
             <div class="inputs-container">
                 <form:hidden path="id"/>
@@ -30,7 +30,7 @@
                 <div class="form-group">
                     <label class="form-label" for="birthDate">Birth Date:</label>
                     <form:input path="birthDate" id="birthDate" class="form-input" type="date"
-                                max="${requestScope.maxDate}" autocomplete="off"/>
+                                max="${maxDate}" autocomplete="off"/>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="age">Age:</label>
@@ -47,15 +47,15 @@
                     <div class="roles-checkboxes form-input">
                         <form:checkboxes
                                 path="roles"
-                                items="${requestScope.roles}"
+                                items="${roles}"
                                 itemValue="id"
                                 itemLabel="name"/>
                     </div>
                 </div>
             </div>
-            <c:if test="${not empty requestScope.errorMessage}">
+            <c:if test="${not empty errorMessage}">
                 <div style="color:red">
-                        ${requestScope.errorMessage}
+                        ${errorMessage}
                 </div>
             </c:if>
             <button class="button green" type="submit">Save</button>

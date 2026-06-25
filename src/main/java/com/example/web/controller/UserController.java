@@ -39,7 +39,7 @@ public class UserController {
     @GetMapping(Paths.USER_ADD_PATH)
     public String userAddPage(Model model) {
         model.addAttribute(RequestAttributes.USER_FORM_MODE, "add");
-        model.addAttribute(RequestAttributes.USER, userService.createEmptyUser());
+        model.addAttribute(RequestAttributes.USER_FORM_DTO, toDto(userService.createEmptyUser()));
         model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USER_FORM);
         return Pages.USER_FORM;
     }
@@ -47,7 +47,7 @@ public class UserController {
     @GetMapping(Paths.USER_EDIT_PATH)
     public String userEditPage(@RequestParam("id") Integer userId, Model model) {
         model.addAttribute(RequestAttributes.USER_FORM_MODE, "edit");
-        model.addAttribute(RequestAttributes.USER, userService.getUser(userId));
+        model.addAttribute(RequestAttributes.USER_FORM_DTO, toDto(userService.getUser(userId)));
         model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USER_FORM);
         return Pages.USER_FORM;
     }
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping(Paths.USER_ADD_PATH)
-    public String userAdd(@ModelAttribute(RequestAttributes.USER) UserFormDTO userFormDTO,
+    public String userAdd(@ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
                           BindingResult bindingResult,
                           Model model) {
         if (bindingResult.hasErrors()) {
@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping(Paths.USER_EDIT_PATH)
-    public String userEdit(@ModelAttribute(RequestAttributes.USER) UserFormDTO userFormDTO,
+    public String userEdit(@ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
                            BindingResult bindingResult,
                            Model model) {
         if (bindingResult.hasErrors()) {
@@ -107,7 +107,6 @@ public class UserController {
         String error = userService.validateAndPrepareUser(user, userFormDTO.getRoles());
 
         if (error != null) {
-            model.addAttribute(RequestAttributes.USER, user);
             model.addAttribute(RequestAttributes.USER_FORM_MODE, isEdit ? "edit" : "add");
             model.addAttribute(RequestAttributes.ERROR_MESSAGE, error);
             return Pages.USER_FORM;
@@ -121,6 +120,26 @@ public class UserController {
 
         model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USERS);
         return "redirect:" + Paths.USERS_PATH;
+    }
+
+    private UserFormDTO toDto(User user) {
+        UserFormDTO dto = new UserFormDTO();
+        dto.setId(user.getId());
+        dto.setLogin(user.getLogin());
+        dto.setPassword(user.getPassword());
+        dto.setName(user.getName());
+        dto.setBirthDate(user.getBirthDate());
+        dto.setAge(user.getAge());
+        dto.setSalary(user.getSalary());
+
+        String[] roles = new String[user.getRoles().size()];
+        int i = 0;
+        for (Role role : user.getRoles()) {
+            roles[i++] = String.valueOf(role.getId());
+        }
+        dto.setRoles(roles);
+
+        return dto;
     }
 
 //    private String handleUserForm(String idStr,
