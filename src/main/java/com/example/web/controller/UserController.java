@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,14 +54,24 @@ public class UserController {
     }
 
     @PostMapping(Paths.USER_ADD_PATH)
-    public String userAdd(@ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
+    public String userAdd(@Valid @ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
+                          BindingResult bindingResult,
                           Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(RequestAttributes.USER_FORM_MODE, "add");
+            return Pages.USER_FORM;
+        }
         return handleUserForm(userFormDTO, model, false);
     }
 
     @PostMapping(Paths.USER_EDIT_PATH)
-    public String userEdit(@ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
+    public String userEdit(@Valid @ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
+                           BindingResult bindingResult,
                            Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(RequestAttributes.USER_FORM_MODE, "edit");
+            return Pages.USER_FORM;
+        }
         return handleUserForm(userFormDTO, model, true);
     }
 
@@ -127,53 +138,4 @@ public class UserController {
 
         return dto;
     }
-
-//    private String handleUserForm(String idStr,
-//                                  String login,
-//                                  String password,
-//                                  String name,
-//                                  String birthDateStr,
-//                                  String ageStr,
-//                                  String salaryStr,
-//                                  String[] selectedRoleIds,
-//                                  Model model,
-//                                  boolean isEdit) {
-//        User user = new User(null,
-//                login.trim(),
-//                password.trim(),
-//                name.trim(),
-//                null,
-//                null,
-//                null,
-//                new HashSet<>());
-//
-//        String error = userService.validateAndPrepareUser(user,
-//                idStr,
-//                birthDateStr,
-//                ageStr,
-//                salaryStr,
-//                selectedRoleIds);
-//
-//        if (error != null) {
-//            model.addAttribute(RequestAttributes.USER, user);
-//            if (isEdit) {
-//                model.addAttribute(RequestAttributes.USER_FORM_MODE, "edit");
-//            } else {
-//                model.addAttribute(RequestAttributes.USER_FORM_MODE, "add");
-//            }
-//            model.addAttribute(RequestAttributes.ERROR_MESSAGE, error);
-//            return Pages.USER_FORM;
-//        }
-//
-//        if (isEdit) {
-//            userService.updateUser(user);
-//        } else {
-//            userService.createUser(user);
-//        }
-//
-//        model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USERS);
-//        return "redirect:" + Paths.USERS_PATH;
-//    }
-
-
 }

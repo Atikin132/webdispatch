@@ -72,41 +72,6 @@ public class UserService {
         return new User();
     }
 
-//    public String validateAndPrepareUser(User user,
-//                                         String idStr,
-//                                         String birthDateStr,
-//                                         String ageStr,
-//                                         String salaryStr,
-//                                         String[] selectedRoleIds) {
-//        if (!idStr.isEmpty()) {
-//            user.setId(Integer.parseInt(idStr));
-//        }
-//
-//        prepareRoles(user, selectedRoleIds);
-//
-//        if (birthDateStr != null && !birthDateStr.isBlank()) {
-//            try {
-//                user.setBirthDate(LocalDate.parse(birthDateStr));
-//            } catch (Exception e) {
-//                return "Invalid birth date format";
-//            }
-//        }
-//
-//        try {
-//            user.setAge(Integer.parseInt(ageStr));
-//        } catch (Exception e) {
-//            return "Invalid age";
-//        }
-//
-//        try {
-//            user.setSalary(new BigDecimal(salaryStr));
-//        } catch (Exception e) {
-//            return "Invalid salary";
-//        }
-//
-//        return validateForForm(user);
-//    }
-
     public String validateAndPrepareUser(User user, String[] selectedRoleIds) {
         prepareRoles(user, selectedRoleIds);
         return validateForForm(user);
@@ -130,11 +95,6 @@ public class UserService {
     }
 
     public String validateForForm(User user) {
-        String basicError = validateUser(user);
-        if (basicError != null) {
-            return basicError;
-        }
-
         if (user.getBirthDate() != null && !isBirthDateBeforeNow(user.getBirthDate())) {
             return "The date must not be today or in the future";
         }
@@ -143,49 +103,6 @@ public class UserService {
 
         if (existingUser != null && !existingUser.getId().equals(user.getId())) {
             return "User with this login already exists";
-        }
-        return null;
-    }
-
-    public String validateUser(User user) {
-        if (user.getLogin() == null || user.getLogin().trim().isEmpty()) {
-            return "Login is required";
-        }
-        if (user.getLogin().length() > 50) {
-            return "Login cannot be longer than 50 characters";
-        }
-        if (user.getPassword() == null || user.getPassword().length() < 6) {
-            return "Password must contain at least 6 characters";
-        }
-        if (user.getPassword().length() > 255) {
-            return "Password is too long";
-        }
-        if (user.getName() == null || user.getName().trim().isEmpty()) {
-            return "Name is required";
-        }
-        if (user.getName().length() > 100) {
-            return "Name cannot be longer than 100 characters";
-        }
-        if (user.getAge() == null) {
-            return "Age is required";
-        }
-        if (user.getAge() <= 18) {
-            return "User must be older than 18";
-        }
-        if (user.getSalary() == null) {
-            return "Salary is required";
-        }
-        if (user.getSalary().compareTo(BigDecimal.ZERO) < 0) {
-            return "Salary cannot be negative";
-        }
-        if (user.getSalary().scale() > 2) {
-            return "Salary can have max 2 decimal places";
-        }
-        if (user.getSalary().compareTo(new BigDecimal("99999999.99")) > 0) {
-            return "Salary is too large";
-        }
-        if (user.getRoles() == null || user.getRoles().isEmpty()) {
-            return "At least one role must be selected";
         }
         return null;
     }

@@ -2,19 +2,41 @@ package com.example.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 
 public class UserFormDTO {
     private Integer id;
+
+    @NotBlank(message = "Login is required")
+    @Size(max = 50, message = "Login cannot be longer than 50 characters")
     private String login;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must contain at least 6 characters")
+    @Size(max = 255, message = "Password is too long")
     private String password;
+
+    @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name cannot be longer than 100 characters")
     private String name;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+
+    @NotNull(message = "Age is required")
+    @Min(value = 19, message = "User must be older than 18")
     private Integer age;
+
+    @NotNull(message = "Salary is required")
+    @DecimalMin(value = "0", message = "Salary cannot be negative")
+    @DecimalMax(value = "99999999.99", message = "Salary is too large")
+    @Digits(integer = 8, fraction = 2, message = "Salary can have max 2 decimal places")
     private BigDecimal salary;
+
+    @NotEmpty(message = "At least one role must be selected")
     private String[] roles;
 
     public Integer getId() {

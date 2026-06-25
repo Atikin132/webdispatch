@@ -13,50 +13,69 @@
                 <form:hidden path="id"/>
                 <div class="form-group">
                     <label class="form-label" for="login">Login:</label>
-                    <form:input path="login" id="login" class="form-input" required="true"
-                                autocomplete="off"/>
+                    <div class="input-container">
+                        <form:input path="login" id="login" cssClass="form-input"
+                                    cssErrorClass="form-input error-input"
+                                    autocomplete="off"/>
+                        <form:errors path="login" cssClass="error-message"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Password:</label>
-                    <form:input path="password" type="password" id="password" class="form-input"
-                                required="true"
-                                autocomplete="off"/>
+                    <div class="input-container">
+                        <form:input path="password" id="password" type="password"
+                                    cssClass="form-input"
+                                    cssErrorClass="form-input error-input" autocomplete="off"/>
+                        <form:errors path="password" cssClass="error-message"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="name">Name:</label>
-                    <form:input path="name" id="name" class="form-input" required="true"
-                                autocomplete="off"/>
+                    <div class="input-container">
+                        <form:input path="name" id="name" cssClass="form-input"
+                                    cssErrorClass="form-input error-input" autocomplete="off"/>
+                        <form:errors path="name" cssClass="error-message"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="birthDate">Birth Date:</label>
-                    <form:input path="birthDate" id="birthDate" class="form-input" type="date"
-                                max="${maxDate}" autocomplete="off"/>
+                    <div class="input-container">
+                        <form:input path="birthDate" id="birthDate" class="form-input" type="date"
+                                    max="${maxDate}" autocomplete="off"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="age">Age:</label>
-                    <form:input path="age" id="age" class="form-input" type="number"
-                                required="true" min="19" autocomplete="off"/>
+                    <div class="input-container">
+                        <form:input path="age" id="age" cssClass="form-input" type="number"
+                                    cssErrorClass="form-input error-input" autocomplete="off"/>
+                        <form:errors path="age" cssClass="error-message"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="salary">Salary:</label>
-                    <form:input path="salary" id="salary" class="form-input" required="true"
-                                autocomplete="off"/>
+                    <div class="input-container">
+                        <form:input path="salary" id="salary" cssClass="form-input" type="number"
+                                    cssErrorClass="form-input error-input" autocomplete="off"/>
+                        <form:errors path="salary" cssClass="error-message"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Roles:</label>
-                    <div class="roles-checkboxes form-input">
-                        <form:checkboxes
-                                path="roles"
-                                items="${roles}"
-                                itemValue="id"
-                                itemLabel="name"/>
+                    <div class="input-container">
+                        <div class="roles-checkboxes form-input">
+                            <form:checkboxes
+                                    path="roles"
+                                    items="${roles}"
+                                    itemValue="id"
+                                    itemLabel="name"/>
+                        </div>
+                        <form:errors path="roles" cssClass="error-message"/>
                     </div>
                 </div>
             </div>
             <c:if test="${not empty errorMessage}">
-                <div style="color:red">
-                        ${errorMessage}
-                </div>
+                <div class="error-message">${errorMessage}</div>
             </c:if>
             <button class="button green" type="submit">Save</button>
         </form:form>
