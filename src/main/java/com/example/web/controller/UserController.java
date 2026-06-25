@@ -52,12 +52,6 @@ public class UserController {
         return Pages.USER_FORM;
     }
 
-    @GetMapping(Paths.USER_DELETE_PATH)
-    public String userDeletePage(Model model) {
-        model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USERS);
-        return Pages.USERS;
-    }
-
     @PostMapping(Paths.USER_ADD_PATH)
     public String userAdd(@ModelAttribute(RequestAttributes.USER_FORM_DTO) UserFormDTO userFormDTO,
                           Model model) {
