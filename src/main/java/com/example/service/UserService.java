@@ -72,38 +72,43 @@ public class UserService {
         return new User();
     }
 
-    public String validateAndPrepareUser(User user,
-                                         String idStr,
-                                         String birthDateStr,
-                                         String ageStr,
-                                         String salaryStr,
-                                         String[] selectedRoleIds) {
-        if (!idStr.isEmpty()) {
-            user.setId(Integer.parseInt(idStr));
-        }
+//    public String validateAndPrepareUser(User user,
+//                                         String idStr,
+//                                         String birthDateStr,
+//                                         String ageStr,
+//                                         String salaryStr,
+//                                         String[] selectedRoleIds) {
+//        if (!idStr.isEmpty()) {
+//            user.setId(Integer.parseInt(idStr));
+//        }
+//
+//        prepareRoles(user, selectedRoleIds);
+//
+//        if (birthDateStr != null && !birthDateStr.isBlank()) {
+//            try {
+//                user.setBirthDate(LocalDate.parse(birthDateStr));
+//            } catch (Exception e) {
+//                return "Invalid birth date format";
+//            }
+//        }
+//
+//        try {
+//            user.setAge(Integer.parseInt(ageStr));
+//        } catch (Exception e) {
+//            return "Invalid age";
+//        }
+//
+//        try {
+//            user.setSalary(new BigDecimal(salaryStr));
+//        } catch (Exception e) {
+//            return "Invalid salary";
+//        }
+//
+//        return validateForForm(user);
+//    }
 
+    public String validateAndPrepareUser(User user, String[] selectedRoleIds) {
         prepareRoles(user, selectedRoleIds);
-
-        if (birthDateStr != null && !birthDateStr.isBlank()) {
-            try {
-                user.setBirthDate(LocalDate.parse(birthDateStr));
-            } catch (Exception e) {
-                return "Invalid birth date format";
-            }
-        }
-
-        try {
-            user.setAge(Integer.parseInt(ageStr));
-        } catch (Exception e) {
-            return "Invalid age";
-        }
-
-        try {
-            user.setSalary(new BigDecimal(salaryStr));
-        } catch (Exception e) {
-            return "Invalid salary";
-        }
-
         return validateForForm(user);
     }
 
