@@ -59,3 +59,31 @@ header, footer {
 .error-input {
     border-color: #E26A6A;
 }
+
+.lang-switch {
+    display: flex;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 10px 15px;
+    gap: 15px;
+    align-self: center;
+}
+
+.en-lang-btn, .ru-lang-btn {
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    object-fit: contain;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.en-lang-btn {
+    background-image: url("../svg/usa_flag.svg");
+}
+
+.ru-lang-btn {
+    background-image: url("../svg/russian_flag.svg");
+}
