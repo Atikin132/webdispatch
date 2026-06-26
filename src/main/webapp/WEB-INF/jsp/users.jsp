@@ -1,28 +1,30 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<t:main-html title="Users" pageName="users">
+<spring:message code="usersTitle" var="usersTitle"/>
+<t:main-html title="${usersTitle}" pageName="users">
     <div class="users-list">
-        <h2 class="page-title">Users list</h2>
+        <h2 class="page-title"><spring:message code="usersList"/></h2>
         <div class="table-container">
             <table class="users-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Login</th>
-                    <th>Name</th>
-                    <th>Birth Date</th>
-                    <th>Age</th>
-                    <th>Salary</th>
-                    <th>Roles</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th><spring:message code="usersListID"/></th>
+                    <th><spring:message code="usersListLogin"/></th>
+                    <th><spring:message code="usersListName"/></th>
+                    <th><spring:message code="usersListBirthDate"/></th>
+                    <th><spring:message code="usersListAge"/></th>
+                    <th><spring:message code="usersListSalary"/></th>
+                    <th><spring:message code="usersListRoles"/></th>
+                    <th><spring:message code="usersListEdit"/></th>
+                    <th><spring:message code="usersListDelete"/></th>
                 </tr>
                 </thead>
 
                 <tbody>
-                <c:forEach var="user" items="${requestScope.users}">
+                <c:forEach var="user" items="${users}">
                     <tr>
                         <td>${user.id}</td>
                         <td>${user.login}</td>
@@ -53,6 +55,8 @@
                 </tbody>
             </table>
         </div>
-        <a class="button green" href="${pageContext.request.contextPath}/useradd.jhtml">Add user</a>
+        <a class="button green" href="${pageContext.request.contextPath}/useradd.jhtml">
+            <spring:message code="usersListAddBtn"/>
+        </a>
     </div>
 </t:main-html>
