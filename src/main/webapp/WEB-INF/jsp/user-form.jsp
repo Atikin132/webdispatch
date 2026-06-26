@@ -86,7 +86,7 @@
                                     path="roles"
                                     items="${roles}"
                                     itemValue="id"
-                                    itemLabel="name"/>
+                                    itemLabel="displayName"/>
                         </div>
                         <form:errors path="roles" cssClass="error-message"/>
                     </div>

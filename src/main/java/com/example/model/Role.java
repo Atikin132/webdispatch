@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Role {
     private Integer id;
     private String name;
+    private String displayName;
 
     public Role() {
     }
@@ -34,6 +35,14 @@ public class Role {
         this.name = name;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,6 +58,6 @@ public class Role {
 
     @Override
     public String toString() {
-        return name;
+        return displayName;
     }
 }

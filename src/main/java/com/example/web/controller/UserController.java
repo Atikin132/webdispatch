@@ -9,6 +9,8 @@ import com.example.model.User;
 import com.example.service.RoleService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,9 +33,20 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping(Paths.USERS_PATH)
     public String usersPage(Model model) {
-        model.addAttribute(RequestAttributes.USERS, userService.getAllUsers());
+        Collection<User> users = userService.getAllUsers();
+        for (User user : users) {
+            for (Role role : user.getRoles()) {
+                role.setDisplayName(messageSource.getMessage("role" + role.getName(),
+                        null,
+                        LocaleContextHolder.getLocale()));
+            }
+        }
+        model.addAttribute(RequestAttributes.USERS, users);
         model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USERS);
         return Pages.USERS;
     }
@@ -83,7 +97,13 @@ public class UserController {
 
     @ModelAttribute(RequestAttributes.ROLES)
     public Set<Role> roles() {
-        return roleService.findAll();
+        Set<Role> roles = roleService.findAll();
+        for (Role role : roles) {
+            role.setDisplayName(messageSource.getMessage("role" + role.getName(),
+                    null,
+                    LocaleContextHolder.getLocale()));
+        }
+        return roles;
     }
 
     @ModelAttribute(RequestAttributes.MAX_DATE)
