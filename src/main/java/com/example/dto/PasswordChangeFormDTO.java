@@ -3,10 +3,10 @@ package com.example.dto;
 import javax.validation.constraints.NotBlank;
 
 public class PasswordChangeFormDTO {
-    @NotBlank(message = "Old password cannot be empty")
+    @NotBlank(message = "{validationOldPasswordEmpty}")
     private String oldPassword;
 
-    @NotBlank(message = "New password cannot be empty")
+    @NotBlank(message = "{validationNewPasswordEmpty}")
     private String newPassword;
 
     public String getOldPassword() {

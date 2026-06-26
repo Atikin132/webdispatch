@@ -38,6 +38,7 @@ public class LoginEditController {
                             Model model) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.LOGIN_EDIT);
             return Pages.LOGIN_EDIT;
         }
         User currentUser = (User) session.getAttribute(SessionAttributes.USER);

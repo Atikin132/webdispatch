@@ -9,33 +9,32 @@ import java.util.Arrays;
 
 public class UserFormDTO {
     private Integer id;
-
-    @NotBlank(message = "Login is required")
-    @Size(max = 50, message = "Login cannot be longer than 50 characters")
+    @NotBlank(message = "{validationLoginRequired}")
+    @Size(max = 50, message = "{validationLoginTooLong}")
     private String login;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must contain at least 6 characters")
+    @NotBlank(message = "{validationPasswordRequired}")
+    @Size(min = 6, message = "{validationPasswordTooShort}")
     private String password;
 
-    @NotBlank(message = "Name is required")
-    @Size(max = 100, message = "Name cannot be longer than 100 characters")
+    @NotBlank(message = "{validationNameRequired}")
+    @Size(max = 100, message = "{validationNameTooLong}")
     private String name;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
-    @NotNull(message = "Age is required")
-    @Min(value = 19, message = "User must be older than 18")
+    @NotNull(message = "{validationAgeRequired}")
+    @Min(value = 19, message = "{validationAgeTooYoung}")
     private Integer age;
 
-    @NotNull(message = "Salary is required")
-    @DecimalMin(value = "0", message = "Salary cannot be negative")
-    @DecimalMax(value = "99999999.99", message = "Salary is too large")
-    @Digits(integer = 8, fraction = 2, message = "Salary can have max 2 decimal places")
+    @NotNull(message = "{validationSalaryRequired}")
+    @DecimalMin(value = "0", message = "{validationSalaryNoNegative}")
+    @DecimalMax(value = "99999999.99", message = "{validationSalaryTooLarge}")
+    @Digits(integer = 8, fraction = 2, message = "{validationSalaryTwoDecimal}")
     private BigDecimal salary;
 
-    @NotEmpty(message = "At least one role must be selected")
+    @NotEmpty(message = "{validationRolesOneRequired}")
     private String[] roles;
 
     public Integer getId() {
