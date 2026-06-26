@@ -8,6 +8,8 @@ import com.example.dto.PasswordChangeFormDTO;
 import com.example.model.User;
 import com.example.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +25,9 @@ public class LoginEditController {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping(Paths.LOGIN_EDIT_PATH)
     public String loginEditPage(Model model) {
@@ -46,9 +51,16 @@ public class LoginEditController {
                 passwordChangeFormDTO.getOldPassword(),
                 passwordChangeFormDTO.getNewPassword());
         if (changePassword) {
-            model.addAttribute(RequestAttributes.SUCCESS_MESSAGE, "Password changed successfully");
+            ;
+            model.addAttribute(RequestAttributes.SUCCESS_MESSAGE,
+                    messageSource.getMessage("passwordChangedSuccessfully",
+                            null,
+                            LocaleContextHolder.getLocale()));
         } else {
-            model.addAttribute(RequestAttributes.ERROR_MESSAGE, "Old password is incorrect");
+            model.addAttribute(RequestAttributes.ERROR_MESSAGE,
+                    messageSource.getMessage("oldPasswordIncorrect",
+                            null,
+                            LocaleContextHolder.getLocale()));
         }
         model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.LOGIN_EDIT);
         return Pages.LOGIN_EDIT;
