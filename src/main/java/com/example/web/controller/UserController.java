@@ -11,6 +11,7 @@ import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +38,7 @@ public class UserController {
     private MessageSource messageSource;
 
     @GetMapping(Paths.USERS_PATH)
-    public String usersPage(Model model) {
+    public String usersPage(Model model, Authentication authentication) {
         Collection<User> users = userService.getAllUsers();
         for (User user : users) {
             for (Role role : user.getRoles()) {
@@ -46,6 +47,7 @@ public class UserController {
                         LocaleContextHolder.getLocale()));
             }
         }
+        model.addAttribute(RequestAttributes.CURRENT_USER, authentication.getName());
         model.addAttribute(RequestAttributes.USERS, users);
         model.addAttribute(RequestAttributes.CURRENT_PAGE, Pages.USERS);
         return Pages.USERS;

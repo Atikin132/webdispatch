@@ -1,32 +1,33 @@
 package com.example.service;
 
+import com.example.model.Role;
 import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import static org.springframework.security.core.userdetails.User.withUsername;
+
 @Service
-public class SecurityService {
+public class SecurityService implements UserDetailsService {
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private MessageSource messageSource;
-
-    public String login(String login, String password) {
-        login = (login != null) ? login.trim() : null;
-        password = (password != null) ? password.trim() : null;
+    @Override
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = userService.getUserByLogin(login);
-
-        if (user != null && user.getPassword().equals(password)) {
-            return null;
-        } else {
-            return messageSource.getMessage("securityLoginError",
-                    null,
-                    LocaleContextHolder.getLocale());
+        if (user == null) {
+            throw new UsernameNotFoundException(login);
         }
+        String[] roles = new String[user.getRoles().size()];
+        int i = 0;
+        for (Role role : user.getRoles()) {
+            roles[i++] = String.valueOf(role.getName());
+        }
+        return withUsername(user.getLogin()).password(user.getPassword()).roles(roles).build();
     }
 
     public boolean changePassword(Integer userId, String oldPassword, String newPassword) {

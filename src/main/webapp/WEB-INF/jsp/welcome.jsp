@@ -5,6 +5,6 @@
 <spring:message code="welcome" var="welcome"/>
 <t:main-html title="${welcome}" pageName="welcome">
     <div class="welcome-page">
-        <h2><spring:message code="welcome"/>, ${sessionScope.user.login}!</h2>
+        <h2><spring:message code="welcome"/>, ${pageContext.request.userPrincipal.name}!</h2>
     </div>
 </t:main-html>

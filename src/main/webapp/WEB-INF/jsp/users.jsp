@@ -42,7 +42,7 @@
                             </div>
                         </td>
                         <td>
-                            <c:if test="${user.login ne sessionScope.user.login}">
+                            <c:if test="${user.login ne currentUser}">
                                 <form class="btn-container" method="post"
                                       action="${pageContext.request.contextPath}/userdelete.jhtml">
                                     <input type="hidden" name="id" value="${user.id}">
