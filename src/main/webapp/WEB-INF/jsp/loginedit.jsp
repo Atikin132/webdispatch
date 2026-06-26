@@ -2,29 +2,28 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<t:main-html title="Change Password" pageName="loginedit">
+
+<spring:message code="loginEdit" var="loginEditTitle"/>
+<t:main-html title="${loginEditTitle}" pageName="loginedit">
     <div class="change-password-form-container">
-        <h2>Change Password</h2>
+        <h2><spring:message code="loginEdit"/></h2>
         <form:form class="change-password-form" method="post"
                    action="${pageContext.request.contextPath}/loginedit.jhtml"
                    modelAttribute="passwordChangeFormDTO">
             <div class="password-field">
-                <label for="oldPassword">
-                    Old password
-                </label>
+                <label for="oldPassword"><spring:message code="oldPassword"/></label>
                 <form:password path="oldPassword" id="oldPassword" cssClass="password-input"
-                            cssErrorClass="password-input error-input"
-                            autocomplete="off"/>
+                               cssErrorClass="password-input error-input"
+                               autocomplete="off"/>
                 <form:errors path="oldPassword" cssClass="error-message"/>
             </div>
             <div class="password-field">
-                <label for="newPassword">
-                    New password
-                </label>
+                <label for="newPassword"><spring:message code="newPassword"/></label>
                 <form:password path="newPassword" id="newPassword" cssClass="password-input"
-                            cssErrorClass="password-input error-input"
-                            autocomplete="off"/>
+                               cssErrorClass="password-input error-input"
+                               autocomplete="off"/>
                 <form:errors path="newPassword" cssClass="error-message"/>
             </div>
             <c:if test="${not empty errorMessage}">
@@ -34,7 +33,7 @@
                 <span class="success-message">${successMessage}</span>
             </c:if>
             <button class="change-password-btn button green" type="submit">
-                Change password
+                <spring:message code="changePasswordBtn"/>
             </button>
         </form:form>
     </div>
