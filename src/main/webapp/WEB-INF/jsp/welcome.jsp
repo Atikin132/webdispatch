@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<t:main-html title="Welcome" pageName="welcome">
+<spring:message code="welcome" var="welcome"/>
+<t:main-html title="${welcome}" pageName="welcome">
     <div class="welcome-page">
-        <h2>Welcome, ${sessionScope.user.login}!</h2>
+        <h2><spring:message code="welcome"/>, ${sessionScope.user.login}!</h2>
     </div>
 </t:main-html>
