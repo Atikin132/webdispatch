@@ -1,14 +1,17 @@
 package com.example.service;
 
-import com.example.model.Role;
+import com.example.model.CustomUserDetails;
 import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import static org.springframework.security.core.userdetails.User.withUsername;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SecurityService implements UserDetailsService {
@@ -22,12 +25,13 @@ public class SecurityService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(login);
         }
-        String[] roles = new String[user.getRoles().size()];
-        int i = 0;
-        for (Role role : user.getRoles()) {
-            roles[i++] = String.valueOf(role.getName());
-        }
-        return withUsername(user.getLogin()).password(user.getPassword()).roles(roles).build();
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+                .collect(Collectors.toList());
+        return new CustomUserDetails(user.getId(),
+                user.getLogin(),
+                user.getPassword(),
+                authorities);
     }
 
     public boolean changePassword(Integer userId, String oldPassword, String newPassword) {

@@ -12,6 +12,6 @@ public class RequestAttributes {
     public static final String PASSWORD_CHANGE_FORM_DTO = "passwordChangeFormDTO";
     public static final String USER_FORM_DTO = "userFormDTO";
 
-    public RequestAttributes() {
+    private RequestAttributes() {
     }
 }

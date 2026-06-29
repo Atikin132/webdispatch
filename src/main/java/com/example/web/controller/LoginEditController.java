@@ -4,7 +4,7 @@ import com.example.constants.Pages;
 import com.example.constants.Paths;
 import com.example.constants.RequestAttributes;
 import com.example.dto.PasswordChangeFormDTO;
-import com.example.model.User;
+import com.example.model.CustomUserDetails;
 import com.example.service.SecurityService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +50,8 @@ public class LoginEditController {
             return Pages.LOGIN_EDIT;
         }
 
-        User currentUser = userService.getUserByLogin(authentication.getName());
-        boolean changePassword = securityService.changePassword(currentUser.getId(),
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        boolean changePassword = securityService.changePassword(userDetails.getId(),
                 passwordChangeFormDTO.getOldPassword(),
                 passwordChangeFormDTO.getNewPassword());
         if (changePassword) {
