@@ -20,28 +20,21 @@
 </head>
 <body>
 <section class="login-section">
-    <form:form class="login-form" method="post"
-               action="${pageContext.request.contextPath}/login.jhtml"
-               modelAttribute="loginFormDTO">
+    <form class="login-form" action="${pageContext.request.contextPath}/login.jhtml" method="post">
         <div class="auth-field">
             <label for="login"><spring:message code="login"/></label>
-            <form:input path="login" id="login" cssClass="auth-input"
-                        cssErrorClass="auth-input error-input"
-                        autocomplete="off"/>
-            <form:errors path="login" cssClass="error-message"/>
+            <input type="text" name="login" id="login" class="auth-input" autocomplete="off" required/>
         </div>
         <div class="auth-field">
             <label for="password"><spring:message code="password"/></label>
-            <form:password path="password" id="password" cssClass="auth-input"
-                           cssErrorClass="auth-input error-input"
-                           autocomplete="off"/>
-            <form:errors path="password" cssClass="error-message"/>
+            <input type="password" id="password" name="password" class="auth-input"
+                   autocomplete="off" required/>
         </div>
         <c:if test="${not empty errorMessage}">
             <span class="error-message">${errorMessage}</span>
         </c:if>
         <button class="button blue" type="submit"><spring:message code="loginBtn"/></button>
-    </form:form>
+    </form>
 
     <t:change-lang-btn/>
 </section>

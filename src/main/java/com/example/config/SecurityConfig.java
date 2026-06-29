@@ -12,7 +12,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests(auth -> auth.antMatchers("/",
+        http.csrf().disable().authorizeRequests(auth -> auth.antMatchers("/",
                         "/index.jsp",
                         "/login.jhtml",
                         "/resources/**").permitAll().antMatchers("/users.jhtml",
@@ -29,7 +29,6 @@ public class SecurityConfig {
 
                 .logout().logoutUrl("/logout.jhtml").logoutSuccessUrl("/login.jhtml")
                 .invalidateHttpSession(true).clearAuthentication(true).permitAll();
-
 
         return http.build();
     }

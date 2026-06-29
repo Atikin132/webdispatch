@@ -12,7 +12,6 @@
         </p>
         <t:change-lang-btn/>
         <form method="post" action="${pageContext.request.contextPath}/logout.jhtml">
-            <sec:csrfInput/>
             <button class="button blue"><spring:message code="headerLogoutBtn"/></button>
         </form>
     </div>

@@ -3,7 +3,6 @@ package com.example.web.controller;
 import com.example.constants.Pages;
 import com.example.constants.Paths;
 import com.example.constants.RequestAttributes;
-import com.example.dto.LoginFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -26,8 +25,6 @@ public class AuthController {
                             null,
                             LocaleContextHolder.getLocale()));
         }
-
-        model.addAttribute(RequestAttributes.LOGIN_FORM_DTO, new LoginFormDTO());
         return Pages.LOGIN;
     }
 }
