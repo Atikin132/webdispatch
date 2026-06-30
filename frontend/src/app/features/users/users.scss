@@ -1,0 +1,29 @@
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-title {
+  text-align: center;
+}
+
+.table-container {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-roles {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.add-user-btn {
+  align-self: center;
+}
+
+.text-center {
+  text-align: center;
+}

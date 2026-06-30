@@ -1,0 +1,11 @@
+<header class="header">
+  <div class="logo"></div>
+
+  <div class="greeting-logout">
+    @if (currentUser()) {
+      <p class="user-greeting">Hello, {{ currentUser() }}!</p>
+    }
+    <app-change-lang />
+    <p-button label="Logout" rounded icon="pi pi-sign-out" (click)="onLogout()" />
+  </div>
+</header>
