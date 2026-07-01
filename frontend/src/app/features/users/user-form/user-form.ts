@@ -5,7 +5,6 @@ import { Password } from 'primeng/password';
 import { Button } from 'primeng/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { ROLES } from '../../../core/mock/users.mock';
 import { Checkbox } from 'primeng/checkbox';
 import { InputNumber } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';
@@ -13,6 +12,7 @@ import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user';
 import { Role } from '../../../core/models/role';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { RoleService } from '../../../core/services/role.service';
 
 @Component({
   selector: 'app-user-form',
@@ -35,9 +35,10 @@ export class UserForm {
   private router = inject(Router);
   private toast = inject(MessageService);
   private userService = inject(UserService);
+  private roleService = inject(RoleService);
   private translate = inject(TranslateService);
 
-  roles = ROLES;
+  roles = this.roleService.getRoles();
 
   mode = signal<'add' | 'edit'>('add');
 

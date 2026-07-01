@@ -55,7 +55,7 @@
       <div class="form-group">
         <label class="form-label" for="roles">{{ 'userFormRoles' | translate }}</label>
         <div class="roles-checkboxes form-input">
-          @for (role of roles; track role.id) {
+          @for (role of roles(); track role.id) {
             <div class="role-item">
               <p-checkbox [value]="role" formControlName="roles"> </p-checkbox>
               <span>{{ role.name }}</span>
