@@ -6,7 +6,7 @@ import { ChangeLang } from '../../core/layouts/change-lang/change-lang';
 import { InputText } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth-service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',

@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { User } from '../../core/models/user';
-import { USERS } from '../../core/mock/users.mock';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth-service';
+import { AuthService } from '../../core/services/auth.service';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-users',
@@ -15,14 +14,12 @@ import { AuthService } from '../../core/services/auth-service';
 })
 export class Users {
   private authService = inject(AuthService);
-  users: User[] = USERS;
+  private userService = inject(UserService);
+  users = this.userService.getUsers();
 
   currentUser = this.authService.currentUserSignal;
 
-  //TODO edit user
-  // edit(user: User) {}
-  //TODO delete user
-  // delete(user: User) {}
-  //TODO add user
-  // add() {}
+  deleteUser(userId: number): void {
+    this.userService.delete(userId);
+  }
 }

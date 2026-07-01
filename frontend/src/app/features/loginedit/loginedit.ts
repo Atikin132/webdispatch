@@ -3,7 +3,7 @@ import { Password } from 'primeng/password';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../core/services/auth-service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-loginedit',

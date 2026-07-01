@@ -1,11 +1,12 @@
-import { Injectable, signal } from '@angular/core';
-import { USERS } from '../mock/users.mock';
+import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private userService = inject(UserService);
   private currentUser = signal<User | null>(null);
 
   currentUserSignal = this.currentUser;
@@ -19,8 +20,7 @@ export class AuthService {
   }
 
   login(login: string, password: string): boolean {
-    const user = USERS.find((user: User) => user.login === login && user.password === password);
-
+    const user = this.userService.getUserByLoginAndPassword(login, password);
     if (!user) {
       return false;
     }
@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('currentUser');
+    return this.currentUser() !== null;
   }
 
   changePassword(oldPassword: string, newPassword: string): boolean {
@@ -50,22 +50,16 @@ export class AuthService {
       return false;
     }
 
-    const updatedUser: User = {
-      ...user,
-      password: newPassword,
-    };
+    const successChange = this.userService.updatePassword(user.id, newPassword);
 
-    const index = USERS.findIndex((user) => user.id === updatedUser.id);
-
-    if (index !== -1) {
-      USERS[index] = {
-        ...updatedUser,
-      };
+    if (successChange) {
+      const updatedUser = { ...user, password: newPassword };
+      this.currentUser.set(updatedUser);
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      return true;
     }
 
-    this.currentUser.set(updatedUser);
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    return true;
+    return false;
   }
 
   hasRole(roleName: string): boolean {

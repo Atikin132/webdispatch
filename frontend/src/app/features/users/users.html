@@ -1,7 +1,7 @@
 <div class="users-list">
   <h2 class="page-title">Users List</h2>
   <div class="table-container">
-    <p-table [value]="users" stripedRows showGridlines>
+    <p-table [value]="users()" stripedRows showGridlines>
       <ng-template pTemplate="header">
         <tr>
           <th class="text-center">ID</th>
@@ -31,19 +31,17 @@
             </div>
           </td>
           <td>
-            <!--            <p-button icon="pi pi-pencil" rounded text (onClick)="edit(user)" />-->
             <p-button icon="pi pi-pencil" rounded text [routerLink]="['/users/edit', user.id]" />
           </td>
           <td>
             @if (user.login !== currentUser()?.login) {
-              <p-button icon="pi pi-trash" severity="danger" rounded text />
-              <!--              <p-button-->
-              <!--                icon="pi pi-trash"-->
-              <!--                severity="danger"-->
-              <!--                rounded-->
-              <!--                text-->
-              <!--                (onClick)="delete(user)"-->
-              <!--              />-->
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                rounded
+                text
+                (onClick)="deleteUser(user.id)"
+              />
             }
           </td>
         </tr>

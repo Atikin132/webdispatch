@@ -5,7 +5,7 @@ export interface User {
   login: string;
   password: string;
   name: string;
-  birthDate: string;
+  birthDate?: string;
   age: number;
   salary: number;
   roles: Role[];
