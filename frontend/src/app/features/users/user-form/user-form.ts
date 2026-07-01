@@ -5,7 +5,7 @@ import { Password } from 'primeng/password';
 import { Button } from 'primeng/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { ROLES } from '../mock/users.mock';
+import { ROLES } from '../../../core/mock/users.mock';
 import { Checkbox } from 'primeng/checkbox';
 import { InputNumber } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';

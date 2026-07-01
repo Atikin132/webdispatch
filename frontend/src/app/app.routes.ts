@@ -4,6 +4,8 @@ import { Loginedit } from './features/loginedit/loginedit';
 import { Login } from './features/login/login';
 import { MainLayout } from './core/layouts/main-layout/main-layout';
 import { AuthLayout } from './core/layouts/auth-layout/auth-layout';
+import { authGuard } from './core/guards/auth.guard';
+import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -18,14 +20,17 @@ export const routes: Routes = [
       {
         path: 'welcome',
         component: Welcome,
+        canActivate: [authGuard],
       },
       {
         path: 'users',
         loadChildren: () => import('./features/users/users.routes').then((m) => m.usersRoutes),
+        canActivate: [authGuard],
       },
       {
         path: 'loginedit',
         component: Loginedit,
+        canActivate: [authGuard],
       },
     ],
   },
@@ -36,6 +41,7 @@ export const routes: Routes = [
       {
         path: 'login',
         component: Login,
+        canActivate: [guestGuard],
       },
     ],
   },

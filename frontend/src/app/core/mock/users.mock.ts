@@ -1,5 +1,5 @@
-import { User } from '../../../core/models/user';
-import { Role } from '../../../core/models/role';
+import { User } from '../models/user';
+import { Role } from '../models/role';
 
 export const ROLES: Role[] = [
   { id: 1, name: 'Administrator' },

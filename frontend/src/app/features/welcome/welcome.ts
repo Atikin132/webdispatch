@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../core/services/auth-service';
 
 @Component({
   selector: 'app-welcome',
@@ -7,5 +8,7 @@ import { Component, signal } from '@angular/core';
   styleUrl: './welcome.scss',
 })
 export class Welcome {
-  currentUser = signal('USER');
+  private authService = inject(AuthService);
+
+  currentUser = this.authService.currentUserSignal;
 }

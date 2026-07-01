@@ -1,18 +1,23 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ChangeLang } from '../../change-lang/change-lang';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth-service';
 
 @Component({
   selector: 'app-header',
-  imports: [ButtonModule, ChangeLang, RouterLink],
+  imports: [ButtonModule, ChangeLang],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
-  currentUser = signal('USER');
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  currentUser = this.authService.currentUserSignal;
 
   onLogout(): void {
-    //TODO Logout
+    this.authService.logout();
+    void this.router.navigate(['/login']);
   }
 }
