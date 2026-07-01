@@ -2,15 +2,16 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Password } from 'primeng/password';
 import { Button } from 'primeng/button';
-import { ChangeLang } from '../../core/layouts/change-lang/change-lang';
+import { ChangeLang } from '../../shared/ui/change-lang/change-lang';
 import { InputText } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, Password, Button, ChangeLang, InputText],
+  imports: [ReactiveFormsModule, Password, Button, ChangeLang, InputText, TranslatePipe],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -19,6 +20,7 @@ export class Login {
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   loginForm = this.fb.group({
     login: ['', Validators.required],
@@ -39,8 +41,8 @@ export class Login {
     if (!success) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Login failed',
-        detail: 'Invalid login or password',
+        summary: this.translate.instant('loginErrorSummary'),
+        detail: this.translate.instant('loginErrorDetail'),
       });
       return;
     }

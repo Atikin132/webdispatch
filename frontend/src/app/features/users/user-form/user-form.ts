@@ -12,10 +12,20 @@ import { DatePicker } from 'primeng/datepicker';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user';
 import { Role } from '../../../core/models/role';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-form',
-  imports: [ReactiveFormsModule, InputText, Password, Button, Checkbox, InputNumber, DatePicker],
+  imports: [
+    ReactiveFormsModule,
+    InputText,
+    Password,
+    Button,
+    Checkbox,
+    InputNumber,
+    DatePicker,
+    TranslatePipe,
+  ],
   templateUrl: './user-form.html',
   styleUrl: './user-form.scss',
 })
@@ -25,12 +35,17 @@ export class UserForm {
   private router = inject(Router);
   private toast = inject(MessageService);
   private userService = inject(UserService);
+  private translate = inject(TranslateService);
 
   roles = ROLES;
 
   mode = signal<'add' | 'edit'>('add');
 
-  title = computed(() => (this.mode() === 'add' ? 'Add user' : 'Edit user'));
+  title = computed(() =>
+    this.mode() === 'add'
+      ? this.translate.instant('addUserTitle')
+      : this.translate.instant('editUserTitle'),
+  );
 
   userForm = this.fb.group({
     id: this.fb.control<number | null>(null),
@@ -92,7 +107,7 @@ export class UserForm {
       this.userForm.markAllAsTouched();
       this.toast.add({
         severity: 'error',
-        summary: 'Validation Error',
+        summary: this.translate.instant('userFormValidationErrorSummary'),
         detail: this.getValidationErrorMessage(),
       });
       return;
@@ -114,7 +129,7 @@ export class UserForm {
     if (errorMessage) {
       this.toast.add({
         severity: 'error',
-        summary: 'Validation',
+        summary: this.translate.instant('userFormValidationErrorSummary'),
         detail: errorMessage,
       });
       return;
@@ -124,15 +139,15 @@ export class UserForm {
       this.userService.create(user);
       this.toast.add({
         severity: 'success',
-        summary: 'Created',
-        detail: 'User added',
+        summary: this.translate.instant('userFormCreateSuccessSummary'),
+        detail: this.translate.instant('userFormCreateSuccessDetail'),
       });
     } else {
       this.userService.update(user);
       this.toast.add({
         severity: 'success',
-        summary: 'Updated',
-        detail: 'User updated',
+        summary: this.translate.instant('userFormUpdateSuccessSummary'),
+        detail: this.translate.instant('userFormUpdateSuccessDetail'),
       });
     }
     void this.router.navigate(['/users']);
@@ -140,28 +155,28 @@ export class UserForm {
 
   private getValidationErrorMessage(): string {
     const controls = this.userForm.controls;
-    if (controls.age.hasError('min')) {
-      return 'Age must be older 18';
+    if (controls.login.hasError('required')) {
+      return this.translate.instant('validationLoginRequired');
     }
     if (controls.password.hasError('minlength')) {
-      return 'Password must be at least 6 characters long';
-    }
-    if (controls.login.hasError('required')) {
-      return 'Login is required';
+      return this.translate.instant('validationPasswordTooShort');
     }
     if (controls.name.hasError('required')) {
-      return 'Name is required';
+      return this.translate.instant('validationNameRequired');
     }
     if (controls.age.hasError('required')) {
-      return 'Age is required';
+      return this.translate.instant('validationAgeRequired');
+    }
+    if (controls.age.hasError('min')) {
+      return this.translate.instant('validationAgeTooYoung');
     }
     if (controls.salary.hasError('required')) {
-      return 'Salary is required';
+      return this.translate.instant('validationSalaryRequired');
     }
     if (controls.roles.hasError('required')) {
-      return 'At least one role must be selected';
+      return this.translate.instant('validationRolesOneRequired');
     }
-    return 'Please fill all required fields correctly';
+    return this.translate.instant('validationFillAllRequired');
   }
 
   back() {

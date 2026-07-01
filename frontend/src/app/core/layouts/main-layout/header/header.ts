@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { ChangeLang } from '../../change-lang/change-lang';
+import { ChangeLang } from '../../../../shared/ui/change-lang/change-lang';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
-  imports: [ButtonModule, ChangeLang],
+  imports: [ButtonModule, ChangeLang, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

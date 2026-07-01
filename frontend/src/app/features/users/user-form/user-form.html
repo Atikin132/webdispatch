@@ -3,7 +3,7 @@
   <form class="user-form" autocomplete="off" [formGroup]="userForm" (ngSubmit)="save()">
     <div class="inputs-container">
       <div class="form-group">
-        <label class="form-label" for="login">Login:</label>
+        <label class="form-label" for="login">{{ 'userFormLogin' | translate }}</label>
         <input
           id="login"
           class="form-input"
@@ -14,10 +14,10 @@
         />
       </div>
       <div class="form-group">
-        <label class="form-label" for="password">Password:</label>
+        <label class="form-label" for="password">{{ 'userFormPassword' | translate }}</label>
         <p-password
           id="password"
-          class="password-input"
+          class="p-input"
           formControlName="password"
           [feedback]="false"
           [toggleMask]="true"
@@ -26,11 +26,11 @@
         />
       </div>
       <div class="form-group">
-        <label class="form-label" for="name">Name:</label>
+        <label class="form-label" for="name">{{ 'userFormName' | translate }}</label>
         <input class="form-input" id="name" pInputText formControlName="name" />
       </div>
       <div class="form-group">
-        <label class="form-label" for="birthDate">Birth date:</label>
+        <label class="form-label" for="birthDate">{{ 'userFormBirthDate' | translate }}</label>
         <p-datepicker
           class="date-input"
           id="birthDate"
@@ -39,15 +39,21 @@
         ></p-datepicker>
       </div>
       <div class="form-group">
-        <label class="form-label" for="age">Age:</label>
-        <p-inputNumber id="age" formControlName="age" />
+        <label class="form-label" for="age">{{ 'userFormAge' | translate }}</label>
+        <p-inputNumber class="p-input" id="age" formControlName="age" />
       </div>
       <div class="form-group">
-        <label class="form-label" for="salary">Salary:</label>
-        <p-inputNumber id="salary" formControlName="salary" mode="currency" currency="USD" />
+        <label class="form-label" for="salary">{{ 'userFormSalary' | translate }}</label>
+        <p-inputNumber
+          class="p-input"
+          id="salary"
+          formControlName="salary"
+          mode="currency"
+          currency="USD"
+        />
       </div>
       <div class="form-group">
-        <label class="form-label" for="roles">Roles:</label>
+        <label class="form-label" for="roles">{{ 'userFormRoles' | translate }}</label>
         <div class="roles-checkboxes form-input">
           @for (role of roles; track role.id) {
             <div class="role-item">
@@ -59,8 +65,14 @@
       </div>
     </div>
 
-    <p-button class="save-btn" type="submit" label="Save" severity="success" rounded />
+    <p-button
+      class="save-btn"
+      type="submit"
+      label="{{ 'userFormSaveBtn' | translate }}"
+      severity="success"
+      rounded
+    />
   </form>
 
-  <p-button type="button" label="Back" rounded (onClick)="back()" />
+  <p-button type="button" label="{{ 'userFormBackBtn' | translate }}" rounded (onClick)="back()" />
 </div>

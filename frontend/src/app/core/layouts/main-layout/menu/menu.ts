@@ -4,10 +4,11 @@ import { TabsModule } from 'primeng/tabs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink, TabsModule],
+  imports: [RouterLink, TabsModule, TranslatePipe],
   templateUrl: './menu.html',
   styleUrl: './menu.scss',
 })

@@ -4,10 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../core/services/auth.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loginedit',
-  imports: [Password, ReactiveFormsModule, Button],
+  imports: [Password, ReactiveFormsModule, Button, TranslatePipe],
   templateUrl: './loginedit.html',
   styleUrl: './loginedit.scss',
 })
@@ -15,6 +16,7 @@ export class Loginedit {
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
+  private translate = inject(TranslateService);
 
   passwordForm = this.fb.group({
     oldPassword: ['', Validators.required],
@@ -35,16 +37,16 @@ export class Loginedit {
     if (result) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Password changed successfully',
+        summary: this.translate.instant('logineditSuccessSummary'),
+        detail: this.translate.instant('logineditSuccessDetail'),
       });
 
       this.passwordForm.reset();
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Old password is incorrect',
+        summary: this.translate.instant('logineditErrorSummary'),
+        detail: this.translate.instant('logineditErrorDetail'),
       });
     }
   }

@@ -5,10 +5,11 @@ import { Button } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserService } from '../../core/services/user.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-users',
-  imports: [TableModule, Tag, Button, RouterLink],
+  imports: [TableModule, Tag, Button, RouterLink, TranslatePipe],
   templateUrl: './users.html',
   styleUrl: './users.scss',
 })

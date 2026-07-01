@@ -1,18 +1,18 @@
 <div class="users-list">
-  <h2 class="page-title">Users List</h2>
+  <h2 class="page-title">{{ 'usersList' | translate }}</h2>
   <div class="table-container">
     <p-table [value]="users()" stripedRows showGridlines>
       <ng-template pTemplate="header">
         <tr>
-          <th class="text-center">ID</th>
-          <th class="text-center">Login</th>
-          <th class="text-center">Name</th>
-          <th class="text-center">Birth date</th>
-          <th class="text-center">Age</th>
-          <th class="text-center">Salary</th>
-          <th class="text-center">Roles</th>
-          <th class="text-center">Edit</th>
-          <th class="text-center">Delete</th>
+          <th class="text-center">{{ 'usersListID' | translate }}</th>
+          <th class="text-center">{{ 'usersListLogin' | translate }}</th>
+          <th class="text-center">{{ 'usersListName' | translate }}</th>
+          <th class="text-center">{{ 'usersListBirthDate' | translate }}</th>
+          <th class="text-center">{{ 'usersListAge' | translate }}</th>
+          <th class="text-center">{{ 'usersListSalary' | translate }}</th>
+          <th class="text-center">{{ 'usersListRoles' | translate }}</th>
+          <th class="text-center">{{ 'usersListEdit' | translate }}</th>
+          <th class="text-center">{{ 'usersListDelete' | translate }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-user>
@@ -26,7 +26,7 @@
           <td>
             <div class="user-roles">
               @for (role of user.roles; track role.id) {
-                <p-tag [value]="role.name" severity="info" />
+                <p-tag [value]="role.displayName || role.name" severity="info" />
               }
             </div>
           </td>
@@ -50,7 +50,7 @@
   </div>
   <p-button
     class="add-user-btn"
-    label="Add user"
+    label="{{ 'usersListAddBtn' | translate }}"
     rounded
     icon="pi pi-plus"
     severity="success"

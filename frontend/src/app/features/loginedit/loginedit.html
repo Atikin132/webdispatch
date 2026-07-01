@@ -1,8 +1,8 @@
 <div class="change-password-form-container">
-  <h2>Change password</h2>
+  <h2>{{ 'loginEdit' | translate }}</h2>
   <form class="change-password-form" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
     <div class="password-field">
-      <label for="oldPassword">Old password</label>
+      <label for="oldPassword">{{ 'oldPassword' | translate }}</label>
       <p-password
         id="oldPassword"
         formControlName="oldPassword"
@@ -13,12 +13,12 @@
       />
 
       @if (passwordForm.controls.oldPassword.touched && passwordForm.controls.oldPassword.invalid) {
-        <span class="error-message"> Old password is required. </span>
+        <span class="error-message">{{ 'validationOldPasswordEmpty' | translate }}</span>
       }
     </div>
 
     <div class="password-field">
-      <label for="newPassword">New password</label>
+      <label for="newPassword">{{ 'newPassword' | translate }}</label>
       <p-password
         id="newPassword"
         formControlName="newPassword"
@@ -29,13 +29,13 @@
       />
 
       @if (passwordForm.controls.newPassword.touched && passwordForm.controls.newPassword.invalid) {
-        <span class="error-message"> New password is required. </span>
+        <span class="error-message">{{ 'validationNewPasswordEmpty' | translate }}</span>
       }
     </div>
 
     <p-button
       type="submit"
-      label="Change password"
+      label="{{ 'changePasswordBtn' | translate }}"
       severity="success"
       rounded
       class="change-password-btn"

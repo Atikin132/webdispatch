@@ -3,9 +3,16 @@
 
   <div class="greeting-logout">
     @if (currentUser()) {
-      <p class="user-greeting">Hello, {{ currentUser()?.name }}!</p>
+      <p class="user-greeting">
+        {{ 'headerUserGreeting' | translate }}, {{ currentUser()?.name }}!
+      </p>
     }
     <app-change-lang />
-    <p-button label="Logout" rounded icon="pi pi-sign-out" (click)="onLogout()" />
+    <p-button
+      label="{{ 'headerLogoutBtn' | translate }}"
+      rounded
+      icon="pi pi-sign-out"
+      (click)="onLogout()"
+    />
   </div>
 </header>

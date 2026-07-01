@@ -2,12 +2,12 @@
   <section class="login-section">
     <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
       <div class="auth-field">
-        <label for="login">Login</label>
+        <label for="login">{{ 'login' | translate }}</label>
         <input pInputText id="login" formControlName="login" autocomplete="off" />
       </div>
 
       <div class="auth-field">
-        <label for="password">Password</label>
+        <label for="password">{{ 'password' | translate }}</label>
         <p-password
           id="password"
           formControlName="password"
@@ -19,7 +19,7 @@
 
       <p-button
         type="submit"
-        label="Login"
+        label="{{ 'loginBtn' | translate }}"
         class="login-btn"
         rounded
         [disabled]="loginForm.invalid"

@@ -2,19 +2,19 @@
   <p-tablist>
     <p-tab value="/welcome" [routerLink]="['/welcome']">
       <span class="pi pi-home"></span>
-      Welcome
+      {{ 'menuHome' | translate }}
     </p-tab>
 
     @if (isAdmin()) {
       <p-tab value="/users" [routerLink]="['/users']">
         <span class="pi pi-users"></span>
-        Users
+        {{ 'menuUsers' | translate }}
       </p-tab>
     }
 
     <p-tab value="/loginedit" [routerLink]="['/loginedit']">
       <span class="pi pi-key"></span>
-      Change password
+      {{ 'menuChangePassword' | translate }}
     </p-tab>
   </p-tablist>
 </p-tabs>

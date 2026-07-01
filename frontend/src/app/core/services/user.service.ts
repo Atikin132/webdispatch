@@ -1,23 +1,35 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user';
 import { USERS } from '../mock/users.mock';
+import { TranslateService } from '@ngx-translate/core';
+import { RoleTranslateService } from './role-translate.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+  private translate = inject(TranslateService);
+  private roleTranslate = inject(RoleTranslateService);
+
   private users = signal<User[]>([...USERS]);
 
+  usersTranslated = computed(() => this.roleTranslate.translateUsersRoles(this.users()));
+  constructor() {
+    this.translate.onLangChange.subscribe(() => {
+      this.users.set([...this.users()]);
+    });
+  }
+
   getUsers() {
-    return this.users.asReadonly();
+    return this.usersTranslated;
   }
 
   getUser(id: number): User | undefined {
-    return this.users().find((user) => user.id === id);
+    const user = this.users().find((user) => user.id === id);
+    return user ? this.roleTranslate.translateUserRoles(user) : undefined;
   }
 
   create(user: User) {
-    const newId =
-      this.users().length > 0 ? Math.max(...this.users().map((user) => user.id)) + 1 : 1;
-
+    const users = this.users();
+    const newId = users.length === 0 ? 1 : Math.max(...users.map((user) => user.id)) + 1;
     this.users.update((users) => [
       ...users,
       {
@@ -38,36 +50,44 @@ export class UserService {
   }
 
   loginExists(login: string, currentId?: number): boolean {
+    const normalizedLogin = login.toLowerCase();
     return this.users().some(
-      (user) => user.login.toLowerCase() === login.toLowerCase() && user.id !== currentId,
+      (user) => user.login.toLowerCase() === normalizedLogin && user.id !== currentId,
     );
   }
 
   validateUser(user: User): string | null {
     if (user.birthDate && new Date(user.birthDate) >= new Date()) {
-      return 'Birth date must be in the past';
+      return this.translate.instant('validationBirthDateFuture');
     }
 
     if (user.login && this.loginExists(user.login, user.id)) {
-      return 'Login already exists';
+      return this.translate.instant('userAlreadyExists');
     }
     return null;
   }
 
   getUserByLoginAndPassword(login: string, password: string): User | undefined {
-    return USERS.find((user) => user.login === login && user.password === password);
+    return this.users().find((user) => user.login === login && user.password === password);
   }
 
   updatePassword(userId: number, newPassword: string): boolean {
-    const index = USERS.findIndex((user) => user.id === userId);
-    if (index === -1) {
+    const user = this.users().find((user) => user.id === userId);
+    if (!user) {
       return false;
     }
 
-    USERS[index] = {
-      ...USERS[index],
-      password: newPassword,
-    };
+    this.users.update((users) =>
+      users.map((user) =>
+        user.id === userId
+          ? {
+              ...user,
+              password: newPassword,
+            }
+          : user,
+      ),
+    );
+
     return true;
   }
 }
