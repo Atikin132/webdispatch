@@ -1,1 +1,66 @@
-<p>user-form works!</p>
+<div class="user-form-container">
+  <h2>{{ title() }}</h2>
+  <form class="user-form" autocomplete="off" [formGroup]="userForm" (ngSubmit)="save()">
+    <div class="inputs-container">
+      <div class="form-group">
+        <label class="form-label" for="login">Login:</label>
+        <input
+          id="login"
+          class="form-input"
+          pInputText
+          formControlName="login"
+          autocomplete="new-username"
+          name="new-username"
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password:</label>
+        <p-password
+          id="password"
+          class="password-input"
+          formControlName="password"
+          [feedback]="false"
+          [toggleMask]="true"
+          [fluid]="true"
+          autocomplete="new-password"
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="name">Name:</label>
+        <input class="form-input" id="name" pInputText formControlName="name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="birthDate">Birth date:</label>
+        <p-datepicker
+          class="date-input"
+          id="birthDate"
+          formControlName="birthDate"
+          [showIcon]="true"
+        ></p-datepicker>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="age">Age:</label>
+        <p-inputNumber id="age" formControlName="age" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="salary">Salary:</label>
+        <p-inputNumber id="salary" formControlName="salary" mode="currency" currency="USD" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="roles">Roles:</label>
+        <div class="roles-checkboxes form-input">
+          @for (role of roles; track role.id) {
+            <div class="role-item">
+              <p-checkbox [value]="role" formControlName="roles"> </p-checkbox>
+              <span>{{ role.name }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <p-button class="save-btn" type="submit" label="Save" severity="success" rounded />
+  </form>
+
+  <p-button type="button" label="Back" rounded (onClick)="back()" />
+</div>

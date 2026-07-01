@@ -1,7 +1,7 @@
 import { User } from '../../../core/models/user';
 import { Role } from '../../../core/models/role';
 
-const ROLES: Role[] = [
+export const ROLES: Role[] = [
   { id: 1, name: 'Administrator' },
   { id: 2, name: 'Manager' },
   { id: 3, name: 'Bookkeeper' },

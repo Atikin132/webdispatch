@@ -6,6 +6,12 @@
       <p class="user-greeting">Hello, {{ currentUser() }}!</p>
     }
     <app-change-lang />
-    <p-button label="Logout" rounded icon="pi pi-sign-out" (click)="onLogout()" />
+    <p-button
+      label="Logout"
+      rounded
+      icon="pi pi-sign-out"
+      (click)="onLogout()"
+      [routerLink]="['/login']"
+    />
   </div>
 </header>

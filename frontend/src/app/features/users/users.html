@@ -31,22 +31,31 @@
             </div>
           </td>
           <td>
-            <p-button icon="pi pi-pencil" rounded text (onClick)="edit(user)" />
+            <!--            <p-button icon="pi pi-pencil" rounded text (onClick)="edit(user)" />-->
+            <p-button icon="pi pi-pencil" rounded text [routerLink]="['/users/edit', user.id]" />
           </td>
           <td>
             @if (user.login !== currentUser) {
-              <p-button
-                icon="pi pi-trash"
-                severity="danger"
-                rounded
-                text
-                (onClick)="delete(user)"
-              />
+              <p-button icon="pi pi-trash" severity="danger" rounded text />
+              <!--              <p-button-->
+              <!--                icon="pi pi-trash"-->
+              <!--                severity="danger"-->
+              <!--                rounded-->
+              <!--                text-->
+              <!--                (onClick)="delete(user)"-->
+              <!--              />-->
             }
           </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
-  <p-button class="add-user-btn" label="Add user" rounded icon="pi pi-plus" severity="success" />
+  <p-button
+    class="add-user-btn"
+    label="Add user"
+    rounded
+    icon="pi pi-plus"
+    severity="success"
+    [routerLink]="['/users/add']"
+  />
 </div>

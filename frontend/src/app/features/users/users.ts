@@ -4,10 +4,11 @@ import { USERS } from './mock/users.mock';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-users',
-  imports: [TableModule, Tag, Button],
+  imports: [TableModule, Tag, Button, RouterLink],
   templateUrl: './users.html',
   styleUrl: './users.scss',
 })

@@ -1,0 +1,84 @@
+.user-form-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user-form {
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.form-label {
+  width: 35%;
+  box-sizing: border-box;
+}
+
+.form-input {
+  width: 65%;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  border: 0.5px solid gray;
+  border-radius: 10px;
+}
+
+.password-input {
+  width: 65%;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .p-password-input,
+:host ::ng-deep .p-inputnumber-input {
+  padding: 5px 10px;
+  border: 0.5px solid gray;
+  border-radius: 10px;
+}
+
+.date-input {
+  width: 65%;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .p-datepicker-input {
+  padding: 5px 10px;
+  border: 0.5px solid gray;
+  border-radius: 10px 0 0 10px;
+}
+:host ::ng-deep .p-datepicker-dropdown {
+  padding: 5px 10px;
+  border: 0.5px solid gray;
+  border-radius: 0 10px 10px 0;
+}
+
+.error-message {
+  color: #e26a6a;
+}
+
+.roles-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.save-btn {
+  align-self: center;
+}

@@ -1,1 +1,31 @@
-<p>login works!</p>
+<div class="login-page">
+  <section class="login-section">
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="auth-field">
+        <label for="login">Login</label>
+        <input pInputText id="login" formControlName="login" autocomplete="off" />
+      </div>
+
+      <div class="auth-field">
+        <label for="password">Password</label>
+        <p-password
+          id="password"
+          formControlName="password"
+          [feedback]="false"
+          [toggleMask]="true"
+          autocomplete="off"
+        />
+      </div>
+
+      <p-button
+        type="submit"
+        label="Login"
+        class="login-btn"
+        rounded
+        [disabled]="loginForm.invalid"
+        [routerLink]="['/welcome']"
+      />
+    </form>
+    <app-change-lang />
+  </section>
+</div>

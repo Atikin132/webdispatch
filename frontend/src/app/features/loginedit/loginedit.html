@@ -1,1 +1,45 @@
-<p>loginedit works!</p>
+<div class="change-password-form-container">
+  <h2>Change password</h2>
+  <form class="change-password-form" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+    <div class="password-field">
+      <label for="oldPassword">Old password</label>
+      <p-password
+        id="oldPassword"
+        formControlName="oldPassword"
+        [feedback]="false"
+        [toggleMask]="true"
+        autocomplete="off"
+        [fluid]="true"
+      />
+
+      @if (passwordForm.controls.oldPassword.touched && passwordForm.controls.oldPassword.invalid) {
+        <span class="error-message"> Old password is required. </span>
+      }
+    </div>
+
+    <div class="password-field">
+      <label for="newPassword">New password</label>
+      <p-password
+        id="newPassword"
+        formControlName="newPassword"
+        [toggleMask]="true"
+        [feedback]="false"
+        autocomplete="off"
+        [fluid]="true"
+      />
+
+      @if (passwordForm.controls.newPassword.touched && passwordForm.controls.newPassword.invalid) {
+        <span class="error-message"> New password is required. </span>
+      }
+    </div>
+
+    <p-button
+      type="submit"
+      label="Change password"
+      severity="success"
+      rounded
+      class="change-password-btn"
+      [disabled]="passwordForm.invalid"
+    />
+  </form>
+</div>
