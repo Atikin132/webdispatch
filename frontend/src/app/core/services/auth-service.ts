@@ -67,4 +67,12 @@ export class AuthService {
     localStorage.setItem('currentUser', JSON.stringify(updatedUser));
     return true;
   }
+
+  hasRole(roleName: string): boolean {
+    const user = this.currentUser();
+    if (!user) {
+      return false;
+    }
+    return user.roles.some((role) => role.name === roleName);
+  }
 }

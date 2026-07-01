@@ -6,6 +6,7 @@ import { MainLayout } from './core/layouts/main-layout/main-layout';
 import { AuthLayout } from './core/layouts/auth-layout/auth-layout';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -25,7 +26,7 @@ export const routes: Routes = [
       {
         path: 'users',
         loadChildren: () => import('./features/users/users.routes').then((m) => m.usersRoutes),
-        canActivate: [authGuard],
+        canMatch: [authGuard, adminGuard],
       },
       {
         path: 'loginedit',
