@@ -5,6 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ROLES } from '../../../constants/roles.constants';
 
 @Component({
   selector: 'app-menu',
@@ -16,7 +17,7 @@ export class Menu {
   private router = inject(Router);
   private authService = inject(AuthService);
 
-  isAdmin = computed(() => this.authService.hasRole('Administrator'));
+  isAdmin = computed(() => this.authService.hasRole(ROLES.ADMINISTRATOR));
 
   private currentUrl = toSignal(
     this.router.events.pipe(
