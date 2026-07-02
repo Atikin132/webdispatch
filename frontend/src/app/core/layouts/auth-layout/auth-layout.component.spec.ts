@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChangeLang } from './change-lang';
+import { AuthLayoutComponent } from './auth-layout.component';
 
-describe('ChangeLang', () => {
-  let component: ChangeLang;
-  let fixture: ComponentFixture<ChangeLang>;
+describe('AuthLayoutComponent', () => {
+  let component: AuthLayoutComponent;
+  let fixture: ComponentFixture<AuthLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChangeLang],
+      imports: [AuthLayoutComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ChangeLang);
+    fixture = TestBed.createComponent(AuthLayoutComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

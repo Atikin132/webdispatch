@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Password } from 'primeng/password';
 import { Button } from 'primeng/button';
-import { ChangeLang } from '../../shared/ui/change-lang/change-lang';
+import { ChangeLangComponent } from '../../shared/ui/change-lang/change-lang.component';
 import { InputText } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -11,11 +11,11 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, Password, Button, ChangeLang, InputText, TranslatePipe],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  imports: [ReactiveFormsModule, Password, Button, ChangeLangComponent, InputText, TranslatePipe],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
 })
-export class Login {
+export class LoginComponent {
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);

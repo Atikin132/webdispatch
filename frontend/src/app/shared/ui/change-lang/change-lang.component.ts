@@ -4,10 +4,10 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-change-lang',
   imports: [TranslatePipe],
-  templateUrl: './change-lang.html',
-  styleUrl: './change-lang.scss',
+  templateUrl: './change-lang.component.html',
+  styleUrl: './change-lang.component.scss',
 })
-export class ChangeLang {
+export class ChangeLangComponent {
   private translate = inject(TranslateService);
 
   constructor() {

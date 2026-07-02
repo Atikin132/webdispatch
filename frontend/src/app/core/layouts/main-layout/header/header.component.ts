@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { ChangeLang } from '../../../../shared/ui/change-lang/change-lang';
+import { ChangeLangComponent } from '../../../../shared/ui/change-lang/change-lang.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
-  imports: [ButtonModule, ChangeLang, TranslatePipe],
-  templateUrl: './header.html',
-  styleUrl: './header.scss',
+  imports: [ButtonModule, ChangeLangComponent, TranslatePipe],
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.scss',
 })
-export class Header {
+export class HeaderComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 

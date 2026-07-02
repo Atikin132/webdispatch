@@ -7,12 +7,12 @@ import { AuthService } from '../../core/services/auth.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-loginedit',
+  selector: 'app-login-edit',
   imports: [Password, ReactiveFormsModule, Button, TranslatePipe],
-  templateUrl: './loginedit.html',
-  styleUrl: './loginedit.scss',
+  templateUrl: './login-edit.component.html',
+  styleUrl: './login-edit.component.scss',
 })
-export class Loginedit {
+export class LoginEditComponent {
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);

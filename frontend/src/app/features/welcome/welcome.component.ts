@@ -5,10 +5,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-welcome',
   imports: [TranslatePipe],
-  templateUrl: './welcome.html',
-  styleUrl: './welcome.scss',
+  templateUrl: './welcome.component.html',
+  styleUrl: './welcome.component.scss',
 })
-export class Welcome {
+export class WelcomeComponent {
   private authService = inject(AuthService);
 
   currentUser = this.authService.currentUser;

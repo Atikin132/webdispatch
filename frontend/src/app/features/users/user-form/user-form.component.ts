@@ -26,10 +26,10 @@ import { RoleService } from '../../../core/services/role.service';
     DatePicker,
     TranslatePipe,
   ],
-  templateUrl: './user-form.html',
-  styleUrl: './user-form.scss',
+  templateUrl: './user-form.component.html',
+  styleUrl: './user-form.component.scss',
 })
-export class UserForm {
+export class UserFormComponent {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);

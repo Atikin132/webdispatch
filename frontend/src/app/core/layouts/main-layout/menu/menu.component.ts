@@ -10,10 +10,10 @@ import { ROLES } from '../../../constants/roles.constants';
 @Component({
   selector: 'app-menu',
   imports: [RouterLink, TabsModule, TranslatePipe],
-  templateUrl: './menu.html',
-  styleUrl: './menu.scss',
+  templateUrl: './menu.component.html',
+  styleUrl: './menu.component.scss',
 })
-export class Menu {
+export class MenuComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
 

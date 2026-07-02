@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { Welcome } from './features/welcome/welcome';
-import { Loginedit } from './features/loginedit/loginedit';
-import { Login } from './features/login/login';
-import { MainLayout } from './core/layouts/main-layout/main-layout';
-import { AuthLayout } from './core/layouts/auth-layout/auth-layout';
+import { WelcomeComponent } from './features/welcome/welcome.component';
+import { LoginEditComponent } from './features/login-edit/login-edit.component';
+import { LoginComponent } from './features/login/login.component';
+import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component';
+import { AuthLayoutComponent } from './core/layouts/auth-layout/auth-layout.component';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { adminGuard } from './core/guards/admin.guard';
@@ -11,7 +11,7 @@ import { adminGuard } from './core/guards/admin.guard';
 export const routes: Routes = [
   {
     path: '',
-    component: MainLayout,
+    component: MainLayoutComponent,
     children: [
       {
         path: '',
@@ -20,7 +20,7 @@ export const routes: Routes = [
       },
       {
         path: 'welcome',
-        component: Welcome,
+        component: WelcomeComponent,
         canActivate: [authGuard],
       },
       {
@@ -30,18 +30,18 @@ export const routes: Routes = [
       },
       {
         path: 'loginedit',
-        component: Loginedit,
+        component: LoginEditComponent,
         canActivate: [authGuard],
       },
     ],
   },
   {
     path: '',
-    component: AuthLayout,
+    component: AuthLayoutComponent,
     children: [
       {
         path: 'login',
-        component: Login,
+        component: LoginComponent,
         canActivate: [guestGuard],
       },
     ],

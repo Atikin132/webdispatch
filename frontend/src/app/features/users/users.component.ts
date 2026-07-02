@@ -10,10 +10,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-users',
   imports: [TableModule, Tag, Button, RouterLink, TranslatePipe],
-  templateUrl: './users.html',
-  styleUrl: './users.scss',
+  templateUrl: './users.component.html',
+  styleUrl: './users.component.scss',
 })
-export class Users {
+export class UsersComponent {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   users = this.userService.getUsers();

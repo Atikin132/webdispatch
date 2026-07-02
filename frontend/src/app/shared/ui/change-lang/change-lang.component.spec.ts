@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Loginedit } from './loginedit';
+import { ChangeLangComponent } from './change-lang.component';
 
-describe('Loginedit', () => {
-  let component: Loginedit;
-  let fixture: ComponentFixture<Loginedit>;
+describe('ChangeLangComponent', () => {
+  let component: ChangeLangComponent;
+  let fixture: ComponentFixture<ChangeLangComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Loginedit],
+      imports: [ChangeLangComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Loginedit);
+    fixture = TestBed.createComponent(ChangeLangComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
