@@ -5,22 +5,36 @@ import { Button } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserService } from '../../core/services/user.service';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-users',
-  imports: [TableModule, Tag, Button, RouterLink, TranslatePipe],
+  imports: [TableModule, Tag, Button, RouterLink, TranslatePipe, ConfirmDialog],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
 export class UsersComponent {
   private authService = inject(AuthService);
   private userService = inject(UserService);
+  private confirmationService = inject(ConfirmationService);
+  private translate = inject(TranslateService);
+
   users = this.userService.getUsers();
 
   currentUser = this.authService.currentUser;
 
   deleteUser(userId: number): void {
-    this.userService.delete(userId);
+    this.confirmationService.confirm({
+      header: this.translate.instant('usersDeleteHeader'),
+      message: this.translate.instant('usersDeleteMessage'),
+      acceptLabel: this.translate.instant('yes'),
+      rejectLabel: this.translate.instant('no'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.userService.delete(userId);
+      },
+    });
   }
 }

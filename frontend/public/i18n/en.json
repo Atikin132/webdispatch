@@ -55,6 +55,10 @@
   "usersListEdit": "Edit",
   "usersListDelete": "Delete",
   "usersListAddBtn": "Add user",
+  "usersDeleteHeader": "Confirmation",
+  "usersDeleteMessage": "Delete user?",
+  "yes": "Yes",
+  "no": "No",
 
   "welcome": "Welcome",
 

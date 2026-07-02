@@ -55,6 +55,10 @@
   "usersListEdit": "Изменить",
   "usersListDelete": "Удалить",
   "usersListAddBtn": "Добавить пользователя",
+  "usersDeleteHeader": "Подтверждение",
+  "usersDeleteMessage": "Удалить пользователя?",
+  "yes": "Да",
+  "no": "Нет",
 
   "welcome": "Добро пожаловать",
 
