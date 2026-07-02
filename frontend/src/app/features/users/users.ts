@@ -18,7 +18,7 @@ export class Users {
   private userService = inject(UserService);
   users = this.userService.getUsers();
 
-  currentUser = this.authService.currentUserSignal;
+  currentUser = this.authService.currentUser;
 
   deleteUser(userId: number): void {
     this.userService.delete(userId);

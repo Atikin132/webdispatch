@@ -1,21 +1,22 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal, computed } from '@angular/core';
 import { User } from '../models/user';
 import { UserService } from './user.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private userService = inject(UserService);
-  private currentUser = signal<User | null>(null);
 
-  currentUserSignal = this.currentUser;
+  private currentUserId = signal<number | null>(null);
+
+  currentUser = computed<User | null>(() => {
+    const id = this.currentUserId();
+    return id ? (this.userService.getUser(id) ?? null) : null;
+  });
 
   constructor() {
-    const user = localStorage.getItem('currentUser');
-
-    if (user) {
-      this.currentUser.set(JSON.parse(user));
+    const savedId = localStorage.getItem('currentUserId');
+    if (savedId) {
+      this.currentUserId.set(+savedId);
     }
   }
 
@@ -25,48 +26,30 @@ export class AuthService {
       return false;
     }
 
-    this.currentUser.set(user);
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUserId.set(user.id);
+    localStorage.setItem('currentUserId', user.id.toString());
     return true;
   }
 
   logout(): void {
-    this.currentUser.set(null);
-    localStorage.removeItem('currentUser');
+    this.currentUserId.set(null);
+    localStorage.removeItem('currentUserId');
   }
 
   isAuthenticated(): boolean {
-    return this.currentUser() !== null;
+    return this.currentUserId() !== null;
   }
 
   changePassword(oldPassword: string, newPassword: string): boolean {
     const user = this.currentUser();
-
-    if (!user) {
+    if (!user || user.password !== oldPassword) {
       return false;
     }
-
-    if (user.password !== oldPassword) {
-      return false;
-    }
-
-    const successChange = this.userService.updatePassword(user.id, newPassword);
-
-    if (successChange) {
-      const updatedUser = { ...user, password: newPassword };
-      this.currentUser.set(updatedUser);
-      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-      return true;
-    }
-
-    return false;
+    return this.userService.updatePassword(user.id, newPassword);
   }
 
   hasRole(roleName: string): boolean {
     const user = this.currentUser();
-    if (!user) {
-      return false;
-    }
-    return user.roles.some((role) => role.name === roleName);
+    return user?.roles.some((role) => role.name === roleName) ?? false;
   }
 }

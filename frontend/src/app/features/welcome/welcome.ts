@@ -11,5 +11,5 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class Welcome {
   private authService = inject(AuthService);
 
-  currentUser = this.authService.currentUserSignal;
+  currentUser = this.authService.currentUser;
 }
