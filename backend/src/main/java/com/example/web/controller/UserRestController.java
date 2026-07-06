@@ -1,0 +1,73 @@
+package com.example.web.controller;
+
+import com.example.dto.UserDTO;
+import com.example.dto.UserFormDTO;
+import com.example.model.User;
+import com.example.service.UserService;
+import com.example.utils.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/users")
+public class UserRestController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        Collection<User> users = userService.getAllUsers();
+        List<UserDTO> userDTOs = users.stream().map(userMapper::toDTO).toList();
+        return ResponseEntity.ok(userDTOs);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Integer userId) {
+        User user = userService.getUser(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userMapper.toDTO(user));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserFormDTO userFormDTO) {
+        User user = userMapper.fromDTO(userFormDTO);
+        String error = userService.validateAndPrepareUser(user, userFormDTO.getRoles());
+        if (error != null) {
+            return ResponseEntity.badRequest().body(Map.of("error", error));
+        }
+        userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDTO(user));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") Integer id,
+                                        @Valid @RequestBody UserFormDTO userFormDTO) {
+        userFormDTO.setId(id);
+        User user = userMapper.fromDTO(userFormDTO);
+        String error = userService.validateAndPrepareUser(user, userFormDTO.getRoles());
+        if (error != null) {
+            return ResponseEntity.badRequest().body(Map.of("error", error));
+        }
+        userService.updateUser(user);
+        return ResponseEntity.ok(userMapper.toDTO(user));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Integer userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
+}

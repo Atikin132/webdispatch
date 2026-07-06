@@ -12,25 +12,33 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable().authorizeRequests(auth -> auth.antMatchers("/",
-                        "/index.jsp",
-                        "/login.jhtml",
-                        "/resources/**").permitAll().antMatchers("/users.jhtml",
-                        "/useradd.jhtml",
-                        "/useredit.jhtml",
-                        "/userdelete.jhtml").hasRole("Administrator").anyRequest().authenticated())
+        http.csrf().disable().authorizeRequests(auth -> auth
+                .anyRequest().permitAll()
+        );
 
-                .formLogin().loginPage("/login.jhtml").loginProcessingUrl("/login.jhtml")
-                .usernameParameter("login").passwordParameter("password")
-                .defaultSuccessUrl("/welcome.jhtml").failureUrl("/login.jhtml?error=true")
-                .permitAll()
-
-                .and()
-
-                .logout().logoutUrl("/logout.jhtml").logoutSuccessUrl("/login.jhtml")
-                .invalidateHttpSession(true).clearAuthentication(true).permitAll();
 
         return http.build();
+
+//        http.csrf().disable().authorizeRequests(auth -> auth.antMatchers("/",
+//                        "/index.jsp",
+//                        "/login.jhtml",
+//                        "/resources/**").permitAll().antMatchers("/users.jhtml",
+//                        "/useradd.jhtml",
+//                        "/useredit.jhtml",
+//                        "/userdelete.jhtml").hasRole("Administrator").anyRequest()
+//                        .authenticated())
+//
+//                .formLogin().loginPage("/login.jhtml").loginProcessingUrl("/login.jhtml")
+//                .usernameParameter("login").passwordParameter("password")
+//                .defaultSuccessUrl("/welcome.jhtml").failureUrl("/login.jhtml?error=true")
+//                .permitAll()
+//
+//                .and()
+//
+//                .logout().logoutUrl("/logout.jhtml").logoutSuccessUrl("/login.jhtml")
+//                .invalidateHttpSession(true).clearAuthentication(true).permitAll();
+//
+//        return http.build();
     }
 
 
