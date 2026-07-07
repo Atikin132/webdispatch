@@ -177,7 +177,6 @@ export class UserFormComponent {
         },
       });
     }
-    void this.router.navigate(['/users']);
   }
 
   private getValidationErrorMessage(): string {
