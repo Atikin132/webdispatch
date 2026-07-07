@@ -29,7 +29,7 @@ public class UserMapper {
                 .toList();
         return new UserDTO(user.getId(),
                 user.getLogin(),
-                null,
+                user.getPassword(),
                 user.getName(),
                 user.getBirthDate(),
                 user.getAge(),

@@ -33,6 +33,10 @@
   "userFormCreateSuccessDetail": "Пользователь добавлен",
   "userFormUpdateSuccessSummary": "Обновлен",
   "userFormUpdateSuccessDetail": "Данные пользователя обновлены",
+  "userFormCreateErrorSummary": "Ошибка создания",
+  "userFormCreateErrorDetail": "Ошибка при создании пользователя",
+  "userFormUpdateErrorSummary": "Ошибка обновления",
+  "userFormUpdateErrorDetail": "Ошибка при обновлении пользователя",
 
   "validationLoginRequired": "Имя пользователя обязательно",
   "validationPasswordTooShort": "Пароль должен содержать не менее 6 символов",
@@ -59,6 +63,10 @@
   "usersDeleteMessage": "Удалить пользователя?",
   "yes": "Да",
   "no": "Нет",
+  "userFormDeleteSuccessSummary": "Удалено",
+  "userFormDeleteSuccessDetail": "Пользователь успешно удален",
+  "userFormDeleteErrorSummary": "Ошибка удаления",
+  "userFormDeleteErrorDetail": "Ошибка при удалении пользователя",
 
   "welcome": "Добро пожаловать",
 
@@ -82,5 +90,6 @@
   "roleDesigner": "Дизайнер",
 
   "loadErrorSummary": "Ошибка загрузки данных",
-  "loadRolesErrorDetail": "Ошибка загрузки ролей"
+  "loadRolesErrorDetail": "Ошибка загрузки ролей",
+  "loadUsersErrorDetail": "Ошибка загрузки пользователей"
 }

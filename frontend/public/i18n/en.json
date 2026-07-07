@@ -33,6 +33,10 @@
   "userFormCreateSuccessDetail": "User added",
   "userFormUpdateSuccessSummary": "Updated",
   "userFormUpdateSuccessDetail": "User updated",
+  "userFormCreateErrorSummary": "Created error",
+  "userFormCreateErrorDetail": "Failed to create user",
+  "userFormUpdateErrorSummary": "Updated error",
+  "userFormUpdateErrorDetail": "Failed to update user",
 
   "validationLoginRequired": "Login is required",
   "validationPasswordTooShort": "Password must contain at least 6 characters",
@@ -59,6 +63,10 @@
   "usersDeleteMessage": "Delete user?",
   "yes": "Yes",
   "no": "No",
+  "userFormDeleteSuccessSummary": "Deleted",
+  "userFormDeleteSuccessDetail": "User deleted",
+  "userFormDeleteErrorSummary": "Delete error",
+  "userFormDeleteErrorDetail": "Failed to delete user",
 
   "welcome": "Welcome",
 
@@ -82,5 +90,6 @@
   "roleDesigner": "Designer",
 
   "loadErrorSummary": "Load error",
-  "loadRolesErrorDetail": "Failed to load roles"
+  "loadRolesErrorDetail": "Failed to load roles",
+  "loadUsersErrorDetail": "Failed to load users"
 }

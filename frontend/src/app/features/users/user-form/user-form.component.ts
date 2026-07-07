@@ -141,18 +141,40 @@ export class UserFormComponent {
     }
 
     if (this.mode() === 'add') {
-      this.userService.create(user);
-      this.toast.add({
-        severity: 'success',
-        summary: this.translate.instant('userFormCreateSuccessSummary'),
-        detail: this.translate.instant('userFormCreateSuccessDetail'),
+      this.userService.create(user).subscribe({
+        next: () => {
+          this.toast.add({
+            severity: 'success',
+            summary: this.translate.instant('userFormCreateSuccessSummary'),
+            detail: this.translate.instant('userFormCreateSuccessDetail'),
+          });
+          void this.router.navigate(['/users']);
+        },
+        error: () => {
+          this.toast.add({
+            severity: 'error',
+            summary: this.translate.instant('userFormCreateErrorSummary'),
+            detail: this.translate.instant('userFormCreateErrorDetail'),
+          });
+        },
       });
     } else {
-      this.userService.update(user);
-      this.toast.add({
-        severity: 'success',
-        summary: this.translate.instant('userFormUpdateSuccessSummary'),
-        detail: this.translate.instant('userFormUpdateSuccessDetail'),
+      this.userService.update(user).subscribe({
+        next: () => {
+          this.toast.add({
+            severity: 'success',
+            summary: this.translate.instant('userFormUpdateSuccessSummary'),
+            detail: this.translate.instant('userFormUpdateSuccessDetail'),
+          });
+          void this.router.navigate(['/users']);
+        },
+        error: () => {
+          this.toast.add({
+            severity: 'error',
+            summary: this.translate.instant('userFormUpdateErrorSummary'),
+            detail: this.translate.instant('userFormUpdateErrorDetail'),
+          });
+        },
       });
     }
     void this.router.navigate(['/users']);

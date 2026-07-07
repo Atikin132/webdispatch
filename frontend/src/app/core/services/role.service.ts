@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { catchError } from 'rxjs';
 import { RoleTranslateService } from './role-translate.service';
+import { environment } from '../environment';
 
 @Injectable({ providedIn: 'root' })
 export class RoleService {
@@ -13,7 +14,7 @@ export class RoleService {
   private toast = inject(MessageService);
   private translate = inject(TranslateService);
   private roleTranslate = inject(RoleTranslateService);
-  private readonly apiUrl = 'http://localhost:8080/roles';
+  private readonly apiUrl = environment.apiUrl + '/roles';
 
   private rolesResource = rxResource({
     stream: () =>

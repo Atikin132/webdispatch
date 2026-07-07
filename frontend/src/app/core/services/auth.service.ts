@@ -1,4 +1,4 @@
-import { inject, Injectable, signal, computed } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user';
 import { UserService } from './user.service';
 
@@ -40,12 +40,12 @@ export class AuthService {
     return this.currentUserId() !== null;
   }
 
-  changePassword(oldPassword: string, newPassword: string): boolean {
+  changePassword(oldPassword: string, newPassword: string): void {
     const user = this.currentUser();
-    if (!user || user.password !== oldPassword) {
-      return false;
+    if (!user) {
+      return;
     }
-    return this.userService.updatePassword(user.id, newPassword);
+    this.userService.updatePassword(user.id, oldPassword, newPassword).subscribe();
   }
 
   hasRole(roleName: string): boolean {
