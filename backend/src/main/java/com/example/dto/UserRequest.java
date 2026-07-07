@@ -1,13 +1,13 @@
 package com.example.dto;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-public class UserFormDTO {
+public class UserRequest {
     private Integer id;
     @NotBlank(message = "{validationLoginRequired}")
     @Size(max = 50, message = "{validationLoginTooLong}")
@@ -21,7 +21,7 @@ public class UserFormDTO {
     @Size(max = 100, message = "{validationNameTooLong}")
     private String name;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @NotNull(message = "{validationAgeRequired}")
@@ -103,7 +103,7 @@ public class UserFormDTO {
 
     @Override
     public String toString() {
-        return "UserFormDTO{" + "id=" + id + ", login='" + login + '\'' + ", password='" +
+        return "UserRequest{" + "id=" + id + ", login='" + login + '\'' + ", password='" +
                 password + '\'' + ", name='" + name + '\'' + ", birthDate=" + birthDate + ", age=" +
                 age + ", salary=" + salary + ", roleIds=" + Arrays.toString(roles) + '}';
     }

@@ -2,7 +2,7 @@ package com.example.web.controller;
 
 import com.example.dto.LoginDTO;
 import com.example.dto.UserDTO;
-import com.example.dto.UserFormDTO;
+import com.example.dto.UserRequest;
 import com.example.model.User;
 import com.example.service.UserService;
 import com.example.utils.UserMapper;
@@ -48,9 +48,9 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserFormDTO userFormDTO) {
-        User user = userMapper.fromDTO(userFormDTO);
-        String error = userService.validateAndPrepareUser(user, userFormDTO.getRoles());
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserRequest userRequest) {
+        User user = userMapper.fromRequest(userRequest);
+        String error = userService.validateAndPrepareUser(user, userRequest.getRoles());
         if (error != null) {
             return ResponseEntity.badRequest().body(Map.of("error", error));
         }
@@ -60,10 +60,10 @@ public class UserRestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Integer id,
-                                        @Valid @RequestBody UserFormDTO userFormDTO) {
-        userFormDTO.setId(id);
-        User user = userMapper.fromDTO(userFormDTO);
-        String error = userService.validateAndPrepareUser(user, userFormDTO.getRoles());
+                                        @Valid @RequestBody UserRequest userRequest) {
+        userRequest.setId(id);
+        User user = userMapper.fromRequest(userRequest);
+        String error = userService.validateAndPrepareUser(user, userRequest.getRoles());
         if (error != null) {
             return ResponseEntity.badRequest().body(Map.of("error", error));
         }
