@@ -1,36 +1,41 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { Role } from '../models/role';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { catchError } from 'rxjs';
+import { RoleTranslateService } from './role-translate.service';
 
 @Injectable({ providedIn: 'root' })
 export class RoleService {
   private http = inject(HttpClient);
   private toast = inject(MessageService);
   private translate = inject(TranslateService);
+  private roleTranslate = inject(RoleTranslateService);
   private readonly apiUrl = 'http://localhost:8080/roles';
 
-  private roles = signal<Role[]>([]);
+  private rolesResource = rxResource({
+    stream: () =>
+      this.http.get<Role[]>(this.apiUrl).pipe(
+        catchError(() => {
+          this.toast.add({
+            severity: 'error',
+            summary: this.translate.instant('loadErrorSummary'),
+            detail: this.translate.instant('loadRolesErrorDetail'),
+          });
+          return [];
+        }),
+      ),
+  });
 
-  constructor() {
-    this.loadRoles();
-  }
+  readonly roles = computed(() => {
+    const rawRoles = this.rolesResource.value() ?? [];
+    this.roleTranslate.langSignal();
+    return this.roleTranslate.translateRoles(rawRoles);
+  });
 
-  private loadRoles(): void {
-    this.http.get<Role[]>(this.apiUrl).subscribe({
-      next: (roles) => this.roles.set(roles),
-      error: () => {
-        this.toast.add({
-          severity: 'error',
-          summary: this.translate.instant('loadErrorSummary'),
-          detail: this.translate.instant('loadRolesErrorDetail'),
-        });
-      },
-    });
-  }
-
-  getRoles() {
-    return this.roles.asReadonly();
+  public getRoles() {
+    return this.roles;
   }
 }

@@ -1,11 +1,20 @@
 import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, startWith } from 'rxjs';
 import { Role } from '../models/role';
 import { User } from '../models/user';
 
 @Injectable({ providedIn: 'root' })
 export class RoleTranslateService {
   private translate = inject(TranslateService);
+
+  readonly langSignal = toSignal(
+    this.translate.onLangChange.pipe(
+      map((event) => event.lang),
+      startWith(this.translate.currentLang),
+    ),
+  );
 
   translateRole(role: Role): Role {
     return {

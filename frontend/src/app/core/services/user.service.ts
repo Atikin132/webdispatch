@@ -11,20 +11,18 @@ export class UserService {
 
   private users = signal<User[]>([...USERS]);
 
-  usersTranslated = computed(() => this.roleTranslate.translateUsersRoles(this.users()));
-  constructor() {
-    this.translate.onLangChange.subscribe(() => {
-      this.users.set([...this.users()]);
-    });
-  }
+  readonly usersTranslated = computed(() => {
+    const rawUsers = this.users();
+    this.roleTranslate.langSignal();
+    return this.roleTranslate.translateUsersRoles(rawUsers);
+  });
 
   getUsers() {
     return this.usersTranslated;
   }
 
   getUser(id: number): User | undefined {
-    const user = this.users().find((user) => user.id === id);
-    return user ? this.roleTranslate.translateUserRoles(user) : undefined;
+    return this.users().find((user) => user.id === id);
   }
 
   create(user: User) {

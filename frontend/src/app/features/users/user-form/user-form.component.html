@@ -58,7 +58,7 @@
           @for (role of roles(); track role.id) {
             <div class="role-item">
               <p-checkbox [value]="role.id" formControlName="roles"></p-checkbox>
-              <span>{{ role.name }}</span>
+              <span>{{ role.displayName || role.name }}</span>
             </div>
           }
         </div>
