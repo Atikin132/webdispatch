@@ -1,7 +1,7 @@
 package com.example.web.controller;
 
 import com.example.dto.PasswordChangeFormDTO;
-import com.example.service.SecurityService;
+import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class PasswordRestController {
 
     @Autowired
-    private SecurityService securityService;
+    private UserService userService;
 
     @Autowired
     private MessageSource messageSource;
@@ -28,7 +28,7 @@ public class PasswordRestController {
                 null ? null : passwordChangeFormDTO.getOldPassword().trim();
         String newPassword = passwordChangeFormDTO.getNewPassword() ==
                 null ? null : passwordChangeFormDTO.getNewPassword().trim();
-        boolean isChanged = securityService.changePassword(userId, oldPassword, newPassword);
+        boolean isChanged = userService.changePassword(userId, oldPassword, newPassword);
         if (isChanged) {
             String successMsg = messageSource.getMessage("passwordChangedSuccessfully",
                     null,

@@ -57,10 +57,6 @@ public class UserService {
         return users;
     }
 
-    public void updatePassword(Integer id, String newPassword) {
-        userDao.updatePassword(id, newPassword);
-    }
-
     public User getUserByLogin(String login) {
         User user = userDao.findByLogin(login);
         if (user != null) {
@@ -114,5 +110,19 @@ public class UserService {
                     LocaleContextHolder.getLocale());
         }
         return null;
+    }
+
+    public boolean changePassword(Integer userId, String oldPassword, String newPassword) {
+        User user = this.getUser(userId);
+
+        if (user == null) {
+            return false;
+        }
+        if (!user.getPassword().equals(oldPassword)) {
+            return false;
+        }
+
+        userDao.updatePassword(userId, newPassword);
+        return true;
     }
 }
