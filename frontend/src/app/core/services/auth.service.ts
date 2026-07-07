@@ -1,10 +1,16 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user';
 import { UserService } from './user.service';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private userService = inject(UserService);
+  private router = inject(Router);
+  private messageService = inject(MessageService);
+  private translate = inject(TranslateService);
 
   private currentUserId = signal<number | null>(null);
 
@@ -20,15 +26,23 @@ export class AuthService {
     }
   }
 
-  login(login: string, password: string): boolean {
-    const user = this.userService.getUserByLoginAndPassword(login, password);
-    if (!user) {
-      return false;
-    }
-
-    this.currentUserId.set(user.id);
-    localStorage.setItem('currentUserId', user.id.toString());
-    return true;
+  login(login: string, password: string): void {
+    this.userService.login(login, password).subscribe({
+      next: (user: User) => {
+        if (user) {
+          this.currentUserId.set(user.id);
+          localStorage.setItem('currentUserId', user.id.toString());
+          void this.router.navigate(['/welcome']);
+        }
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('loginErrorSummary'),
+          detail: this.translate.instant('loginErrorDetail'),
+        });
+      },
+    });
   }
 
   logout(): void {

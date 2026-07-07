@@ -79,10 +79,11 @@ export class UserService {
     return null;
   }
 
-  getUserByLoginAndPassword(login: string, password: string): User | undefined {
-    return this.usersResource
-      .value()
-      ?.find((user) => user.login === login && user.password === password);
+  login(login: string, password: string) {
+    return this.http.post<User>(`${this.apiUrl}/login`, {
+      login,
+      password,
+    });
   }
 
   updatePassword(userId: number, oldPassword: string, newPassword: string) {

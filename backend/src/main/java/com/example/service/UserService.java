@@ -65,6 +65,14 @@ public class UserService {
         return user;
     }
 
+    public User login(String login, String password) {
+        User user = getUserByLogin(login);
+        if (user == null || !user.getPassword().equals(password)) {
+            return null;
+        }
+        return user;
+    }
+
     public boolean isBirthDateBeforeNow(LocalDate birthDate) {
         return birthDate.isBefore(LocalDate.now());
     }

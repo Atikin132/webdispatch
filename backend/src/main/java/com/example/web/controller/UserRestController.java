@@ -1,11 +1,14 @@
 package com.example.web.controller;
 
+import com.example.dto.LoginDTO;
 import com.example.dto.UserDTO;
 import com.example.dto.UserFormDTO;
 import com.example.model.User;
 import com.example.service.UserService;
 import com.example.utils.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,9 @@ public class UserRestController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -69,5 +75,17 @@ public class UserRestController {
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Integer userId) {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        User user = userService.login(loginDTO.getLogin(), loginDTO.getPassword());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error",
+                    messageSource.getMessage("loginErrorDetail",
+                            null,
+                            LocaleContextHolder.getLocale())));
+        }
+        return ResponseEntity.ok(userMapper.toDTO(user));
     }
 }
