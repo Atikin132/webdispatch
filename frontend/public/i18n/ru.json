@@ -79,5 +79,8 @@
   "roleManager": "Менеджер",
   "roleBookkeeper": "Бухгалтер",
   "roleDeveloper": "Разработчик",
-  "roleDesigner": "Дизайнер"
+  "roleDesigner": "Дизайнер",
+
+  "loadErrorSummary": "Ошибка загрузки данных",
+  "loadRolesErrorDetail": "Ошибка загрузки ролей"
 }

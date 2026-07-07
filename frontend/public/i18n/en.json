@@ -79,5 +79,8 @@
   "roleManager": "Manager",
   "roleBookkeeper": "Bookkeeper",
   "roleDeveloper": "Developer",
-  "roleDesigner": "Designer"
+  "roleDesigner": "Designer",
+
+  "loadErrorSummary": "Load error",
+  "loadRolesErrorDetail": "Failed to load roles"
 }

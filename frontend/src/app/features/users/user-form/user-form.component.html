@@ -57,7 +57,7 @@
         <div class="roles-checkboxes form-input">
           @for (role of roles(); track role.id) {
             <div class="role-item">
-              <p-checkbox [value]="role" formControlName="roles"> </p-checkbox>
+              <p-checkbox [value]="role.id" formControlName="roles"></p-checkbox>
               <span>{{ role.name }}</span>
             </div>
           }

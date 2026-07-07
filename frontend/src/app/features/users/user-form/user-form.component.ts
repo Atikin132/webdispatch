@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
@@ -10,7 +10,6 @@ import { InputNumber } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user';
-import { Role } from '../../../core/models/role';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { RoleService } from '../../../core/services/role.service';
 
@@ -65,7 +64,7 @@ export class UserFormComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    roles: this.fb.control<Role[]>([], {
+    roles: this.fb.control<number[]>([], {
       nonNullable: true,
       validators: [Validators.required],
     }),
@@ -76,7 +75,12 @@ export class UserFormComponent {
 
     if (id) {
       this.mode.set('edit');
-      this.loadUser(id);
+      effect(() => {
+        const availableRoles = this.roles();
+        if (availableRoles && availableRoles.length > 0) {
+          this.loadUser(id);
+        }
+      });
     }
   }
 
@@ -95,7 +99,7 @@ export class UserFormComponent {
       birthDate: user.birthDate ? new Date(user.birthDate) : null,
       age: user.age,
       salary: user.salary,
-      roles: user.roles,
+      roles: user.roles.map((role) => role.id),
     });
   }
 
@@ -123,7 +127,7 @@ export class UserFormComponent {
       birthDate: form.birthDate ? this.formatDate(form.birthDate) : '',
       age: form.age,
       salary: form.salary,
-      roles: form.roles,
+      roles: form.roles.map((id) => this.roles().find((r) => r.id === id)!).filter(Boolean),
     };
 
     const errorMessage = this.userService.validateUser(user);
