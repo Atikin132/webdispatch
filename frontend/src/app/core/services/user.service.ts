@@ -92,24 +92,7 @@ export class UserService {
         `${this.apiUrl}/${userId}/password`,
         this.toPasswordChangeFormDTO(oldPassword, newPassword),
       )
-      .pipe(
-        tap(() => {
-          this.usersResource.reload();
-          this.toast.add({
-            severity: 'success',
-            summary: this.translate.instant('logineditSuccessSummary'),
-            detail: this.translate.instant('logineditSuccessDetail'),
-          });
-        }),
-        catchError((error) => {
-          this.toast.add({
-            severity: 'error',
-            summary: this.translate.instant('logineditErrorSummary'),
-            detail: this.translate.instant('logineditErrorDetail'),
-          });
-          throw error;
-        }),
-      );
+      .pipe(tap(() => this.usersResource.reload()));
   }
 
   private toUserFormDTO(user: User) {

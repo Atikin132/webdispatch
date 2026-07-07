@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { EMPTY, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -54,12 +55,12 @@ export class AuthService {
     return this.currentUserId() !== null;
   }
 
-  changePassword(oldPassword: string, newPassword: string): void {
+  changePassword(oldPassword: string, newPassword: string): Observable<{ message: string }> {
     const user = this.currentUser();
     if (!user) {
-      return;
+      return EMPTY;
     }
-    this.userService.updatePassword(user.id, oldPassword, newPassword).subscribe();
+    return this.userService.updatePassword(user.id, oldPassword, newPassword);
   }
 
   hasRole(roleName: string): boolean {
