@@ -85,21 +85,19 @@ export class UserFormComponent {
   }
 
   private loadUser(id: number) {
-    const user = this.userService.getUser(id);
-
-    if (!user) {
-      return;
-    }
-
-    this.userForm.patchValue({
-      id: user.id,
-      login: user.login,
-      password: user.password,
-      name: user.name,
-      birthDate: user.birthDate ? new Date(user.birthDate) : null,
-      age: user.age,
-      salary: user.salary,
-      roles: user.roles.map((role) => role.id),
+    this.userService.getUser(id).subscribe({
+      next: (user) => {
+        this.userForm.patchValue({
+          id: user.id,
+          login: user.login,
+          password: user.password,
+          name: user.name,
+          birthDate: user.birthDate ? new Date(user.birthDate) : null,
+          age: user.age,
+          salary: user.salary,
+          roles: user.roles.map((role) => role.id),
+        });
+      },
     });
   }
 

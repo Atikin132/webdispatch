@@ -35,8 +35,8 @@ export class UserService {
     return this.usersTranslated;
   }
 
-  getUser(id: number): User | undefined {
-    return this.users().find((user) => user.id === id);
+  getUser(id: number) {
+    return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 
   create(user: User) {
