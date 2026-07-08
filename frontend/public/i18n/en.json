@@ -91,5 +91,6 @@
 
   "loadErrorSummary": "Load error",
   "loadRolesErrorDetail": "Failed to load roles",
-  "loadUsersErrorDetail": "Failed to load users"
+  "loadUsersErrorDetail": "Failed to load users",
+  "loadUserErrorDetail": "Failed to load user"
 }

@@ -1,70 +1,42 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { User } from '../models/user';
-import { UserService } from './user.service';
-import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { TranslateService } from '@ngx-translate/core';
-import { EMPTY, Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../environment';
+import { JWTResponse } from '../models/jwt-response';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private userService = inject(UserService);
-  private router = inject(Router);
-  private messageService = inject(MessageService);
-  private translate = inject(TranslateService);
+  private http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl + '/login';
 
-  private currentUserId = signal<number | null>(null);
-
-  currentUser = computed<User | null>(() => {
-    const id = this.currentUserId();
-    return id ? (this.userService.getUser(id) ?? null) : null;
-  });
-
-  constructor() {
-    const savedId = localStorage.getItem('currentUserId');
-    if (savedId) {
-      this.currentUserId.set(+savedId);
-    }
-  }
-
-  login(login: string, password: string): void {
-    this.userService.login(login, password).subscribe({
-      next: (user: User) => {
-        if (user) {
-          this.currentUserId.set(user.id);
-          localStorage.setItem('currentUserId', user.id.toString());
-          void this.router.navigate(['/welcome']);
-        }
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('loginErrorSummary'),
-          detail: this.translate.instant('loginErrorDetail'),
-        });
-      },
+  login(login: string, password: string) {
+    return this.http.post<JWTResponse>(`${this.apiUrl}`, {
+      login,
+      password,
     });
   }
 
   logout(): void {
-    this.currentUserId.set(null);
+    localStorage.removeItem('token');
     localStorage.removeItem('currentUserId');
+    localStorage.removeItem('login');
+    localStorage.removeItem('roles');
   }
 
   isAuthenticated(): boolean {
-    return this.currentUserId() !== null;
+    return !!localStorage.getItem('token');
   }
 
-  changePassword(oldPassword: string, newPassword: string): Observable<{ message: string }> {
-    const user = this.currentUser();
-    if (!user) {
-      return EMPTY;
-    }
-    return this.userService.updatePassword(user.id, oldPassword, newPassword);
+  hasRole(role: string): boolean {
+    const roles = JSON.parse(localStorage.getItem('roles') ?? '[]');
+    return roles.includes(role);
   }
 
-  hasRole(roleName: string): boolean {
-    const user = this.currentUser();
-    return user?.roles.some((role) => role.name === roleName) ?? false;
+  getCurrentUserId(): number | null {
+    const id = localStorage.getItem('currentUserId');
+    return id ? Number(id) : null;
+  }
+
+  getCurrentLogin(): string | null {
+    return localStorage.getItem('login');
   }
 }

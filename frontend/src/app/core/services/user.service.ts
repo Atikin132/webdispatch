@@ -1,69 +1,74 @@
-import { computed, inject, Injectable } from '@angular/core';
-import { User } from '../models/user';
-import { TranslateService } from '@ngx-translate/core';
-import { RoleTranslateService } from './role-translate.service';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MessageService } from 'primeng/api';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { catchError, EMPTY, tap } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { catchError, EMPTY, map, switchMap, tap } from 'rxjs';
+
+import { User } from '../models/user';
+import { RoleTranslateService } from './role-translate.service';
 import { environment } from '../environment';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private http = inject(HttpClient);
-  private toast = inject(MessageService);
   private translate = inject(TranslateService);
   private roleTranslate = inject(RoleTranslateService);
 
   private readonly apiUrl = environment.apiUrl + '/users';
 
-  readonly usersResource = rxResource({
-    stream: () =>
-      this.http.get<User[]>(this.apiUrl).pipe(
-        catchError(() => {
-          this.toast.add({
-            severity: 'error',
-            summary: this.translate.instant('loadErrorSummary'),
-            detail: this.translate.instant('loadUsersErrorDetail'),
-          });
-          return EMPTY;
-        }),
-      ),
-  });
+  private readonly users = signal<User[]>([]);
 
   readonly usersTranslated = computed(() => {
     this.roleTranslate.langSignal();
-    return this.roleTranslate.translateUsersRoles(this.usersResource.value() ?? []);
+    return this.roleTranslate.translateUsersRoles(this.users());
   });
+
+  loadUsers() {
+    return this.http.get<User[]>(this.apiUrl).pipe(
+      tap((users) => this.users.set(users)),
+      catchError(() => {
+        return EMPTY;
+      }),
+    );
+  }
 
   getUsers() {
     return this.usersTranslated;
   }
 
   getUser(id: number): User | undefined {
-    return this.usersResource.value()?.find((user) => user.id === id);
+    return this.users().find((user) => user.id === id);
   }
 
   create(user: User) {
-    return this.http
-      .post<User>(this.apiUrl, this.toUserFormDTO(user))
-      .pipe(tap(() => this.usersResource.reload()));
+    return this.http.post<User>(this.apiUrl, this.toUserFormDTO(user)).pipe(
+      switchMap(() => this.loadUsers()),
+      map(() => void 0),
+    );
   }
 
   update(user: User) {
-    return this.http
-      .put<User>(`${this.apiUrl}/${user.id}`, this.toUserFormDTO(user))
-      .pipe(tap(() => this.usersResource.reload()));
+    return this.http.put<User>(`${this.apiUrl}/${user.id}`, this.toUserFormDTO(user)).pipe(
+      switchMap(() => this.loadUsers()),
+      map(() => void 0),
+    );
   }
 
   delete(id: number) {
-    return this.http
-      .delete<void>(`${this.apiUrl}/${id}`)
-      .pipe(tap(() => this.usersResource.reload()));
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      switchMap(() => this.loadUsers()),
+      map(() => void 0),
+    );
+  }
+
+  updatePassword(userId: number, oldPassword: string, newPassword: string) {
+    return this.http.put<{ message: string }>(
+      `${environment.apiUrl}/password/${userId}`,
+      this.toPasswordChangeFormDTO(oldPassword, newPassword),
+    );
   }
 
   loginExists(login: string, currentId?: number): boolean {
-    return (this.usersResource.value() ?? []).some(
+    return this.users().some(
       (user) => user.login.toLowerCase() === login.toLowerCase() && user.id !== currentId,
     );
   }
@@ -77,22 +82,6 @@ export class UserService {
       return this.translate.instant('userAlreadyExists');
     }
     return null;
-  }
-
-  login(login: string, password: string) {
-    return this.http.post<User>(`${environment.apiUrl}/login`, {
-      login,
-      password,
-    });
-  }
-
-  updatePassword(userId: number, oldPassword: string, newPassword: string) {
-    return this.http
-      .put<{ message: string }>(
-        `${environment.apiUrl}/password/${userId}`,
-        this.toPasswordChangeFormDTO(oldPassword, newPassword),
-      )
-      .pipe(tap(() => this.usersResource.reload()));
   }
 
   private toUserFormDTO(user: User) {

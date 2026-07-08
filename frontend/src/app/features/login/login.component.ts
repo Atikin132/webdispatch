@@ -5,7 +5,9 @@ import { Button } from 'primeng/button';
 import { ChangeLangComponent } from '../../shared/ui/change-lang/change-lang.component';
 import { InputText } from 'primeng/inputtext';
 import { AuthService } from '../../core/services/auth.service';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +18,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
+  private messageService = inject(MessageService);
+  private translate = inject(TranslateService);
 
   loginForm = this.fb.group({
     login: ['', Validators.required],
@@ -32,6 +37,22 @@ export class LoginComponent {
     if (!login || !password) {
       return;
     }
-    this.authService.login(login, password);
+
+    this.authService.login(login, password).subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('currentUserId', response.id.toString());
+        localStorage.setItem('login', response.login);
+        localStorage.setItem('roles', JSON.stringify(response.roles));
+        void this.router.navigate(['/welcome']);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('loginErrorSummary'),
+          detail: this.translate.instant('loginErrorDetail'),
+        });
+      },
+    });
   }
 }

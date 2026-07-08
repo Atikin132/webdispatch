@@ -5,6 +5,7 @@ import { Button } from 'primeng/button';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-login-edit',
@@ -15,6 +16,7 @@ import { MessageService } from 'primeng/api';
 export class LoginEditComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private userService = inject(UserService);
   private toast = inject(MessageService);
   private translate = inject(TranslateService);
 
@@ -29,10 +31,11 @@ export class LoginEditComponent {
       return;
     }
     const { oldPassword, newPassword } = this.passwordForm.value;
-    if (!oldPassword || !newPassword) {
+    const userId = this.authService.getCurrentUserId();
+    if (!oldPassword || !newPassword || userId === null) {
       return;
     }
-    this.authService.changePassword(oldPassword, newPassword).subscribe({
+    this.userService.updatePassword(userId, oldPassword, newPassword).subscribe({
       next: () => {
         this.toast.add({
           severity: 'success',

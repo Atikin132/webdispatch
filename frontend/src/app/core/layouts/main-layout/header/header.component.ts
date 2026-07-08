@@ -15,7 +15,7 @@ export class HeaderComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  currentUser = this.authService.currentUser;
+  currentUserLogin = this.authService.getCurrentLogin();
 
   onLogout(): void {
     this.authService.logout();

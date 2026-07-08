@@ -5,9 +5,10 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import { ThemePreset } from './theme.config';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { provideTranslateHttpLoader, TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
         preset: ThemePreset,
       },
     }),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([jwtInterceptor])),
     provideTranslateService({
       loader: {
         provide: TranslateLoader,

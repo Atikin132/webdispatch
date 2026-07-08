@@ -91,5 +91,6 @@
 
   "loadErrorSummary": "Ошибка загрузки данных",
   "loadRolesErrorDetail": "Ошибка загрузки ролей",
-  "loadUsersErrorDetail": "Ошибка загрузки пользователей"
+  "loadUsersErrorDetail": "Ошибка загрузки пользователей",
+  "loadUserErrorDetail": "Ошибка загрузки пользователя"
 }

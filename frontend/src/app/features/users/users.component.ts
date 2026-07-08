@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private confirmationService = inject(ConfirmationService);
@@ -26,7 +26,22 @@ export class UsersComponent {
 
   users = this.userService.getUsers();
 
-  currentUser = this.authService.currentUser;
+  currentUserLogin = this.authService.getCurrentLogin();
+
+  ngOnInit(): void {
+    this.userService
+      .loadUsers()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        error: () => {
+          this.toast.add({
+            severity: 'error',
+            summary: this.translate.instant('loadErrorSummary'),
+            detail: this.translate.instant('loadUsersErrorDetail'),
+          });
+        },
+      });
+  }
 
   deleteUser(userId: number): void {
     this.confirmationService.confirm({

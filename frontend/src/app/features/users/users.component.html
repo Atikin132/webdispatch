@@ -35,7 +35,7 @@
             <p-button icon="pi pi-pencil" rounded text [routerLink]="['/users/edit', user.id]" />
           </td>
           <td>
-            @if (user.login !== currentUser()?.login) {
+            @if (user.login !== currentUserLogin) {
               <p-button
                 icon="pi pi-trash"
                 severity="danger"
