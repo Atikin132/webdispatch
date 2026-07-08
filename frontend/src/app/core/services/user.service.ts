@@ -80,7 +80,7 @@ export class UserService {
   }
 
   login(login: string, password: string) {
-    return this.http.post<User>(`${this.apiUrl}/login`, {
+    return this.http.post<User>(`${environment.apiUrl}/login`, {
       login,
       password,
     });
@@ -89,7 +89,7 @@ export class UserService {
   updatePassword(userId: number, oldPassword: string, newPassword: string) {
     return this.http
       .put<{ message: string }>(
-        `${this.apiUrl}/${userId}/password`,
+        `${environment.apiUrl}/password/${userId}`,
         this.toPasswordChangeFormDTO(oldPassword, newPassword),
       )
       .pipe(tap(() => this.usersResource.reload()));

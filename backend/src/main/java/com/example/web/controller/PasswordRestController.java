@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/password/{id}")
 public class PasswordRestController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class PasswordRestController {
     @Autowired
     private MessageSource messageSource;
 
-    @PutMapping("/{id}/password")
+    @PutMapping
     public ResponseEntity<?> changePassword(@PathVariable("id") Integer userId,
                                             @Valid @RequestBody PasswordChangeFormDTO passwordChangeFormDTO) {
         String oldPassword = passwordChangeFormDTO.getOldPassword() ==
