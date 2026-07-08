@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../environment';
 import { JWTResponse } from '../models/jwt-response';
 import { HttpClient } from '@angular/common/http';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -23,7 +24,20 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return false;
+    }
+    try {
+      const decoded = jwtDecode<{ exp?: number }>(token);
+      const isTokenNotExpired = decoded.exp !== undefined && decoded.exp * 1000 > Date.now();
+      if (!isTokenNotExpired) {
+        this.logout();
+      }
+      return isTokenNotExpired;
+    } catch {
+      return false;
+    }
   }
 
   hasRole(role: string): boolean {
