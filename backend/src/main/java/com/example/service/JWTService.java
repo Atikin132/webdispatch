@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,13 +18,19 @@ import java.util.List;
 @Service
 public class JWTService {
 
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    @Value("${jwt.expiration-ms}")
+    private long expirationMs;
+
     public String generateToken(Authentication authentication) {
         List<String> roles =
                 authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                         .toList();
         return Jwts.builder().setSubject(authentication.getName()).claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 43200000))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
@@ -49,8 +56,7 @@ public class JWTService {
     }
 
     private Key getSignKey() {
-        String SECRET_KEY = "nop2xVmXUgn0MyqvpQKoA71tLt1jzqFFUFhSvJVqRhI";
-        byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
