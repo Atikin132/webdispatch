@@ -1,11 +1,15 @@
 package com.example.service;
 
+import com.example.constants.Roles;
 import com.example.dao.UserDao;
 import com.example.model.Role;
 import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -121,15 +125,20 @@ public class UserService {
     }
 
     public boolean changePassword(Integer userId, String oldPassword, String newPassword) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = getUserByLogin(authentication.getName());
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(role -> Roles.ADMINISTRATOR.equals(role.getName()));
+        if (!currentUser.getId().equals(userId) && !isAdmin) {
+            throw new AccessDeniedException("Access denied");
+        }
         User user = this.getUser(userId);
-
         if (user == null) {
             return false;
         }
         if (!user.getPassword().equals(oldPassword)) {
             return false;
         }
-
         userDao.updatePassword(userId, newPassword);
         return true;
     }
