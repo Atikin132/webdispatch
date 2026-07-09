@@ -5,8 +5,6 @@ import com.example.dao.UserDao;
 import com.example.model.Role;
 import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,9 +23,6 @@ public class UserService {
 
     @Autowired
     private RoleService roleService;
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Transactional
     public void createUser(User user) {
@@ -81,10 +76,6 @@ public class UserService {
         return birthDate.isBefore(LocalDate.now());
     }
 
-    public User createEmptyUser() {
-        return new User();
-    }
-
     public String validateAndPrepareUser(User user, String[] selectedRoleIds) {
         prepareRoles(user, selectedRoleIds);
         return validateForForm(user);
@@ -109,17 +100,13 @@ public class UserService {
 
     public String validateForForm(User user) {
         if (user.getBirthDate() != null && !isBirthDateBeforeNow(user.getBirthDate())) {
-            return messageSource.getMessage("validationBirthDateFuture",
-                    null,
-                    LocaleContextHolder.getLocale());
+            return "The date must not be today or in the future";
         }
 
         User existingUser = userDao.findByLogin(user.getLogin().trim());
 
         if (existingUser != null && !existingUser.getId().equals(user.getId())) {
-            return messageSource.getMessage("userAlreadyExists",
-                    null,
-                    LocaleContextHolder.getLocale());
+            return "User with this login already exists";
         }
         return null;
     }
